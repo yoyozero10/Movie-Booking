@@ -1,8 +1,6 @@
-// API client to replace Convex
-// In production (Vercel), use relative path /api
-// In development, use localhost:5000/api
-const API_BASE_URL = import.meta.env.VITE_API_URL || 
-  (import.meta.env.PROD ? '/api' : 'http://localhost:5000/api');
+// API client to use Render backend
+// Use Render backend URL directly
+const API_BASE_URL = 'https://movie-booking-api-40tb.onrender.com/api';
 
 class ApiClient {
   private baseURL: string;

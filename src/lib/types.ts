@@ -1,6 +1,6 @@
 // Type definitions for custom components
 export interface User {
-  id: string;
+  _id: string;
   email: string;
   name: string;
 }

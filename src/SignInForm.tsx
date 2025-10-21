@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { toast } from "sonner";
-import { api } from "./lib/api";
+import { useAuth } from "./lib/auth";
 import { SignInFormProps } from "./lib/types";
 
 export function SignInForm({ onSignIn }: SignInFormProps) {
+  const { login, register } = useAuth();
   const [flow, setFlow] = useState<"signIn" | "signUp">("signIn");
   const [submitting, setSubmitting] = useState(false);
 
@@ -17,17 +18,14 @@ export function SignInForm({ onSignIn }: SignInFormProps) {
         const email = formData.get("email") as string;
         const password = formData.get("password") as string;
 
-        let response;
         if (flow === "signIn") {
-          response = await api.login(email, password);
+          const user = await login(email, password);
           toast.success("Signed in successfully!");
+          onSignIn(user);
         } else {
-          response = await api.register(email, password, email.split("@")[0]);
+          const user = await register(email, password, email.split("@")[0]);
           toast.success("Account created successfully!");
-        }
-
-        if (response.token) {
-          onSignIn(response.user);
+          onSignIn(user);
         }
       } catch (error: unknown) {
         let toastMessage = "";
