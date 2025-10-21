@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { MovieDetails } from "./MovieDetails";
-import { SeedDataButton } from "./SeedDataButton";
 import { api } from "../lib/api";
 
 // Define types for MongoDB documents
@@ -78,7 +77,6 @@ export function MovieList() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h3 className="text-2xl font-bold">Browse Movies</h3>
-        <SeedDataButton />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
