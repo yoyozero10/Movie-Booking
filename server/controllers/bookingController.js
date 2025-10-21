@@ -1,0 +1,170 @@
+import Booking from '../models/Booking.js';
+import Showtime from '../models/Showtime.js';
+import mongoose from 'mongoose';
+import { logger } from '../server.js';
+
+// Get user's bookings
+export const getUserBookings = async (req, res) => {
+  try {
+    const bookings = await Booking.find({ userId: req.user.id })
+      .populate({ path: 'showtimeId', populate: { path: 'movieId', select: 'title posterUrl' } })
+      .sort({ createdAt: -1 });
+
+    res.json(bookings);
+  } catch (error) {
+    logger.error('Error fetching bookings:', error);
+    res.status(500).json({ error: 'Failed to fetch bookings' });
+  }
+};
+
+// Create new booking
+export const createBooking = async (req, res) => {
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    const { showtimeId, seats, totalPrice } = req.body;
+    logger.info('Creating booking with:', { showtimeId, seats, totalPrice, userId: req.user?.id });
+
+    // Validate showtime exists and get details
+    const showtime = await Showtime.findById(showtimeId);
+    logger.info('Showtime found:', showtime);
+    if (!showtime) {
+      await session.abortTransaction();
+      return res.status(404).json({ error: 'Showtime not found' });
+    }
+
+    // Check if showtime has enough available seats
+    logger.info('Available seats:', showtime.availableSeats, 'Requested seats:', seats.length);
+    if (showtime.availableSeats < seats.length) {
+      await session.abortTransaction();
+      return res.status(400).json({ error: 'Not enough available seats' });
+    }
+
+    // Check if seats are already booked for this showtime
+    const existingBooking = await Booking.findOne({
+      showtimeId,
+      status: 'confirmed',
+      seats: { $in: seats }
+    });
+    logger.info('Existing booking check:', existingBooking);
+
+    if (existingBooking) {
+      await session.abortTransaction();
+      return res.status(400).json({ error: 'Some seats are already booked' });
+    }
+
+    // Calculate total price
+    const calculatedTotalPrice = seats.length * showtime.price;
+    logger.info('Price calculation:', { requested: totalPrice, calculated: calculatedTotalPrice, showtimePrice: showtime.price });
+
+    // Create booking
+    const booking = new Booking({
+      userId: req.user.id,
+      showtimeId,
+      seats,
+      totalPrice: calculatedTotalPrice,
+      status: 'confirmed'
+    });
+
+    let savedBooking;
+    try {
+      savedBooking = await booking.save({ session });
+      logger.info('Booking saved successfully:', savedBooking._id);
+    } catch (saveError) {
+      await session.abortTransaction();
+      console.error('=== DETAILED ERROR INFO ===');
+      console.error('Error message:', saveError.message);
+      console.error('Error code:', saveError.code);
+      console.error('Error name:', saveError.name);
+      console.error('Stack trace:', saveError.stack);
+      console.error('Booking data:', {
+        userId: booking.userId,
+        showtimeId: booking.showtimeId,
+        seats: booking.seats,
+        totalPrice: booking.totalPrice,
+        bookingReference: booking.bookingReference
+      });
+
+      // Handle duplicate key error for bookingReference
+      if (saveError.code === 11000 && saveError.keyPattern && saveError.keyPattern.bookingReference) {
+        console.log('Duplicate bookingReference detected, retrying with new reference');
+        // Retry with a new booking reference
+        booking.bookingReference = 'BK' + Date.now() + Math.random().toString(36).substr(2, 9).toUpperCase();
+        try {
+          savedBooking = await booking.save({ session });
+          console.log('Booking saved after retry:', savedBooking._id);
+        } catch (retryError) {
+          console.error('Error saving booking after retry:', retryError.message);
+          return res.status(500).json({ error: 'Failed to create booking - please try again' });
+        }
+      } else {
+        return res.status(500).json({ error: 'Failed to create booking' });
+      }
+    }
+
+    // Update available seats in showtime
+    showtime.availableSeats -= seats.length;
+    await showtime.save({ session });
+    logger.info('Showtime updated, new available seats:', showtime.availableSeats);
+
+    await session.commitTransaction();
+    logger.info('Transaction committed successfully');
+
+    // Populate the saved booking for response
+    const populatedBooking = await Booking.findById(savedBooking._id)
+      .populate({ path: 'showtimeId', populate: { path: 'movieId', select: 'title posterUrl' } });
+
+    logger.info('Booking populated successfully');
+    res.status(201).json(populatedBooking);
+  } catch (error) {
+    await session.abortTransaction();
+    logger.error('Error creating booking:', error);
+    res.status(500).json({ error: 'Failed to create booking' });
+  } finally {
+    session.endSession();
+  }
+};
+
+// Cancel booking
+export const cancelBooking = async (req, res) => {
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    const booking = await Booking.findById(req.params.id);
+    if (!booking) {
+      await session.abortTransaction();
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+
+    // Check if user owns this booking
+    if (booking.userId.toString() !== req.user.id) {
+      await session.abortTransaction();
+      return res.status(403).json({ error: 'Not authorized to cancel this booking' });
+    }
+
+    // Update booking status
+    booking.status = 'cancelled';
+    await booking.save({ session });
+
+    // Return seats to showtime
+    const showtime = await Showtime.findById(booking.showtimeId);
+    if (showtime) {
+      showtime.availableSeats += booking.seats.length;
+      await showtime.save({ session });
+    }
+
+    await session.commitTransaction();
+
+    res.json({ message: 'Booking cancelled successfully' });
+  } catch (error) {
+    await session.abortTransaction();
+    logger.error('Error cancelling booking:', error);
+    res.status(500).json({ error: 'Failed to cancel booking' });
+  } finally {
+    session.endSession();
+  }
+};

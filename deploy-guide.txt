@@ -1,0 +1,79 @@
+🚀 QUICK DEPLOYMENT GUIDE
+========================
+
+STEP 1: Deploy Backend to Render (FREE)
+----------------------------------------
+1. Go to https://render.com and sign up (free)
+2. Click "New +" → "Web Service"
+3. Choose "Public Git repository" and enter: <your-github-repo-url>
+   (Or connect your GitHub account)
+4. Render will detect the render.yaml file automatically
+5. Add these Environment Variables in Render dashboard:
+   
+   MONGODB_URI = mongodb+srv://thnhctdxhbt_db_user:cclldm123@movie-booking.mhqk3em.mongodb.net/movie_booking?retryWrites=true&w=majority&appName=Movie-Booking
+   JWT_SECRET = movie_booking_app_secret_key_2024_cascade_ai_assistant
+   JWT_EXPIRES_IN = 7d
+   FRONTEND_URL = (leave empty for now, add after frontend deployment)
+
+6. Click "Create Web Service"
+7. Wait for deployment (5-10 minutes)
+8. Copy your backend URL: https://movie-booking-api.onrender.com
+
+
+STEP 2: Deploy Frontend to Netlify (FREE)
+------------------------------------------
+1. In terminal, run: netlify login
+2. Run: netlify init
+3. Follow prompts:
+   - Create new site
+   - Choose team
+   - Site name: movie-booking-app
+   - Build command: npm run build
+   - Publish directory: dist
+4. After setup, go to Netlify dashboard
+5. Add Environment Variable:
+   VITE_API_URL = https://movie-booking-api.onrender.com/api
+6. Trigger a redeploy
+7. Copy your frontend URL: https://movie-booking-app.netlify.app
+
+
+STEP 3: Update Backend CORS
+----------------------------
+1. Go back to Render dashboard
+2. Find your backend service
+3. Add/Update Environment Variable:
+   FRONTEND_URL = https://movie-booking-app.netlify.app
+4. Service will auto-redeploy
+
+
+STEP 4: Test Your App
+----------------------
+1. Visit your Netlify URL
+2. Try registering a new account
+3. Browse movies and make a booking
+4. Check Render logs if any issues
+
+
+⚠️ IMPORTANT NOTES:
+-------------------
+- Render free tier: Service sleeps after 15 min inactivity (30s cold start)
+- MongoDB Atlas: Make sure IP whitelist includes 0.0.0.0/0
+- Never commit .env file to Git!
+- Both services auto-deploy when you push to Git
+
+
+📝 Need Git Setup?
+------------------
+If you don't have a Git repository yet:
+
+git init
+git add .
+git commit -m "Initial commit"
+git remote add origin <your-github-repo-url>
+git push -u origin main
+
+Then follow Render deployment steps above.
+
+
+✅ You're Done!
+Your app is now live and accessible worldwide!
