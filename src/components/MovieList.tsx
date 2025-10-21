@@ -39,7 +39,7 @@ export function MovieList() {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-500"></div>
       </div>
     );
   }
@@ -57,15 +57,15 @@ export function MovieList() {
     return (
       <div className="text-center py-20">
         <div className="text-6xl mb-4">🎬</div>
-        <p className="text-xl text-gray-600 mb-2">
+        <p className="text-xl text-gray-300 mb-2">
           No movies available yet
         </p>
-        <p className="text-gray-500 mb-6">
+        <p className="text-gray-400 mb-6">
           Movies have been seeded to your MongoDB Atlas database!
         </p>
         <button
           onClick={() => window.location.reload()}
-          className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-hover"
+          className="px-4 py-2 bg-pink-600 text-white rounded hover:bg-pink-700 transition-colors"
         >
           Refresh Page
         </button>
@@ -76,14 +76,14 @@ export function MovieList() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h3 className="text-2xl font-bold">Browse Movies</h3>
+        <h3 className="text-2xl font-bold text-white">Browse Movies</h3>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {movies.map((movie) => (
           <div
             key={movie._id}
-            className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+            className="bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-xl hover:shadow-pink-500/20 transition-all duration-300 cursor-pointer border border-gray-700 hover:border-pink-500/50"
             onClick={() => setSelectedMovieId(movie._id)}
           >
             <img
@@ -92,13 +92,13 @@ export function MovieList() {
               className="w-full h-64 object-cover"
             />
             <div className="p-4">
-              <h4 className="text-lg font-semibold mb-2">{movie.title}</h4>
-              <p className="text-gray-600 text-sm mb-2 line-clamp-2">
+              <h4 className="text-lg font-semibold mb-2 text-white">{movie.title}</h4>
+              <p className="text-gray-300 text-sm mb-2 line-clamp-2">
                 {movie.description}
               </p>
               <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-500">{movie.genre}</span>
-                <span className="text-sm text-gray-500">{movie.duration} min</span>
+                <span className="text-sm text-gray-400">{movie.genre}</span>
+                <span className="text-sm text-gray-400">{movie.duration} min</span>
               </div>
             </div>
           </div>
