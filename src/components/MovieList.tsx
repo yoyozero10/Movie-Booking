@@ -86,11 +86,15 @@ export function MovieList() {
             className="bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-xl hover:shadow-pink-500/20 transition-all duration-300 cursor-pointer border border-gray-700 hover:border-pink-500/50"
             onClick={() => setSelectedMovieId(movie._id)}
           >
-            <img
-              src={movie.posterUrl}
-              alt={movie.title}
-              className="w-full h-64 object-cover"
-            />
+            <div className="w-full h-80 bg-gray-900 flex items-center justify-center overflow-hidden">
+              <img
+                src={movie.posterUrl}
+                alt={movie.title}
+                loading="lazy"
+                onError={(e) => { (e.target as HTMLImageElement).src = 'https://picsum.photos/seed/placeholder/500/750'; }}
+                className="w-full h-full object-cover"
+              />
+            </div>
             <div className="p-4">
               <h4 className="text-lg font-semibold mb-2 text-white">{movie.title}</h4>
               <p className="text-gray-300 text-sm mb-2 line-clamp-2">

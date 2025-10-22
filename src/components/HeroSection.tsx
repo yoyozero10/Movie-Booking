@@ -26,8 +26,9 @@ export function HeroSection({ onExploreClick }: HeroSectionProps) {
       try {
         const movies = await api.getMovies();
         if (movies.length > 0) {
-          // Get a random featured movie or the first one
-          setFeaturedMovie(movies[0]);
+          // Pick a random featured movie
+          const idx = Math.floor(Math.random() * movies.length);
+          setFeaturedMovie(movies[idx]);
         }
       } catch (error) {
         console.error('Error fetching featured movie:', error);

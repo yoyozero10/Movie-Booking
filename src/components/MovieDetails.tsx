@@ -106,12 +106,12 @@ export function MovieDetails({
           />
           <div className="space-y-2">
             <h1 className="text-3xl font-bold">{movie.title}</h1>
-            <div className="flex items-center gap-4 text-sm text-gray-600">
+            <div className="flex items-center gap-4 text-sm text-gray-300">
               <span>{movie.genre}</span>
               <span>{movie.duration} min</span>
               <span>{movie.rating}</span>
             </div>
-            <p className="text-gray-700">{movie.description}</p>
+            <p className="text-gray-300">{movie.description}</p>
           </div>
         </div>
 
@@ -124,7 +124,7 @@ export function MovieDetails({
             />
           ) : (
             <div>
-              <h2 className="text-2xl font-bold mb-6">Select Showtime</h2>
+              <h2 className="text-2xl font-bold mb-6 text-white">Select Showtime</h2>
 
               {showtimes.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
@@ -155,7 +155,7 @@ export function MovieDetails({
                           <p className="font-semibold">
                             {showtime.theaterId_details?.name || 'Theater'}
                           </p>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-gray-300">
                             {showtime.theaterId_details?.location || 'Location'}
                           </p>
                         </div>

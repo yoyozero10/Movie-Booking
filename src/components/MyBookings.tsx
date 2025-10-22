@@ -85,8 +85,8 @@ export function MyBookings() {
     return (
       <div className="text-center py-20">
         <div className="text-6xl mb-4">🔒</div>
-        <p className="text-xl text-gray-600 mb-2">Sign in required</p>
-        <p className="text-gray-500 mb-6">
+  <p className="text-xl text-gray-300 mb-2">Sign in required</p>
+  <p className="text-gray-400 mb-6">
           Please sign in to view your bookings
         </p>
         <button
@@ -103,8 +103,8 @@ export function MyBookings() {
     return (
       <div className="text-center py-20">
         <div className="text-6xl mb-4">🎫</div>
-        <p className="text-xl text-gray-600 mb-2">No bookings yet</p>
-        <p className="text-gray-500">
+  <p className="text-xl text-gray-300 mb-2">No bookings yet</p>
+  <p className="text-gray-400">
           Book your first movie to see your bookings here!
         </p>
       </div>
@@ -126,7 +126,7 @@ export function MyBookings() {
                 <h4 className="text-lg font-semibold mb-2">
                   {booking.showtimeId_details?.movieId_details?.title || 'Movie Title'}
                 </h4>
-                <div className="space-y-1 text-sm text-gray-600">
+                <div className="space-y-1 text-sm text-gray-300">
                   <p>
                     <span className="font-medium">Date:</span>{' '}
                     {booking.showtimeId_details?.date || 'N/A'}

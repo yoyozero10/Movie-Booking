@@ -25,8 +25,14 @@ export function UserProfile({ userId }: UserProfileProps) {
           // Get current user's profile
           userData = await api.getProfile();
         } else {
+          // Validate userId (simple ObjectId hex string check) before requesting
+          const isValidObjectId = typeof userId === 'string' && /^[a-fA-F0-9]{24}$/.test(userId);
+          if (!isValidObjectId) {
+            throw new Error('Invalid user ID format');
+          }
+
           // Get specific user's profile
-          userData = await api.getUserById(userId);
+          userData = await api.getUserById(userId as string);
         }
 
         setProfileUser(userData);
@@ -146,10 +152,10 @@ export function UserProfile({ userId }: UserProfileProps) {
                 </p>
                 <div className="space-y-2">
                   <button
-                    onClick={() => window.open('/profile/demo-user-1', '_blank')}
+                    onClick={() => window.open('/profile', '_blank')}
                     className="block w-full text-left px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded transition-colors"
                   >
-                    View Demo User Profile
+                    View Your Profile
                   </button>
                   <p className="text-sm text-gray-400 mt-2">
                     💡 Tip: Replace "demo-user-1" with any actual user ID from your database

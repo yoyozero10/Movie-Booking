@@ -149,7 +149,7 @@ export function SeatSelection({
         <div className="space-y-2">
           {rows.map((row) => (
             <div key={row} className="flex items-center gap-2">
-              <span className="w-6 text-sm font-semibold text-gray-600">{row}</span>
+              <span className="w-6 text-sm font-semibold text-gray-300">{row}</span>
               <div className="flex gap-2 flex-1 justify-center">
                 {Array.from({ length: seatsPerRow }, (_, i) => {
                   const seatId = `${row}${i + 1}`;
@@ -168,7 +168,7 @@ export function SeatSelection({
                           ? 'bg-gray-400 text-white cursor-not-allowed'
                           : isSelected
                           ? 'bg-primary text-white'
-                          : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+                          : 'bg-gray-200 hover:bg-gray-300 text-gray-900'
                         }
                       `}
                     >

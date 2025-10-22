@@ -5,6 +5,7 @@ import { MovieList } from "./components/MovieList";
 import { MyBookings } from "./components/MyBookings";
 import { Navigation } from "./components/Navigation";
 import { HeroSection } from "./components/HeroSection";
+import { FeaturedMovies } from "./components/FeaturedMovies";
 import { UserProfile } from "./components/UserProfile";
 import { ContentProps } from "./lib/types";
 import { useAuth } from "./lib/auth";
@@ -78,6 +79,7 @@ function Content({ activeTab, setActiveTab, activeSection, user, showLoginModal,
     return (
       <>
         <HeroSection onExploreClick={onExploreClick} />
+        <FeaturedMovies />
         
         {/* Login Modal */}
         {showLoginModal && (

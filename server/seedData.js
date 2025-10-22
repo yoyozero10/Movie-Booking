@@ -15,8 +15,35 @@ const sampleMovies = [
     genre: "Action",
     duration: 181,
     rating: "PG-13",
-    posterUrl: "https://images.unsplash.com/photo-1635805737707-575885ab0820?w=300&h=450&fit=crop",
+    posterUrl: "https://picsum.photos/seed/avengers-endgame/500/750",
     releaseDate: "2019-04-26"
+  },
+  {
+    title: "Inception",
+    description: "A thief who steals corporate secrets through dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO.",
+    genre: "Sci-Fi, Thriller",
+    duration: 148,
+    rating: "PG-13",
+    posterUrl: "https://picsum.photos/seed/inception/500/750",
+    releaseDate: "2010-07-16"
+  },
+  {
+    title: "Parasite",
+    description: "Greed and class discrimination threaten the newly formed symbiotic relationship between the wealthy Park family and the destitute Kim clan.",
+    genre: "Drama, Thriller",
+    duration: 132,
+    rating: "R",
+    posterUrl: "https://picsum.photos/seed/parasite/500/750",
+    releaseDate: "2019-05-30"
+  },
+  {
+    title: "The Grand Budapest Hotel",
+    description: "A writer encounters the owner of an aging high-class hotel, who recounts his early years serving as the hotel's concierge.",
+    genre: "Comedy, Drama",
+    duration: 99,
+    rating: "R",
+    posterUrl: "https://picsum.photos/seed/grand-budapest/500/750",
+    releaseDate: "2014-03-28"
   },
   {
     title: "The Lion King",
@@ -24,7 +51,7 @@ const sampleMovies = [
     genre: "Animation",
     duration: 88,
     rating: "G",
-    posterUrl: "https://images.unsplash.com/photo-1507924538820-ede94a04019d?w=300&h=450&fit=crop",
+    posterUrl: "https://picsum.photos/seed/lion-king/500/750",
     releaseDate: "2019-07-19"
   },
   {
@@ -33,7 +60,7 @@ const sampleMovies = [
     genre: "Drama",
     duration: 122,
     rating: "R",
-    posterUrl: "https://images.unsplash.com/photo-1489599735147-7f8a39c1ba1d?w=300&h=450&fit=crop",
+    posterUrl: "https://picsum.photos/seed/joker/500/750",
     releaseDate: "2019-10-04"
   },
   {
@@ -42,7 +69,7 @@ const sampleMovies = [
     genre: "Action",
     duration: 129,
     rating: "PG-13",
-    posterUrl: "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=300&h=450&fit=crop",
+    posterUrl: "https://picsum.photos/seed/spiderman-far-from-home/500/750",
     releaseDate: "2019-07-02"
   },
   {
@@ -51,8 +78,54 @@ const sampleMovies = [
     genre: "Animation",
     duration: 103,
     rating: "PG",
-    posterUrl: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=450&fit=crop",
+    posterUrl: "https://picsum.photos/seed/frozen-2/500/750",
     releaseDate: "2019-11-22"
+  }
+  ,
+  {
+    title: "The Matrix",
+    description: "A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.",
+    genre: "Sci-Fi, Action",
+    duration: 136,
+    rating: "R",
+    posterUrl: "https://picsum.photos/seed/the-matrix/500/750",
+    releaseDate: "1999-03-31"
+  },
+  {
+    title: "Interstellar",
+    description: "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
+    genre: "Sci-Fi, Drama",
+    duration: 169,
+    rating: "PG-13",
+    posterUrl: "https://picsum.photos/seed/interstellar/500/750",
+    releaseDate: "2014-11-07"
+  },
+  {
+    title: "Mad Max: Fury Road",
+    description: "In a post-apocalyptic wasteland, Max helps a rebellious woman and a group of female prisoners flee from a tyrant.",
+    genre: "Action, Adventure",
+    duration: 120,
+    rating: "R",
+    posterUrl: "https://picsum.photos/seed/mad-max-fury-road/500/750",
+    releaseDate: "2015-05-15"
+  },
+  {
+    title: "La La Land",
+    description: "A jazz musician and an aspiring actress fall in love while pursuing their dreams in Los Angeles.",
+    genre: "Musical, Romance",
+    duration: 128,
+    rating: "PG-13",
+    posterUrl: "https://picsum.photos/seed/la-la-land/500/750",
+    releaseDate: "2016-12-09"
+  },
+  {
+    title: "The Shawshank Redemption",
+    description: "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.",
+    genre: "Drama",
+    duration: 142,
+    rating: "R",
+    posterUrl: "https://picsum.photos/seed/shawshank-redemption/500/750",
+    releaseDate: "1994-09-23"
   }
 ];
 
@@ -74,46 +147,7 @@ const sampleTheaters = [
   }
 ];
 
-const sampleShowtimes = [
-  // Avengers: Endgame showtimes
-  {
-    movieId: null, // Will be set after movies are created
-    theaterId: null, // Will be set after theaters are created
-    startTime: "14:00",
-    date: "2026-01-01",
-    price: 12.50
-  },
-  {
-    movieId: null,
-    theaterId: null,
-    startTime: "19:30",
-    date: "2026-01-01",
-    price: 15.00
-  },
-  {
-    movieId: null,
-    theaterId: null,
-    startTime: "16:00",
-    date: "2026-01-02",
-    price: 12.50
-  },
-  // The Lion King showtimes
-  {
-    movieId: null,
-    theaterId: null,
-    startTime: "13:00",
-    date: "2026-01-01",
-    price: 10.00
-  },
-  {
-    movieId: null,
-    theaterId: null,
-    startTime: "15:30",
-    date: "2026-01-02",
-    price: 10.00
-  },
-  // More showtimes...
-];
+// We'll generate showtimes programmatically after movies/theaters are created
 
 // Seed function
 async function seedDatabase() {
@@ -139,18 +173,38 @@ async function seedDatabase() {
     const theaters = await Theater.insertMany(sampleTheaters);
     console.log(`✅ Inserted ${theaters.length} theaters`);
 
-    // Create showtimes with references
+    // Programmatically create showtimes for each movie at each theater
     const showtimesData = [];
-    for (let i = 0; i < sampleShowtimes.length; i++) {
-      const movieIndex = i % movies.length;
-      const theaterIndex = i % theaters.length;
+    const times = ["13:00", "16:00", "19:30"]; // daily times
 
-      showtimesData.push({
-        ...sampleShowtimes[i],
-        movieId: movies[movieIndex]._id,
-        theaterId: theaters[theaterIndex]._id,
-        availableSeats: theaters[theaterIndex].totalSeats
-      });
+    // generate next 3 days' dates in YYYY-MM-DD
+    const daysToCreate = 3;
+    const dates = [];
+    for (let d = 0; d < daysToCreate; d++) {
+      const dt = new Date();
+      dt.setDate(dt.getDate() + d);
+      const yyyy = dt.getFullYear();
+      const mm = String(dt.getMonth() + 1).padStart(2, '0');
+      const dd = String(dt.getDate()).padStart(2, '0');
+      dates.push(`${yyyy}-${mm}-${dd}`);
+    }
+
+    for (let mi = 0; mi < movies.length; mi++) {
+      for (let ti = 0; ti < theaters.length; ti++) {
+        for (const date of dates) {
+          for (const startTime of times) {
+            const price = 8 + (ti * 2) + (mi % 3); // simple varying price
+            showtimesData.push({
+              movieId: movies[mi]._id,
+              theaterId: theaters[ti]._id,
+              startTime,
+              date,
+              price,
+              availableSeats: theaters[ti].totalSeats
+            });
+          }
+        }
+      }
     }
 
     const showtimes = await Showtime.insertMany(showtimesData);

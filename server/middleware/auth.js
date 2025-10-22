@@ -14,11 +14,16 @@ export const authenticateToken = async (req, res, next) => {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
 
+    // Debug: log incoming auth header (don't log token in production)
+    console.log('authenticateToken: incoming Authorization header:', authHeader ? '[REDACTED]' : 'none');
+
     if (!token) {
       return res.status(401).json({ error: 'Access token required' });
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // Debug: log decoded token
+    console.log('authenticateToken: decoded token payload:', decoded);
 
     // Get user from database to ensure they still exist
     const user = await User.findById(decoded.userId).select('-password');

@@ -23,7 +23,7 @@ export const register = async (req, res) => {
       message: 'User registered successfully',
       token,
       user: {
-        id: user._id,
+        _id: user._id,
         email: user.email,
         name: user.name
       }
@@ -61,7 +61,7 @@ export const login = async (req, res) => {
       message: 'Login successful',
       token,
       user: {
-        id: user._id,
+        _id: user._id,
         email: user.email,
         name: user.name
       }
@@ -75,6 +75,7 @@ export const login = async (req, res) => {
 // Get current user profile
 export const getProfile = async (req, res) => {
   try {
+    console.log('getProfile: req.user from middleware:', req.user ? req.user._id : null);
     const user = await User.findById(req.user.id).select('-password');
     res.json(user);
   } catch (error) {
@@ -86,6 +87,7 @@ export const getProfile = async (req, res) => {
 // Get user by ID (public route for displaying user details)
 export const getUserById = async (req, res) => {
   try {
+    console.log('getUserById called with id=', req.params.id);
     const user = await User.findById(req.params.id).select('-password');
     if (!user) {
       return res.status(404).json({ error: 'User not found' });

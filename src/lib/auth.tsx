@@ -35,11 +35,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is logged in on mount
     const token = localStorage.getItem('token');
     if (token) {
-      // Verify token and get user info
-      fetchUserProfile();
+      void fetchUserProfile();
     } else {
       setIsLoading(false);
     }
@@ -55,16 +53,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       if (response.ok) {
         const userData = await response.json();
+        if (userData && userData.id && !userData._id) {
+          userData._id = userData.id;
+        }
         setUser(userData);
       } else {
-        // Token invalid, remove it
-        localStorage.removeItem('token');
-        setUser(null);
+        // Only remove token when server explicitly indicates unauthorized
+        if (response.status === 401 || response.status === 403) {
+          localStorage.removeItem('token');
+          setUser(null);
+        } else {
+          console.warn('fetchUserProfile: server returned', response.status);
+        }
       }
-    } catch (error) {
-      console.error('Error fetching user profile:', error);
-      localStorage.removeItem('token');
-      setUser(null);
+    } catch (err) {
+      // Network / CORS / transient errors — keep token for now
+      console.error('Network error while fetching user profile:', err);
     } finally {
       setIsLoading(false);
     }
@@ -82,16 +86,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
 
       if (!response.ok) {
-        const error = await response.json();
+        const error = await response.json().catch(() => ({ error: 'Login failed' }));
         throw new Error(error.error || 'Login failed');
       }
 
       const data = await response.json();
-      localStorage.setItem('token', data.token);
+      if (data.user && data.user.id && !data.user._id) {
+        data.user._id = data.user.id;
+      }
+      if (data.token) localStorage.setItem('token', data.token);
       setUser(data.user);
       return data.user;
-    } catch (error) {
-      throw error;
     } finally {
       setIsLoading(false);
     }
@@ -109,16 +114,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
 
       if (!response.ok) {
-        const error = await response.json();
+        const error = await response.json().catch(() => ({ error: 'Registration failed' }));
         throw new Error(error.error || 'Registration failed');
       }
 
       const data = await response.json();
-      localStorage.setItem('token', data.token);
+      if (data.user && data.user.id && !data.user._id) {
+        data.user._id = data.user.id;
+      }
+      if (data.token) localStorage.setItem('token', data.token);
       setUser(data.user);
       return data.user;
-    } catch (error) {
-      throw error;
     } finally {
       setIsLoading(false);
     }
@@ -127,7 +133,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const getUserById = async (userId: string): Promise<User> => {
     const response = await fetch(`${config.API_BASE_URL}/auth/${userId}`);
     if (!response.ok) {
-      const error = await response.json();
+      const error = await response.json().catch(() => ({ error: 'Failed to fetch user' }));
       throw new Error(error.error || 'Failed to fetch user');
     }
     return await response.json();
