@@ -1,6 +1,7 @@
-// API client to use Render backend
-// Use Render backend URL directly
-const API_BASE_URL = 'https://movie-booking-api-40tb.onrender.com/api';
+// API client using environment variables
+import { config } from './config';
+
+const API_BASE_URL = config.API_BASE_URL;
 
 class ApiClient {
   private baseURL: string;
@@ -70,6 +71,10 @@ class ApiClient {
 
   async getProfile(): Promise<any> {
     return this.request('/auth/profile');
+  }
+
+  async getUserById(userId: string): Promise<any> {
+    return this.request(`/auth/${userId}`);
   }
 
   async updateProfile(data: any): Promise<any> {

@@ -17,6 +17,9 @@ export function Navigation({ user, onLoginClick, onSignOut, activeSection, onNav
     { id: "contact", label: "Contact" },
   ];
 
+  // Add profile to nav items if user is logged in
+  const allNavItems = user ? [...navItems, { id: "profile", label: "Profile" }] : navItems;
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black/80 to-transparent backdrop-blur-sm">
       <div className="max-w-7xl mx-auto px-6 py-4">
@@ -28,7 +31,7 @@ export function Navigation({ user, onLoginClick, onSignOut, activeSection, onNav
 
           {/* Navigation Menu */}
           <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
+            {allNavItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => onNavigate(item.id)}

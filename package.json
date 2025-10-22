@@ -12,6 +12,7 @@
     "start": "node server/server.js",
     "seed": "node server/seedData.js",
     "lint": "tsc -p . -noEmit --pretty false && vite build",
+    "setup": "node setup-env.mjs",
     "pre-deploy": "node pre-deploy-check.mjs"
   },
   "dependencies": {

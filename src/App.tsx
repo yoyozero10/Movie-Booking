@@ -6,6 +6,7 @@ import { MovieList } from "./components/MovieList";
 import { MyBookings } from "./components/MyBookings";
 import { Navigation } from "./components/Navigation";
 import { HeroSection } from "./components/HeroSection";
+import { UserProfile } from "./components/UserProfile";
 import { ContentProps, User } from "./lib/types";
 
 export default function App() {
@@ -183,6 +184,29 @@ function Content({ activeTab, setActiveTab, activeSection, user, setUser, showLo
         </div>
       </div>
     );
+  }
+
+  // Show profile section
+  if (activeSection === "profile") {
+    if (!user) {
+      return (
+        <div className="min-h-screen flex items-center justify-center px-4 pt-20 bg-gray-900">
+          <div className="max-w-md w-full bg-gray-800 rounded-2xl p-8 border border-gray-700">
+            <div className="text-center mb-6">
+              <h2 className="text-3xl font-bold text-white mb-2">
+                Sign In Required
+              </h2>
+              <p className="text-gray-300">
+                Please sign in to view profiles
+              </p>
+            </div>
+            <SignInForm onSignIn={setUser} />
+          </div>
+        </div>
+      );
+    }
+
+    return <UserProfile />;
   }
 
   // Placeholder for other sections

@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { config } from './config';
 
 interface User {
   _id: string;
@@ -10,6 +11,7 @@ interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<User>;
   register: (email: string, password: string, name: string) => Promise<User>;
+  getUserById: (userId: string) => Promise<User>;
   logout: () => void;
   isLoading: boolean;
 }
@@ -45,7 +47,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const fetchUserProfile = async () => {
     try {
-      const response = await fetch('https://movie-booking-api-40tb.onrender.com/api/auth/profile', {
+      const response = await fetch(`${config.API_BASE_URL}/auth/profile`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
@@ -71,7 +73,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (email: string, password: string): Promise<User> => {
     setIsLoading(true);
     try {
-      const response = await fetch('https://movie-booking-api-40tb.onrender.com/api/auth/login', {
+      const response = await fetch(`${config.API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -98,7 +100,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const register = async (email: string, password: string, name: string): Promise<User> => {
     setIsLoading(true);
     try {
-      const response = await fetch('https://movie-booking-api-40tb.onrender.com/api/auth/register', {
+      const response = await fetch(`${config.API_BASE_URL}/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -122,6 +124,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const getUserById = async (userId: string): Promise<User> => {
+    const response = await fetch(`${config.API_BASE_URL}/auth/${userId}`);
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to fetch user');
+    }
+    return await response.json();
+  };
+
   const logout = () => {
     localStorage.removeItem('token');
     setUser(null);
@@ -131,6 +142,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     user,
     login,
     register,
+    getUserById,
     logout,
     isLoading,
   };

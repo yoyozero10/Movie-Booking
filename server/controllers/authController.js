@@ -83,27 +83,19 @@ export const getProfile = async (req, res) => {
   }
 };
 
-// Update user profile
-export const updateProfile = async (req, res) => {
+// Get user by ID (public route for displaying user details)
+export const getUserById = async (req, res) => {
   try {
-    const { name, email } = req.body;
-
-    const user = await User.findByIdAndUpdate(
-      req.user.id,
-      { name, email },
-      { new: true, runValidators: true }
-    ).select('-password');
-
+    const user = await User.findById(req.params.id).select('-password');
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-
     res.json(user);
   } catch (error) {
-    console.error('Error updating profile:', error);
-    if (error.code === 11000) {
-      return res.status(400).json({ error: 'Email already in use' });
+    console.error('Error fetching user:', error);
+    if (error.name === 'CastError') {
+      return res.status(400).json({ error: 'Invalid user ID' });
     }
-    res.status(500).json({ error: 'Failed to update profile' });
+    res.status(500).json({ error: 'Failed to fetch user' });
   }
 };
