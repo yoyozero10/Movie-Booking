@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { api } from "../lib/api";
+import { useAuth } from "../lib/auth";
 
 // Define types for MongoDB documents
 interface Booking {
@@ -25,22 +26,36 @@ interface Booking {
 export function MyBookings() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
+  const [authError, setAuthError] = useState(false);
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchBookings = async () => {
+      if (!user) {
+        setAuthError(true);
+        setLoading(false);
+        return;
+      }
+
       try {
         const bookingsData = await api.getBookings();
         setBookings(bookingsData);
-      } catch (error) {
+        setAuthError(false);
+      } catch (error: any) {
         console.error('Error fetching bookings:', error);
-        toast.error('Failed to load bookings');
+        if (error.message?.includes('Access token required') || error.message?.includes('401')) {
+          setAuthError(true);
+          toast.error('Please sign in to view your bookings');
+        } else {
+          toast.error('Failed to load bookings');
+        }
       } finally {
         setLoading(false);
       }
     };
 
     void fetchBookings();
-  }, []);
+  }, [user]);
 
   const handleCancel = async (bookingId: string) => {
     if (!confirm("Are you sure you want to cancel this booking?")) return;
@@ -62,6 +77,24 @@ export function MyBookings() {
     return (
       <div className="flex justify-center items-center min-h-[400px]">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (authError || !user) {
+    return (
+      <div className="text-center py-20">
+        <div className="text-6xl mb-4">🔒</div>
+        <p className="text-xl text-gray-600 mb-2">Sign in required</p>
+        <p className="text-gray-500 mb-6">
+          Please sign in to view your bookings
+        </p>
+        <button
+          onClick={() => window.location.reload()}
+          className="px-6 py-2 bg-primary text-white rounded-full hover:bg-primary/90 transition-colors"
+        >
+          Sign In
+        </button>
       </div>
     );
   }

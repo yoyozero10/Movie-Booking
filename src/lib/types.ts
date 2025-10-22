@@ -17,5 +17,4 @@ export interface ContentProps {
   activeTab: "movies" | "bookings";
   setActiveTab: (tab: "movies" | "bookings") => void;
   user: User | null;
-  setUser: (user: User | null) => void;
 }

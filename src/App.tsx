@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import { api, useAuth } from "./lib/api";
+import { useState } from "react";
 import { SignInForm } from "./SignInForm";
 import { Toaster } from "sonner";
 import { MovieList } from "./components/MovieList";
@@ -7,39 +6,17 @@ import { MyBookings } from "./components/MyBookings";
 import { Navigation } from "./components/Navigation";
 import { HeroSection } from "./components/HeroSection";
 import { UserProfile } from "./components/UserProfile";
-import { ContentProps, User } from "./lib/types";
+import { ContentProps } from "./lib/types";
+import { useAuth } from "./lib/auth";
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<"movies" | "bookings">("movies");
   const [activeSection, setActiveSection] = useState<string>("home");
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-  const isAuthenticated = useAuth();
-
-  // Check authentication status on app load
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const userData = await api.getProfile();
-        setUser(userData);
-      } catch (error) {
-        console.error('Auth check failed:', error);
-        localStorage.removeItem('token');
-      }
-      setLoading(false);
-    };
-
-    if (isAuthenticated) {
-      void checkAuth();
-    } else {
-      setLoading(false);
-    }
-  }, [isAuthenticated]);
+  const { user, logout, isLoading } = useAuth();
 
   const handleSignOut = () => {
-    api.logout();
-    setUser(null);
+    logout();
     setActiveSection("home");
   };
 
@@ -55,7 +32,7 @@ export default function App() {
     setActiveTab("movies");
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -79,7 +56,6 @@ export default function App() {
           setActiveTab={setActiveTab}
           activeSection={activeSection}
           user={user}
-          setUser={setUser}
           showLoginModal={showLoginModal}
           setShowLoginModal={setShowLoginModal}
           onExploreClick={handleExploreClick}
@@ -91,7 +67,7 @@ export default function App() {
   );
 }
 
-function Content({ activeTab, setActiveTab, activeSection, user, setUser, showLoginModal, setShowLoginModal, onExploreClick }: ContentProps & {
+function Content({ activeTab, setActiveTab, activeSection, user, showLoginModal, setShowLoginModal, onExploreClick }: ContentProps & {
   activeSection: string;
   showLoginModal: boolean;
   setShowLoginModal: (show: boolean) => void;
@@ -121,8 +97,7 @@ function Content({ activeTab, setActiveTab, activeSection, user, setUser, showLo
                   Sign in to book your favorite movies
                 </p>
               </div>
-              <SignInForm onSignIn={(user) => {
-                setUser(user);
+              <SignInForm onSignIn={() => {
                 setShowLoginModal(false);
               }} />
             </div>
@@ -146,7 +121,7 @@ function Content({ activeTab, setActiveTab, activeSection, user, setUser, showLo
                 Please sign in to browse and book movies
               </p>
             </div>
-            <SignInForm onSignIn={setUser} />
+            <SignInForm onSignIn={() => setShowLoginModal(false)} />
           </div>
         </div>
       );
@@ -200,7 +175,7 @@ function Content({ activeTab, setActiveTab, activeSection, user, setUser, showLo
                 Please sign in to view profiles
               </p>
             </div>
-            <SignInForm onSignIn={setUser} />
+            <SignInForm onSignIn={() => setShowLoginModal(false)} />
           </div>
         </div>
       );

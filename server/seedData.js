@@ -15,7 +15,7 @@ const sampleMovies = [
     genre: "Action",
     duration: 181,
     rating: "PG-13",
-    posterUrl: "https://m.media-amazon.com/images/M/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_SX300.jpg",
+    posterUrl: "https://images.unsplash.com/photo-1635805737707-575885ab0820?w=300&h=450&fit=crop",
     releaseDate: "2019-04-26"
   },
   {
@@ -24,7 +24,7 @@ const sampleMovies = [
     genre: "Animation",
     duration: 88,
     rating: "G",
-    posterUrl: "https://m.media-amazon.com/images/M/MV5BYTYxNGMyZTYtMjE3MS00MzNjLWFjNmYtMDk3N2FmM2JiM2M1XkEyXkFqcGdeQXVyMjMwNDgzNjc@._V1_SX300.jpg",
+    posterUrl: "https://images.unsplash.com/photo-1507924538820-ede94a04019d?w=300&h=450&fit=crop",
     releaseDate: "2019-07-19"
   },
   {
@@ -33,7 +33,7 @@ const sampleMovies = [
     genre: "Drama",
     duration: 122,
     rating: "R",
-    posterUrl: "https://m.media-amazon.com/images/M/MV5BNGVjNWI4ZGUtNzE0MS00YTJmLWE0ZDctN2ZiYTk2YmI3NTYyXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_SX300.jpg",
+    posterUrl: "https://images.unsplash.com/photo-1489599735147-7f8a39c1ba1d?w=300&h=450&fit=crop",
     releaseDate: "2019-10-04"
   },
   {
@@ -42,7 +42,7 @@ const sampleMovies = [
     genre: "Action",
     duration: 129,
     rating: "PG-13",
-    posterUrl: "https://m.media-amazon.com/images/M/MV5BMGZlNTY1ZWUtYTMzZC00YmUyLWE0MjQtMTMxN2E3OTA3OAxkXkEyXkFqcGdeQXVyMDM2NDM2MQ@@._V1_SX300.jpg",
+    posterUrl: "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=300&h=450&fit=crop",
     releaseDate: "2019-07-02"
   },
   {
@@ -51,7 +51,7 @@ const sampleMovies = [
     genre: "Animation",
     duration: 103,
     rating: "PG",
-    posterUrl: "https://m.media-amazon.com/images/M/MV5BMjA0YjYyZGMtN2U0Ni00YmY4LWJkZTItYzU4N2Y2MjhhMzE2XkEyXkFqcGdeQXVyNDg4NjY5OTQ@._V1_SX300.jpg",
+    posterUrl: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=450&fit=crop",
     releaseDate: "2019-11-22"
   }
 ];

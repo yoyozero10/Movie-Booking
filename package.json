@@ -16,10 +16,8 @@
     "pre-deploy": "node pre-deploy-check.mjs"
   },
   "dependencies": {
-    "@convex-dev/auth": "^0.0.90",
     "bcryptjs": "^3.0.2",
     "clsx": "^2.1.1",
-    "convex": "^1.28.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "express-rate-limit": "^8.1.0",
