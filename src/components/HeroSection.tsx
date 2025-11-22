@@ -59,20 +59,22 @@ export function HeroSection({ onExploreClick }: HeroSectionProps) {
         <img
           src={featuredMovie.posterUrl}
           alt={featuredMovie.title}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover scale-110 blur-sm"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+        {/* Stronger overlays to hide poster text */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/70 to-black/40"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+        <div className="absolute inset-0 bg-black/30"></div>
       </div>
 
       {/* Content */}
       <div className="relative h-full flex items-center">
         <div className="max-w-7xl mx-auto px-6 py-20">
           <div className="max-w-2xl">
-            {/* Marvel Studios Badge */}
+            {/* Featured Badge */}
             <div className="mb-6">
-              <span className="inline-block bg-red-600 text-white px-4 py-2 font-bold text-sm tracking-wider">
-                MARVEL STUDIOS
+              <span className="inline-block bg-pink-600 text-white px-4 py-2 font-bold text-sm tracking-wider">
+                FEATURED
               </span>
             </div>
 

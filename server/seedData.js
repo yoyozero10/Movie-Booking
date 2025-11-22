@@ -15,7 +15,7 @@ const sampleMovies = [
     genre: "Action",
     duration: 181,
     rating: "PG-13",
-    posterUrl: "https://picsum.photos/seed/avengers-endgame/500/750",
+    posterUrl: "https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg",
     releaseDate: "2019-04-26"
   },
   {
@@ -24,7 +24,7 @@ const sampleMovies = [
     genre: "Sci-Fi, Thriller",
     duration: 148,
     rating: "PG-13",
-    posterUrl: "https://picsum.photos/seed/inception/500/750",
+    posterUrl: "https://image.tmdb.org/t/p/w500/ljsZTbVsrQSqZgWeep2B1QiDKuh.jpg",
     releaseDate: "2010-07-16"
   },
   {
@@ -33,7 +33,7 @@ const sampleMovies = [
     genre: "Drama, Thriller",
     duration: 132,
     rating: "R",
-    posterUrl: "https://picsum.photos/seed/parasite/500/750",
+    posterUrl: "https://image.tmdb.org/t/p/w500/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg",
     releaseDate: "2019-05-30"
   },
   {
@@ -42,7 +42,7 @@ const sampleMovies = [
     genre: "Comedy, Drama",
     duration: 99,
     rating: "R",
-    posterUrl: "https://picsum.photos/seed/grand-budapest/500/750",
+    posterUrl: "https://image.tmdb.org/t/p/w500/eWdyYQreja6JGCzqHWXpWHDrrPo.jpg",
     releaseDate: "2014-03-28"
   },
   {
@@ -51,7 +51,7 @@ const sampleMovies = [
     genre: "Animation",
     duration: 88,
     rating: "G",
-    posterUrl: "https://picsum.photos/seed/lion-king/500/750",
+    posterUrl: "https://image.tmdb.org/t/p/w500/dzBtMocZuJbjLOXvrl4zGYigDzh.jpg",
     releaseDate: "2019-07-19"
   },
   {
@@ -60,7 +60,7 @@ const sampleMovies = [
     genre: "Drama",
     duration: 122,
     rating: "R",
-    posterUrl: "https://picsum.photos/seed/joker/500/750",
+    posterUrl: "https://image.tmdb.org/t/p/w500/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg",
     releaseDate: "2019-10-04"
   },
   {
@@ -69,7 +69,7 @@ const sampleMovies = [
     genre: "Action",
     duration: 129,
     rating: "PG-13",
-    posterUrl: "https://picsum.photos/seed/spiderman-far-from-home/500/750",
+    posterUrl: "https://image.tmdb.org/t/p/w500/4q2NNj4S5dG2RLF9CpXsej7yXl.jpg",
     releaseDate: "2019-07-02"
   },
   {
@@ -78,17 +78,16 @@ const sampleMovies = [
     genre: "Animation",
     duration: 103,
     rating: "PG",
-    posterUrl: "https://picsum.photos/seed/frozen-2/500/750",
+    posterUrl: "https://image.tmdb.org/t/p/w500/pjeMs3yqRmFL3giJy4PMXWZTTPa.jpg",
     releaseDate: "2019-11-22"
-  }
-  ,
+  },
   {
     title: "The Matrix",
     description: "A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.",
     genre: "Sci-Fi, Action",
     duration: 136,
     rating: "R",
-    posterUrl: "https://picsum.photos/seed/the-matrix/500/750",
+    posterUrl: "https://image.tmdb.org/t/p/w500/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
     releaseDate: "1999-03-31"
   },
   {
@@ -97,7 +96,7 @@ const sampleMovies = [
     genre: "Sci-Fi, Drama",
     duration: 169,
     rating: "PG-13",
-    posterUrl: "https://picsum.photos/seed/interstellar/500/750",
+    posterUrl: "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
     releaseDate: "2014-11-07"
   },
   {
@@ -106,7 +105,7 @@ const sampleMovies = [
     genre: "Action, Adventure",
     duration: 120,
     rating: "R",
-    posterUrl: "https://picsum.photos/seed/mad-max-fury-road/500/750",
+    posterUrl: "https://image.tmdb.org/t/p/w500/hA2ple9q4qnwxp3hKVNhroipsir.jpg",
     releaseDate: "2015-05-15"
   },
   {
@@ -115,7 +114,7 @@ const sampleMovies = [
     genre: "Musical, Romance",
     duration: 128,
     rating: "PG-13",
-    posterUrl: "https://picsum.photos/seed/la-la-land/500/750",
+    posterUrl: "https://image.tmdb.org/t/p/w500/uDO8zWDhfWwoFdKS4fzkUJt0Rf0.jpg",
     releaseDate: "2016-12-09"
   },
   {
@@ -124,7 +123,7 @@ const sampleMovies = [
     genre: "Drama",
     duration: 142,
     rating: "R",
-    posterUrl: "https://picsum.photos/seed/shawshank-redemption/500/750",
+    posterUrl: "https://image.tmdb.org/t/p/w500/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg",
     releaseDate: "1994-09-23"
   }
 ];
@@ -154,10 +153,10 @@ async function seedDatabase() {
   try {
     console.log('🌱 Starting database seeding...');
 
-  // Connect to MongoDB (use fallback for local development)
-  const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/movie_booking';
-  await mongoose.connect(MONGODB_URI);
-  console.log(`✅ Connected to MongoDB (${MONGODB_URI.startsWith('mongodb+srv') ? 'Atlas (SRV)' : 'standard'})`);
+    // Connect to MongoDB (use fallback for local development)
+    const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/movie_booking';
+    await mongoose.connect(MONGODB_URI);
+    console.log(`✅ Connected to MongoDB (${MONGODB_URI.startsWith('mongodb+srv') ? 'Atlas (SRV)' : 'standard'})`);
 
     // Clear existing data
     await Movie.deleteMany({});

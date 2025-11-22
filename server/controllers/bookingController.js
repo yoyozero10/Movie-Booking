@@ -168,3 +168,31 @@ export const cancelBooking = async (req, res) => {
     session.endSession();
   }
 };
+
+// Delete booking
+export const deleteBooking = async (req, res) => {
+  try {
+    const booking = await Booking.findById(req.params.id);
+    if (!booking) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+
+    // Check if user owns this booking
+    if (booking.userId.toString() !== req.user.id) {
+      return res.status(403).json({ error: 'Not authorized to delete this booking' });
+    }
+
+    // Only allow deletion of cancelled bookings
+    if (booking.status !== 'cancelled') {
+      return res.status(400).json({ error: 'Only cancelled bookings can be deleted' });
+    }
+
+    await Booking.findByIdAndDelete(req.params.id);
+    logger.info('Booking deleted successfully:', req.params.id);
+
+    res.json({ message: 'Booking deleted successfully' });
+  } catch (error) {
+    logger.error('Error deleting booking:', error);
+    res.status(500).json({ error: 'Failed to delete booking' });
+  }
+};

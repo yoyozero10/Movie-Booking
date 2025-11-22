@@ -97,6 +97,29 @@ class ApiClient {
     return this.request(`/movies/${id}`);
   }
 
+  async searchMovies(params: {
+    q?: string;
+    genre?: string;
+    rating?: string;
+    minDuration?: number;
+    maxDuration?: number;
+    sortBy?: string;
+    order?: 'asc' | 'desc';
+    page?: number;
+    limit?: number;
+  }): Promise<any> {
+    const queryParams = new URLSearchParams();
+
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== '') {
+        queryParams.append(key, value.toString());
+      }
+    });
+
+    const queryString = queryParams.toString();
+    return this.request(`/movies/search${queryString ? `?${queryString}` : ''}`);
+  }
+
   // Booking methods
   async getBookings(): Promise<any> {
     return this.request('/bookings');
@@ -112,6 +135,12 @@ class ApiClient {
   async cancelBooking(bookingId: string): Promise<any> {
     return this.request(`/bookings/${bookingId}/cancel`, {
       method: 'PUT',
+    });
+  }
+
+  async deleteBooking(bookingId: string): Promise<any> {
+    return this.request(`/bookings/${bookingId}`, {
+      method: 'DELETE',
     });
   }
 

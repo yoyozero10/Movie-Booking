@@ -14,6 +14,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<"movies" | "bookings">("movies");
   const [activeSection, setActiveSection] = useState<string>("home");
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const { user, logout, isLoading } = useAuth();
 
   const handleSignOut = () => {
@@ -26,6 +27,10 @@ export default function App() {
     if (section === "movies") {
       setActiveTab("movies");
     }
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
   };
 
   const handleExploreClick = () => {
@@ -49,8 +54,9 @@ export default function App() {
         onSignOut={handleSignOut}
         activeSection={activeSection}
         onNavigate={handleNavigate}
+        onSearch={handleSearch}
       />
-      
+
       <main>
         <Content
           activeTab={activeTab}
@@ -60,19 +66,21 @@ export default function App() {
           showLoginModal={showLoginModal}
           setShowLoginModal={setShowLoginModal}
           onExploreClick={handleExploreClick}
+          searchQuery={searchQuery}
         />
       </main>
-      
+
       <Toaster />
     </div>
   );
 }
 
-function Content({ activeTab, setActiveTab, activeSection, user, showLoginModal, setShowLoginModal, onExploreClick }: ContentProps & {
+function Content({ activeTab, setActiveTab, activeSection, user, showLoginModal, setShowLoginModal, onExploreClick, searchQuery }: ContentProps & {
   activeSection: string;
   showLoginModal: boolean;
   setShowLoginModal: (show: boolean) => void;
   onExploreClick: () => void;
+  searchQuery: string;
 }) {
   // Show hero section on home
   if (activeSection === "home") {
@@ -80,7 +88,7 @@ function Content({ activeTab, setActiveTab, activeSection, user, showLoginModal,
       <>
         <HeroSection onExploreClick={onExploreClick} />
         <FeaturedMovies />
-        
+
         {/* Login Modal */}
         {showLoginModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
@@ -136,28 +144,26 @@ function Content({ activeTab, setActiveTab, activeSection, user, showLoginModal,
             <div className="flex gap-4 border-b border-gray-700">
               <button
                 onClick={() => setActiveTab("movies")}
-                className={`px-4 py-2 font-semibold transition-colors ${
-                  activeTab === "movies"
+                className={`px-4 py-2 font-semibold transition-colors ${activeTab === "movies"
                     ? "text-pink-400 border-b-2 border-pink-400"
                     : "text-gray-400 hover:text-gray-300"
-                }`}
+                  }`}
               >
                 Browse Movies
               </button>
               <button
                 onClick={() => setActiveTab("bookings")}
-                className={`px-4 py-2 font-semibold transition-colors ${
-                  activeTab === "bookings"
+                className={`px-4 py-2 font-semibold transition-colors ${activeTab === "bookings"
                     ? "text-pink-400 border-b-2 border-pink-400"
                     : "text-gray-400 hover:text-gray-300"
-                }`}
+                  }`}
               >
                 My Bookings
               </button>
             </div>
           </div>
 
-          {activeTab === "movies" ? <MovieList /> : <MyBookings />}
+          {activeTab === "movies" ? <MovieList searchQueryFromNav={searchQuery} /> : <MyBookings />}
         </div>
       </div>
     );

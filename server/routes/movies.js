@@ -4,13 +4,15 @@ import {
   getMovieById,
   createMovie,
   updateMovie,
-  deleteMovie
+  deleteMovie,
+  searchAndFilterMovies
 } from '../controllers/movieController.js';
 import { authenticateToken } from '../middleware/auth.js';
 
 const router = express.Router();
 
 // Public routes
+router.get('/search', searchAndFilterMovies); // Must be before /:id route
 router.get('/', getAllMovies);
 router.get('/:id', getMovieById);
 

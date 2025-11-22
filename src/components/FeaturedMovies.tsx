@@ -49,16 +49,16 @@ export function FeaturedMovies() {
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
         {movies.map((m) => (
           <div key={m._id} className="bg-gray-800 rounded-lg overflow-hidden border border-gray-700 cursor-pointer hover:border-pink-500/60 transition">
-            <div className="w-full h-48 bg-gray-900 flex items-center justify-center overflow-hidden">
+            <div className="w-full h-64 bg-gray-900 flex items-center justify-center overflow-hidden">
               <img
                 src={m.posterUrl}
                 alt={m.title}
                 loading="lazy"
                 onError={(e) => { (e.target as HTMLImageElement).src = 'https://picsum.photos/seed/placeholder/500/750'; }}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
               />
             </div>
-            <div className="p-2">
+            <div className="p-2 bg-gray-800">
               <h4 className="text-sm font-semibold text-white truncate">{m.title}</h4>
               <p className="text-xs text-gray-400">{m.genre}</p>
             </div>
