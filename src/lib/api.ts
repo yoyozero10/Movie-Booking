@@ -144,6 +144,10 @@ class ApiClient {
     });
   }
 
+  async getBookedSeats(showtimeId: string): Promise<any> {
+    return this.request(`/bookings/showtime/${showtimeId}/booked-seats`);
+  }
+
   // Showtime methods
   async getShowtimesByMovie(movieId: string, date?: string): Promise<any> {
     const params = date ? `?date=${date}` : '';

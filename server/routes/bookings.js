@@ -3,13 +3,17 @@ import {
   getUserBookings,
   createBooking,
   cancelBooking,
-  deleteBooking
+  deleteBooking,
+  getBookedSeats
 } from '../controllers/bookingController.js';
 import { authenticateToken } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// All booking routes require authentication
+// Public route to get booked seats for a showtime (no auth required)
+router.get('/showtime/:showtimeId/booked-seats', getBookedSeats);
+
+// All other booking routes require authentication
 router.use(authenticateToken);
 
 router.get('/', getUserBookings);

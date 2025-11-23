@@ -130,18 +130,33 @@ const sampleMovies = [
 
 const sampleTheaters = [
   {
-    name: "Cineplex Downtown",
-    location: "123 Main Street, Downtown",
+    name: "CGV Vincom Center",
+    location: "72 Lê Thánh Tôn, Quận 1, TP. Hồ Chí Minh",
     totalSeats: 200
   },
   {
-    name: "Mega Cinema Mall",
-    location: "456 Shopping Mall, City Center",
+    name: "Galaxy Nguyễn Du",
+    location: "116 Nguyễn Du, Quận 1, TP. Hồ Chí Minh",
     totalSeats: 300
   },
   {
-    name: "Classic Theater",
-    location: "789 Heritage District",
+    name: "Lotte Cinema Landmark 81",
+    location: "Vinhomes Central Park, 720A Điện Biên Phủ, Bình Thạnh",
+    totalSeats: 250
+  },
+  {
+    name: "BHD Star Bitexco",
+    location: "Tầng 3, Bitexco Financial Tower, Quận 1",
+    totalSeats: 180
+  },
+  {
+    name: "CGV Aeon Tân Phú",
+    location: "30 Bờ Bao Tân Thắng, Sơn Kỳ, Tân Phú",
+    totalSeats: 220
+  },
+  {
+    name: "Galaxy Kinh Dương Vương",
+    location: "718bis Kinh Dương Vương, Quận 6",
     totalSeats: 150
   }
 ];

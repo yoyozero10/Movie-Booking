@@ -196,3 +196,24 @@ export const deleteBooking = async (req, res) => {
     res.status(500).json({ error: 'Failed to delete booking' });
   }
 };
+
+// Get booked seats for a showtime
+export const getBookedSeats = async (req, res) => {
+  try {
+    const { showtimeId } = req.params;
+
+    // Find all confirmed bookings for this showtime
+    const bookings = await Booking.find({
+      showtimeId,
+      status: 'confirmed'
+    }).select('seats');
+
+    // Extract all booked seats
+    const bookedSeats = bookings.flatMap(booking => booking.seats);
+
+    res.json({ bookedSeats });
+  } catch (error) {
+    logger.error('Error fetching booked seats:', error);
+    res.status(500).json({ error: 'Failed to fetch booked seats' });
+  }
+};

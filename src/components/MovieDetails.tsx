@@ -16,19 +16,21 @@ interface Movie {
   updatedAt: string;
 }
 
+interface Theater {
+  _id: string;
+  name: string;
+  location: string;
+  totalSeats: number;
+}
+
 interface Showtime {
   _id: string;
-  movieId: string;
-  theaterId: string;
+  movieId: string | Movie;
+  theaterId: string | Theater;
   startTime: string;
   date: string;
   price: number;
   availableSeats: number;
-  movieId_details?: Movie;
-  theaterId_details?: {
-    name: string;
-    location: string;
-  };
 }
 
 export function MovieDetails({
@@ -80,7 +82,7 @@ export function MovieDetails({
         <button
           onClick={onBack}
           className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-hover"
-                    >
+        >
           Go Back
         </button>
       </div>
@@ -133,42 +135,61 @@ export function MovieDetails({
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {showtimes.map((showtime) => (
-                      <button
-                        key={showtime._id}
-                        type="button"
-                        className="w-full text-left border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
-                        onClick={() => {
-                          console.debug('showtime clicked', showtime._id);
+                    <button
+                      key={showtime._id}
+                      type="button"
+                      className="w-full text-left border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
+                      onClick={() => {
+                        console.debug('showtime clicked', showtime._id);
+                        setSelectedShowtimeId(showtime._id);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          console.debug('showtime activated via keyboard', showtime._id);
                           setSelectedShowtimeId(showtime._id);
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault();
-                            console.debug('showtime activated via keyboard', showtime._id);
-                            setSelectedShowtimeId(showtime._id);
-                          }
-                        }}
-                        aria-pressed={selectedShowtimeId === showtime._id}
-                      >
-                      <div className="flex justify-between items-start mb-2">
-                        <div>
-                          <p className="font-semibold">
-                            {showtime.theaterId_details?.name || 'Theater'}
+                        }
+                      }}
+                      aria-pressed={selectedShowtimeId === showtime._id}
+                    >
+                      <div className="flex justify-between items-start mb-3">
+                        <div className="flex-1">
+                          <p className="font-semibold text-white text-lg mb-1">
+                            {typeof showtime.theaterId === 'object' ? showtime.theaterId.name : 'Theater'}
                           </p>
-                          <p className="text-sm text-gray-300">
-                            {showtime.theaterId_details?.location || 'Location'}
+                          <p className="text-sm text-gray-400 flex items-center gap-1">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            {typeof showtime.theaterId === 'object' ? showtime.theaterId.location : 'Location'}
                           </p>
                         </div>
-                        <span className="text-lg font-bold text-primary">
+                        <span className="text-xl font-bold text-primary">
                           ${showtime.price}
                         </span>
                       </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm">
-                          {showtime.date} at {showtime.startTime}
-                        </span>
-                        <span className="text-sm text-green-600">
-                          {showtime.availableSeats} seats left
+                      <div className="flex justify-between items-center pt-3 border-t border-gray-700">
+                        <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-1.5 bg-primary/20 px-3 py-1.5 rounded-lg">
+                            <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span className="text-sm font-semibold text-primary">{showtime.startTime}</span>
+                          </div>
+                          <div className="flex items-center gap-1.5 text-gray-300">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            <span className="text-sm">{showtime.date}</span>
+                          </div>
+                        </div>
+                        <span className="text-sm font-medium text-green-500 flex items-center gap-1">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                            <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" />
+                          </svg>
+                          {showtime.availableSeats} seats
                         </span>
                       </div>
                     </button>
