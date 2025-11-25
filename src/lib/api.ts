@@ -162,6 +162,23 @@ class ApiClient {
   async getTheaters(): Promise<any> {
     return this.request('/theaters');
   }
+
+  async getRegions(): Promise<any> {
+    return this.request('/theaters/regions');
+  }
+
+  async getTheatersByRegion(region: string): Promise<any> {
+    return this.request(`/theaters/region/${encodeURIComponent(region)}`);
+  }
+
+  async getMoviesByTheater(theaterId: string): Promise<any> {
+    return this.request(`/theaters/${theaterId}/movies`);
+  }
+
+  async getShowtimesByTheaterAndMovie(theaterId: string, movieId: string, date?: string): Promise<any> {
+    const params = date ? `?date=${date}` : '';
+    return this.request(`/theaters/${theaterId}/movies/${movieId}/showtimes${params}`);
+  }
 }
 
 // Create singleton instance

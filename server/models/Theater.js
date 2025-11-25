@@ -11,6 +11,17 @@ const theaterSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  region: {
+    type: String,
+    required: true,
+    trim: true,
+    index: true
+  },
+  city: {
+    type: String,
+    default: "TP. Hồ Chí Minh",
+    trim: true
+  },
   totalSeats: {
     type: Number,
     required: true,
@@ -27,7 +38,7 @@ const theaterSchema = new mongoose.Schema({
 });
 
 // Update the updatedAt field before saving
-theaterSchema.pre('save', function(next) {
+theaterSchema.pre('save', function (next) {
   this.updatedAt = new Date();
   next();
 });

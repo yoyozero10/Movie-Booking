@@ -7,8 +7,20 @@ import { logger } from '../server.js';
 export const getUserBookings = async (req, res) => {
   try {
     const bookings = await Booking.find({ userId: req.user.id })
-      .populate({ path: 'showtimeId', populate: { path: 'movieId', select: 'title posterUrl' } })
+      .populate({
+        path: 'showtimeId',
+        populate: {
+          path: 'movieId theaterId',
+          select: 'title posterUrl name location'
+        }
+      })
       .sort({ createdAt: -1 });
+
+    // Debug logging
+    if (bookings.length > 0) {
+      console.log('DEBUG: First booking showtime:', bookings[0].showtimeId);
+      console.log('DEBUG: First booking theater:', bookings[0].showtimeId?.theaterId);
+    }
 
     res.json(bookings);
   } catch (error) {
@@ -114,7 +126,13 @@ export const createBooking = async (req, res) => {
 
     // Populate the saved booking for response
     const populatedBooking = await Booking.findById(savedBooking._id)
-      .populate({ path: 'showtimeId', populate: { path: 'movieId', select: 'title posterUrl' } });
+      .populate({
+        path: 'showtimeId',
+        populate: [
+          { path: 'movieId', select: 'title posterUrl' },
+          { path: 'theaterId', select: 'name location' }
+        ]
+      });
 
     logger.info('Booking populated successfully');
     res.status(201).json(populatedBooking);

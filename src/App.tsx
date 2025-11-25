@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { SignInForm } from "./SignInForm";
 import { Toaster } from "sonner";
-import { MovieList } from "./components/MovieList";
+import { TheaterFlow } from "./components/TheaterFlow";
 import { MyBookings } from "./components/MyBookings";
 import { Navigation } from "./components/Navigation";
 import { HeroSection } from "./components/HeroSection";
@@ -145,8 +145,8 @@ function Content({ activeTab, setActiveTab, activeSection, user, showLoginModal,
               <button
                 onClick={() => setActiveTab("movies")}
                 className={`px-4 py-2 font-semibold transition-colors ${activeTab === "movies"
-                    ? "text-pink-400 border-b-2 border-pink-400"
-                    : "text-gray-400 hover:text-gray-300"
+                  ? "text-pink-400 border-b-2 border-pink-400"
+                  : "text-gray-400 hover:text-gray-300"
                   }`}
               >
                 Browse Movies
@@ -154,8 +154,8 @@ function Content({ activeTab, setActiveTab, activeSection, user, showLoginModal,
               <button
                 onClick={() => setActiveTab("bookings")}
                 className={`px-4 py-2 font-semibold transition-colors ${activeTab === "bookings"
-                    ? "text-pink-400 border-b-2 border-pink-400"
-                    : "text-gray-400 hover:text-gray-300"
+                  ? "text-pink-400 border-b-2 border-pink-400"
+                  : "text-gray-400 hover:text-gray-300"
                   }`}
               >
                 My Bookings
@@ -163,7 +163,7 @@ function Content({ activeTab, setActiveTab, activeSection, user, showLoginModal,
             </div>
           </div>
 
-          {activeTab === "movies" ? <MovieList searchQueryFromNav={searchQuery} /> : <MyBookings />}
+          {activeTab === "movies" ? <TheaterFlow /> : <MyBookings />}
         </div>
       </div>
     );

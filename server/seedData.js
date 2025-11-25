@@ -132,32 +132,44 @@ const sampleTheaters = [
   {
     name: "CGV Vincom Center",
     location: "72 Lê Thánh Tôn, Quận 1, TP. Hồ Chí Minh",
-    totalSeats: 200
+    region: "Quận 1",
+    city: "TP. Hồ Chí Minh",
+    totalSeats: 100
   },
   {
     name: "Galaxy Nguyễn Du",
     location: "116 Nguyễn Du, Quận 1, TP. Hồ Chí Minh",
-    totalSeats: 300
+    region: "Quận 1",
+    city: "TP. Hồ Chí Minh",
+    totalSeats: 100
   },
   {
     name: "Lotte Cinema Landmark 81",
     location: "Vinhomes Central Park, 720A Điện Biên Phủ, Bình Thạnh",
-    totalSeats: 250
+    region: "Bình Thạnh",
+    city: "TP. Hồ Chí Minh",
+    totalSeats: 100
   },
   {
     name: "BHD Star Bitexco",
     location: "Tầng 3, Bitexco Financial Tower, Quận 1",
-    totalSeats: 180
+    region: "Quận 1",
+    city: "TP. Hồ Chí Minh",
+    totalSeats: 100
   },
   {
     name: "CGV Aeon Tân Phú",
     location: "30 Bờ Bao Tân Thắng, Sơn Kỳ, Tân Phú",
-    totalSeats: 220
+    region: "Tân Phú",
+    city: "TP. Hồ Chí Minh",
+    totalSeats: 100
   },
   {
     name: "Galaxy Kinh Dương Vương",
     location: "718bis Kinh Dương Vương, Quận 6",
-    totalSeats: 150
+    region: "Quận 6",
+    city: "TP. Hồ Chí Minh",
+    totalSeats: 100
   }
 ];
 
@@ -208,13 +220,14 @@ async function seedDatabase() {
         for (const date of dates) {
           for (const startTime of times) {
             const price = 8 + (ti * 2) + (mi % 3); // simple varying price
+
             showtimesData.push({
               movieId: movies[mi]._id,
               theaterId: theaters[ti]._id,
               startTime,
               date,
               price,
-              availableSeats: theaters[ti].totalSeats
+              availableSeats: theaters[ti].totalSeats // Start with full capacity
             });
           }
         }

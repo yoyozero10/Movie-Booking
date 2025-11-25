@@ -35,9 +35,11 @@ interface Showtime {
 
 export function MovieDetails({
   movieId,
+  theaterId,
   onBack,
 }: {
   movieId: string;
+  theaterId?: string;
   onBack: () => void;
 }) {
   const [movie, setMovie] = useState<Movie | null>(null);
@@ -53,7 +55,24 @@ export function MovieDetails({
         setMovie(movieData);
 
         // Fetch showtimes for this movie
-        const showtimesData = await api.getShowtimesByMovie(movieId, undefined);
+        let showtimesData;
+        if (theaterId) {
+          // If theaterId is provided, get showtimes for this specific theater
+          showtimesData = await api.getShowtimesByTheaterAndMovie(theaterId, movieId);
+        } else {
+          // Otherwise get all showtimes for this movie
+          showtimesData = await api.getShowtimesByMovie(movieId, undefined);
+        }
+
+        // Filter by theaterId if provided
+        if (theaterId && showtimesData) {
+          showtimesData = showtimesData.filter((st: Showtime) =>
+            typeof st.theaterId === 'object'
+              ? st.theaterId._id === theaterId
+              : st.theaterId === theaterId
+          );
+        }
+
         setShowtimes(showtimesData);
       } catch (error) {
         console.error('Error fetching movie details:', error);
@@ -65,7 +84,7 @@ export function MovieDetails({
     if (movieId) {
       void fetchMovieAndShowtimes();
     }
-  }, [movieId]);
+  }, [movieId, theaterId]);
 
   if (loading) {
     return (

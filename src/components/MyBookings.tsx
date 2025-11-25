@@ -15,6 +15,10 @@ interface Booking {
       posterUrl: string;
       duration: number;
     };
+    theaterId: {
+      name: string;
+      location: string;
+    };
     startTime: string;
     date: string;
     price: number;
@@ -151,10 +155,10 @@ export function MyBookings() {
                 <div className="absolute top-2 right-2 md:hidden">
                   <span
                     className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm ${booking.status === 'confirmed'
-                        ? 'bg-green-500 text-white'
-                        : booking.status === 'cancelled'
-                          ? 'bg-red-500 text-white'
-                          : 'bg-gray-500 text-white'
+                      ? 'bg-green-500 text-white'
+                      : booking.status === 'cancelled'
+                        ? 'bg-red-500 text-white'
+                        : 'bg-gray-500 text-white'
                       }`}
                   >
                     {booking.status}
@@ -177,10 +181,10 @@ export function MyBookings() {
                     <div className="hidden md:block">
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${booking.status === 'confirmed'
-                            ? 'bg-green-500/20 text-green-400 border border-green-500/30'
-                            : booking.status === 'cancelled'
-                              ? 'bg-red-500/20 text-red-400 border border-red-500/30'
-                              : 'bg-gray-500/20 text-gray-400 border border-gray-500/30'
+                          ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+                          : booking.status === 'cancelled'
+                            ? 'bg-red-500/20 text-red-400 border border-red-500/30'
+                            : 'bg-gray-500/20 text-gray-400 border border-gray-500/30'
                           }`}
                       >
                         {booking.status}
@@ -189,6 +193,21 @@ export function MyBookings() {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                    {/* Theater Info - NEW */}
+                    <div className="flex items-center space-x-3 text-gray-300 col-span-1 sm:col-span-2 bg-gray-700/30 p-3 rounded-lg border border-gray-700">
+                      <div className="p-2 bg-gray-700/50 rounded-lg">
+                        <svg className="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-400">Theater Location</p>
+                        <p className="font-bold text-white">{booking.showtimeId?.theaterId?.name || 'Unknown Theater'}</p>
+                        <p className="text-sm text-gray-400">{booking.showtimeId?.theaterId?.location || 'Address not available'}</p>
+                      </div>
+                    </div>
+
                     <div className="flex items-center space-x-3 text-gray-300">
                       <div className="p-2 bg-gray-700/50 rounded-lg">
                         <Calendar className="w-5 h-5 text-pink-400" />
