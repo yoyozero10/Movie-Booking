@@ -2,42 +2,458 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================
+   CINEMAVISION PRO DESIGN SYSTEM
+   Apple-inspired glassmorphism cinema booking
+   ============================================ */
+
+/* === FONTS === */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Bricolage+Grotesque:wght@300;400;500;600;700&display=swap');
+
 :root {
-  --color-light: #ffffff;
-  --color-dark: #171717;
+  /* Apple Colors */
+  --color-blue-primary: #007AFF;
+  --color-blue-hover: #0056CC;
+  --color-orange-premium: #FF9500;
+  --color-orange-hover: #FF6B00;
+  --color-red-accent: #FF2D55;
+
+  /* Glass Effects */
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-bg-premium: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-border-premium: rgba(255, 255, 255, 0.15);
 }
 
-.accent-text {
-  @apply text-slate-600;
-}
-
+/* === BODY === */
 body {
-  font-family:
-    "Inter Variable",
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    "Helvetica Neue",
-    Arial,
-    "Noto Sans",
-    sans-serif,
-    "Apple Color Emoji",
-    "Segoe UI Emoji",
-    "Segoe UI Symbol",
-    "Noto Color Emoji";
-  color: var(--color-dark);
-  background: var(--color-light);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(180deg, #000000 0%, #0a0a0a 50%, #1a1a1a 100%);
+  color: #ffffff;
 }
 
-/* only use this to update the style of the auth input fields. use a different class for all other input fields */
+/* === ANIMATIONS === */
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes blurIn {
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+@keyframes scaleIn {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideRight {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideLeft {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px) translateX(0px);
+  }
+
+  33% {
+    transform: translateY(-40px) translateX(30px);
+  }
+
+  66% {
+    transform: translateY(20px) translateX(-25px);
+  }
+}
+
+/* Animation Classes */
+.animate-fade-in {
+  animation: fadeIn 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  opacity: 0;
+}
+
+.animate-slide-up {
+  animation: slideUp 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  opacity: 0;
+  transform: translateY(60px);
+}
+
+.animate-blur-in {
+  animation: blurIn 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  opacity: 0;
+  filter: blur(30px);
+}
+
+.animate-scale-in {
+  animation: scaleIn 1.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.animate-slide-right {
+  animation: slideRight 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  opacity: 0;
+  transform: translateX(-40px);
+}
+
+.animate-slide-left {
+  animation: slideLeft 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  opacity: 0;
+  transform: translateX(40px);
+}
+
+/* Animation Delays */
+.delay-100 {
+  animation-delay: 0.1s;
+}
+
+.delay-200 {
+  animation-delay: 0.2s;
+}
+
+.delay-300 {
+  animation-delay: 0.3s;
+}
+
+.delay-400 {
+  animation-delay: 0.4s;
+}
+
+.delay-500 {
+  animation-delay: 0.5s;
+}
+
+.delay-600 {
+  animation-delay: 0.6s;
+}
+
+.delay-700 {
+  animation-delay: 0.7s;
+}
+
+.delay-800 {
+  animation-delay: 0.8s;
+}
+
+.delay-900 {
+  animation-delay: 0.9s;
+}
+
+.delay-1000 {
+  animation-delay: 1s;
+}
+
+.delay-1200 {
+  animation-delay: 1.2s;
+}
+
+.delay-1400 {
+  animation-delay: 1.4s;
+}
+
+/* === GLASSMORPHISM === */
+.apple-glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 0.5px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 32px 64px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 0 0 0.5px rgba(255, 255, 255, 0.05);
+}
+
+.premium-glass {
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0.02) 50%,
+      rgba(255, 255, 255, 0.08) 100%);
+  backdrop-filter: blur(60px) saturate(200%);
+  -webkit-backdrop-filter: blur(60px) saturate(200%);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  box-shadow:
+    0 48px 100px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* === SEATS === */
+.seat {
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+}
+
+.seat:hover:not(.seat-occupied) {
+  transform: scale(1.1);
+  filter: drop-shadow(0 4px 12px rgba(0, 122, 255, 0.25));
+}
+
+.seat-available {
+  background: linear-gradient(135deg, rgba(52, 199, 89, 0.25) 0%, rgba(48, 209, 88, 0.35) 100%);
+  border: 1px solid rgba(52, 199, 89, 0.5);
+  color: rgba(52, 199, 89, 1);
+  box-shadow: 0 0 12px rgba(52, 199, 89, 0.15);
+}
+
+.seat-available:hover {
+  background: linear-gradient(135deg, rgba(52, 199, 89, 0.35) 0%, rgba(48, 209, 88, 0.45) 100%);
+  border-color: rgba(52, 199, 89, 0.7);
+  box-shadow: 0 0 20px rgba(52, 199, 89, 0.3);
+}
+
+.seat-selected {
+  background: linear-gradient(135deg, #0A84FF 0%, #007AFF 100%);
+  box-shadow: 0 0 28px rgba(10, 132, 255, 0.6), 0 0 12px rgba(10, 132, 255, 0.4);
+  border: 1px solid rgba(10, 132, 255, 0.8);
+  color: white;
+  font-weight: 600;
+}
+
+.seat-occupied {
+  background: linear-gradient(135deg, rgba(255, 59, 48, 0.3) 0%, rgba(255, 45, 85, 0.4) 100%);
+  border: 1px solid rgba(255, 59, 48, 0.5);
+  color: rgba(255, 59, 48, 0.9);
+  cursor: not-allowed;
+  opacity: 0.7;
+  box-shadow: 0 0 8px rgba(255, 59, 48, 0.15);
+}
+
+.seat-premium {
+  background: linear-gradient(135deg, #FF9500 0%, #FF6B00 100%);
+  box-shadow: 0 0 20px rgba(255, 149, 0, 0.3);
+}
+
+/* === FLOATING ORBS === */
+.floating-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.15;
+  animation: float 12s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.floating-orb:nth-child(1) {
+  background: radial-gradient(circle, rgba(0, 122, 255, 0.4) 0%, rgba(0, 122, 255, 0.1) 70%);
+  animation-delay: 0s;
+}
+
+.floating-orb:nth-child(2) {
+  background: radial-gradient(circle, rgba(255, 149, 0, 0.4) 0%, rgba(255, 149, 0, 0.1) 70%);
+  animation-delay: 4s;
+}
+
+.floating-orb:nth-child(3) {
+  background: radial-gradient(circle, rgba(255, 45, 85, 0.4) 0%, rgba(255, 45, 85, 0.1) 70%);
+  animation-delay: 8s;
+}
+
+/* === MOVIE CARDS === */
+.movie-card {
+  background: rgba(28, 28, 30, 0.8);
+  border: 0.5px solid rgba(99, 99, 102, 0.2);
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+}
+
+.movie-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 32px 64px rgba(0, 0, 0, 0.5);
+  border-color: rgba(174, 174, 178, 0.3);
+}
+
+/* === BUTTONS === */
+.apple-button {
+  background: linear-gradient(135deg, #007AFF 0%, #0056CC 100%);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+  border: none;
+  color: white;
+  font-weight: 500;
+}
+
+.apple-button:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 24px rgba(0, 122, 255, 0.3);
+}
+
+.apple-button:active {
+  transform: scale(0.98);
+}
+
+/* === SCREEN ELEMENT === */
+.screen-glow {
+  position: relative;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.screen-glow::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 12px;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(0, 122, 255, 0.3) 50%,
+      transparent 100%);
+  border-radius: 6px;
+  filter: blur(6px);
+  transition: all 0.4s ease;
+}
+
+.screen-active {
+  transform: scale(1.02);
+  box-shadow: 0 0 40px rgba(0, 122, 255, 0.4);
+}
+
+.screen-active::before {
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(0, 122, 255, 0.8) 50%,
+      transparent 100%);
+  filter: blur(8px);
+  height: 16px;
+}
+
+/* === TEXT GRADIENTS === */
+.apple-text-gradient {
+  background: linear-gradient(135deg, #ffffff 0%, #c7c7cc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-gradient {
+  background: linear-gradient(135deg,
+      rgba(0, 122, 255, 0.1) 0%,
+      rgba(255, 149, 0, 0.05) 50%,
+      rgba(255, 45, 85, 0.1) 100%);
+}
+
+/* === PARALLAX === */
+.parallax-bg {
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+
+.parallax-slow {
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+
+.parallax-fast {
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+
+/* === AUTH FORMS === */
 .auth-input-field {
-  @apply w-full px-4 py-3 rounded-container bg-white border border-gray-200 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-shadow shadow-sm hover:shadow;
+  @apply w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/50 focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 outline-none transition-all duration-200;
 }
 
-/* only use this to update the style of the auth buttons. use the button class for all other buttons */
 .auth-button {
-  @apply w-full px-4 py-3 rounded bg-primary text-white font-semibold hover:bg-primary-hover transition-colors shadow-sm hover:shadow disabled:opacity-50 disabled:cursor-not-allowed;
+  @apply w-full px-4 py-3 rounded-lg font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed;
+  background: linear-gradient(135deg, #007AFF 0%, #0056CC 100%);
+  color: white;
+}
+
+.auth-button:hover:not(:disabled) {
+  transform: scale(1.02);
+  box-shadow: 0 8px 24px rgba(0, 122, 255, 0.3);
+}
+
+/* === UTILITY CLASSES === */
+.btn-primary {
+  @apply px-6 py-3 rounded-lg font-medium text-white transition-all duration-300;
+  background: linear-gradient(135deg, #007AFF 0%, #0056CC 100%);
+}
+
+.btn-primary:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 24px rgba(0, 122, 255, 0.3);
+}
+
+.btn-secondary {
+  @apply px-6 py-3 rounded-lg font-medium text-white transition-all duration-300;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(40px);
+  border: 0.5px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.card {
+  @apply rounded-lg p-6;
+  background: rgba(28, 28, 30, 0.8);
+  border: 0.5px solid rgba(99, 99, 102, 0.2);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .seat {
+    width: 24px;
+    height: 24px;
+  }
+
+  .floating-orb {
+    width: 200px !important;
+    height: 200px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .seat {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* === SMOOTH SCROLLING === */
+html {
+  scroll-behavior: smooth;
+}
+
+/* === SELECTION === */
+::selection {
+  background: rgba(0, 122, 255, 0.3);
+  color: white;
+}
+
+::-moz-selection {
+  background: rgba(0, 122, 255, 0.3);
+  color: white;
 }

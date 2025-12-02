@@ -1,0 +1,774 @@
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CinemaVision Pro • The Future of Entertainment</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+body {
+font-family: 'SF Pro Display', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+background: linear-gradient(180deg, #000000 0%, #0a0a0a 50%, #1a1a1a 100%);
+}
+.animate-fade-in { animation: fadeIn 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; opacity: 0; }
+.animate-slide-up { animation: slideUp 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; opacity: 0; transform: translateY(60px); }
+.animate-blur-in { animation: blurIn 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; opacity: 0; filter: blur(30px); }
+.animate-scale-in { animation: scaleIn 1.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; opacity: 0; transform: scale(0.8); }
+.animate-slide-right { animation: slideRight 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; opacity: 0; transform: translateX(-40px); }
+.animate-slide-left { animation: slideLeft 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; opacity: 0; transform: translateX(40px); }
+@keyframes fadeIn { to { opacity: 1; } }
+@keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+@keyframes blurIn { to { opacity: 1; filter: blur(0); } }
+@keyframes scaleIn { to { opacity: 1; transform: scale(1); } }
+@keyframes slideRight { to { opacity: 1; transform: translateX(0); } }
+@keyframes slideLeft { to { opacity: 1; transform: translateX(0); } }
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+.delay-600 { animation-delay: 0.6s; }
+.delay-700 { animation-delay: 0.7s; }
+.delay-800 { animation-delay: 0.8s; }
+.delay-900 { animation-delay: 0.9s; }
+.delay-1000 { animation-delay: 1s; }
+.delay-1200 { animation-delay: 1.2s; }
+.delay-1400 { animation-delay: 1.4s; }
+.apple-glass {
+background: rgba(255, 255, 255, 0.05);
+backdrop-filter: blur(40px) saturate(180%);
+border: 0.5px solid rgba(255, 255, 255, 0.1);
+box-shadow:
+0 32px 64px rgba(0, 0, 0, 0.4),
+inset 0 1px 0 rgba(255, 255, 255, 0.05),
+0 0 0 0.5px rgba(255, 255, 255, 0.05);
+}
+.premium-glass {
+background: linear-gradient(135deg,
+rgba(255, 255, 255, 0.08) 0%,
+rgba(255, 255, 255, 0.02) 50%,
+rgba(255, 255, 255, 0.08) 100%);
+backdrop-filter: blur(60px) saturate(200%);
+border: 0.5px solid rgba(255, 255, 255, 0.15);
+box-shadow:
+0 48px 100px rgba(0, 0, 0, 0.35),
+inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+.seat {
+transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+position: relative;
+overflow: hidden;
+}
+.seat:hover {
+transform: scale(1.1);
+filter: drop-shadow(0 4px 12px rgba(0, 122, 255, 0.25));
+}
+.seat-available {
+background: linear-gradient(135deg, rgba(142, 142, 147, 0.3) 0%, rgba(99, 99, 102, 0.4) 100%);
+border: 0.5px solid rgba(174, 174, 178, 0.2);
+}
+.seat-selected {
+background: linear-gradient(135deg, #007AFF 0%, #0056CC 100%);
+box-shadow: 0 0 24px rgba(0, 122, 255, 0.4);
+border: 0.5px solid rgba(0, 122, 255, 0.6);
+}
+.seat-occupied {
+background: linear-gradient(135deg, rgba(99, 99, 102, 0.6) 0%, rgba(72, 72, 74, 0.7) 100%);
+border: 0.5px solid rgba(99, 99, 102, 0.3);
+}
+.seat-premium {
+background: linear-gradient(135deg, #FF9500 0%, #FF6B00 100%);
+box-shadow: 0 0 20px rgba(255, 149, 0, 0.3);
+}
+.floating-orb {
+position: absolute;
+border-radius: 50%;
+filter: blur(80px);
+opacity: 0.15;
+animation: float 12s ease-in-out infinite;
+}
+.floating-orb:nth-child(1) {
+background: radial-gradient(circle, rgba(0, 122, 255, 0.4) 0%, rgba(0, 122, 255, 0.1) 70%);
+animation-delay: 0s;
+}
+.floating-orb:nth-child(2) {
+background: radial-gradient(circle, rgba(255, 149, 0, 0.4) 0%, rgba(255, 149, 0, 0.1) 70%);
+animation-delay: 4s;
+}
+.floating-orb:nth-child(3) {
+background: radial-gradient(circle, rgba(255, 45, 85, 0.4) 0%, rgba(255, 45, 85, 0.1) 70%);
+animation-delay: 8s;
+}
+@keyframes float {
+0%, 100% { transform: translateY(0px) translateX(0px); }
+33% { transform: translateY(-40px) translateX(30px); }
+66% { transform: translateY(20px) translateX(-25px); }
+}
+.movie-card {
+background: rgba(28, 28, 30, 0.8);
+border: 0.5px solid rgba(99, 99, 102, 0.2);
+transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+position: relative;
+overflow: hidden;
+}
+.movie-card:hover {
+transform: translateY(-8px) scale(1.02);
+box-shadow: 0 32px 64px rgba(0, 0, 0, 0.5);
+border-color: rgba(174, 174, 178, 0.3);
+}
+.apple-button {
+background: linear-gradient(135deg, #007AFF 0%, #0056CC 100%);
+transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+position: relative;
+overflow: hidden;
+}
+.apple-button:hover {
+transform: scale(1.02);
+box-shadow: 0 8px 24px rgba(0, 122, 255, 0.3);
+}
+.apple-button:active {
+transform: scale(0.98);
+}
+.screen-glow {
+position: relative;
+cursor: pointer;
+transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.screen-glow::before {
+content: '';
+position: absolute;
+top: -4px;
+left: 50%;
+transform: translateX(-50%);
+width: 100%;
+height: 12px;
+background: linear-gradient(90deg,
+transparent 0%,
+rgba(0, 122, 255, 0.3) 50%,
+transparent 100%);
+border-radius: 6px;
+filter: blur(6px);
+transition: all 0.4s ease;
+}
+.screen-active {
+transform: scale(1.02);
+box-shadow: 0 0 40px rgba(0, 122, 255, 0.4);
+}
+.screen-active::before {
+background: linear-gradient(90deg,
+transparent 0%,
+rgba(0, 122, 255, 0.8) 50%,
+transparent 100%);
+filter: blur(8px);
+height: 16px;
+}
+.apple-text-gradient {
+background: linear-gradient(135deg, #ffffff 0%, #c7c7cc 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+}
+.hero-gradient {
+background: linear-gradient(135deg,
+rgba(0, 122, 255, 0.1) 0%,
+rgba(255, 149, 0, 0.05) 50%,
+rgba(255, 45, 85, 0.1) 100%);
+}
+.parallax-bg {
+will-change: transform;
+transform: translate3d(0, 0, 0);
+}
+.parallax-slow {
+will-change: transform;
+transform: translate3d(0, 0, 0);
+}
+.parallax-fast {
+will-change: transform;
+transform: translate3d(0, 0, 0);
+}
+@media (max-width: 768px) {
+.seat { width: 24px; height: 24px; }
+.floating-orb { width: 200px !important; height: 200px !important; }
+}
+@media (max-width: 640px) {
+.seat { width: 20px; height: 20px; }
+}
+</style><link id="all-fonts-link-font-geist" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-geist">.font-geist { font-family: 'Geist', sans-serif !important; }</style><link id="all-fonts-link-font-roboto" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-roboto">.font-roboto { font-family: 'Roboto', sans-serif !important; }</style><link id="all-fonts-link-font-montserrat" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-montserrat">.font-montserrat { font-family: 'Montserrat', sans-serif !important; }</style><link id="all-fonts-link-font-poppins" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-poppins">.font-poppins { font-family: 'Poppins', sans-serif !important; }</style><link id="all-fonts-link-font-playfair" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&amp;display=swap"><style id="all-fonts-style-font-playfair">.font-playfair { font-family: 'Playfair Display', serif !important; }</style><link id="all-fonts-link-font-instrument-serif" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:wght@400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-instrument-serif">.font-instrument-serif { font-family: 'Instrument Serif', serif !important; }</style><link id="all-fonts-link-font-merriweather" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&amp;display=swap"><style id="all-fonts-style-font-merriweather">.font-merriweather { font-family: 'Merriweather', serif !important; }</style><link id="all-fonts-link-font-bricolage" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-bricolage">.font-bricolage { font-family: 'Bricolage Grotesque', sans-serif !important; }</style><link id="all-fonts-link-font-jakarta" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-jakarta">.font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif !important; }</style><link id="all-fonts-link-font-manrope" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-manrope">.font-manrope { font-family: 'Manrope', sans-serif !important; }</style><link id="all-fonts-link-font-space-grotesk" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-space-grotesk">.font-space-grotesk { font-family: 'Space Grotesk', sans-serif !important; }</style><link id="all-fonts-link-font-work-sans" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-work-sans">.font-work-sans { font-family: 'Work Sans', sans-serif !important; }</style><link id="all-fonts-link-font-pt-serif" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&amp;display=swap"><style id="all-fonts-style-font-pt-serif">.font-pt-serif { font-family: 'PT Serif', serif !important; }</style><link id="all-fonts-link-font-geist-mono" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-geist-mono">.font-geist-mono { font-family: 'Geist Mono', monospace !important; }</style><link id="all-fonts-link-font-space-mono" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;display=swap"><style id="all-fonts-style-font-space-mono">.font-space-mono { font-family: 'Space Mono', monospace !important; }</style><link id="all-fonts-link-font-quicksand" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-quicksand">.font-quicksand { font-family: 'Quicksand', sans-serif !important; }</style><link id="all-fonts-link-font-nunito" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-nunito">.font-nunito { font-family: 'Nunito', sans-serif !important; }</style></head>
+<body class="text-white min-h-screen overflow-x-hidden">
+  
+  <!-- Floating Background Orbs -->
+  <div class="fixed inset-0 -z-20 overflow-hidden">
+    <div class="floating-orb w-[600px] h-[600px] top-0 -left-64 parallax-slow"></div>
+    <div class="floating-orb w-[500px] h-[500px] top-1/2 -right-48 parallax-slow"></div>
+    <div class="floating-orb w-[400px] h-[400px] bottom-0 left-1/3 parallax-slow"></div>
+  </div>
+
+  <!-- Apple-Style Navigation -->
+  <nav class="animate-fade-in fixed top-0 left-0 right-0 z-50 apple-glass" style="animation-play-state: running;">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 py-4">
+      <div class="flex items-center justify-between">
+        <div class="text-xl font-semibold tracking-tight flex items-center">
+          <div class="relative mr-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="tv" class="lucide lucide-tv w-7 h-7 text-blue-500"><path d="m17 2-5 5-5-5"></path><rect width="20" height="15" x="2" y="7" rx="2"></rect></svg>
+            <div class="absolute inset-0 bg-blue-500 blur-md opacity-20"></div>
+          </div>
+          <span class="apple-text-gradient font-sans">CinemaVision Pro</span>
+        </div>
+        
+        <div class="hidden md:flex items-center space-x-8">
+          <button class="text-white/80 hover:text-white transition-all duration-300 font-normal text-sm font-sans">Movies</button>
+          <button class="text-white/80 hover:text-white transition-all duration-300 font-normal text-sm font-sans">Theaters</button>
+          <button class="text-white/80 hover:text-white transition-all duration-300 font-normal text-sm font-sans">Pro Max</button>
+          <button class="text-white/80 hover:text-white transition-all duration-300 font-normal text-sm font-sans">Support</button>
+          <button class="apple-button px-4 py-2 rounded-full font-medium text-sm text-white font-sans">
+            Sign In
+          </button>
+        </div>
+        
+        <button class="md:hidden apple-glass p-2 rounded-lg">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="menu" class="lucide lucide-menu w-5 h-5"><path d="M4 12h16"></path><path d="M4 18h16"></path><path d="M4 6h16"></path></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <main class="pt-20">
+    <section class="relative overflow-hidden min-h-screen flex items-center hero-gradient">
+      <div class="absolute inset-0 -z-10 parallax-bg">
+        <img src="https://hoirqrkdgbmvpwutwuwj-all.supabase.co/storage/v1/object/public/assets/assets/45434c56-5fd1-4f92-bf60-72a755bdfbe3_3840w.jpg" alt="Premium cinema interior" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/30"></div>
+      </div>
+      
+      <div class="relative max-w-7xl mx-auto px-6 lg:px-8 py-24 w-full">
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-16 items-center">
+          <div class="animate-slide-right delay-200 parallax-fast" style="animation-play-state: running;">
+            <div class="inline-flex items-center apple-glass text-blue-400 px-4 py-2 rounded-full text-sm mb-8 font-sans">
+              <div class="w-2 h-2 bg-blue-400 rounded-full mr-3 animate-pulse"></div>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="sparkles" class="lucide lucide-sparkles w-4 h-4 mr-2"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path><path d="M20 2v4"></path><path d="M22 4h-4"></path><circle cx="4" cy="20" r="2"></circle></svg>
+              Now Playing • Dolby Vision
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter mb-8 leading-none">
+              <span class="apple-text-gradient font-bricolage font-semibold">Oppenheimer</span><br>
+              <span class="text-4xl md:text-5xl lg:text-6xl text-white/90 font-bricolage font-semibold">in IMAX 70mm</span>
+            </h1>
+            
+            <p class="text-xl md:text-2xl text-white/70 max-w-2xl mb-12 leading-relaxed font-bricolage font-semibold">
+              Experience Christopher Nolan's masterpiece as intended. Shot on large format IMAX film cameras with 
+              <span class="text-orange-400 font-bricolage font-semibold">premium spatial audio</span> and 
+              <span class="text-blue-400 font-bricolage font-semibold">laser projection</span>.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4">
+              <button class="apple-button px-8 py-4 rounded-2xl font-medium text-lg flex items-center justify-center font-sans">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="play" class="lucide lucide-play w-5 h-5 mr-3"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"></path></svg>
+                Watch Trailer
+              </button>
+              <button class="apple-glass hover:bg-white/10 transition-all duration-300 px-8 py-4 rounded-2xl font-medium text-lg flex items-center justify-center font-sans">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="calendar-plus" class="lucide lucide-calendar-plus w-5 h-5 mr-3"><path d="M16 19h6"></path><path d="M16 2v4"></path><path d="M19 16v6"></path><path d="M21 12.598V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8.5"></path><path d="M3 10h18"></path><path d="M8 2v4"></path></svg>
+                Book Tickets
+              </button>
+            </div>
+            
+            <div class="animate-slide-up delay-600 flex items-center space-x-8 mt-12 pt-8 border-t border-white/10" style="animation-play-state: running;">
+              <div class="text-center">
+                <div class="text-2xl font-bricolage font-semibold">9.2</div>
+                <div class="text-sm text-white/60 font-sans">IMDb Rating</div>
+              </div>
+              <div class="text-center">
+                <div class="text-2xl font-bricolage font-semibold">3h 1m</div>
+                <div class="text-sm text-white/60 font-sans">Runtime</div>
+              </div>
+              <div class="text-center">
+                <div class="text-2xl font-bricolage font-semibold">R</div>
+                <div class="text-sm text-white/60 font-sans">Rating</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="animate-slide-left delay-400 parallax-fast" style="animation-play-state: running;">
+            <div class="movie-card rounded-3xl overflow-hidden relative">
+              <div class="absolute inset-0 z-10 bg-gradient-to-t from-black/60 via-transparent to-transparent relative"><video src="https://cdn.midjourney.com/video/a4e50b8c-bdf1-4078-9036-568b259c270a/1.mp4" autoplay="" loop="" muted="" playsinline="" class="absolute inset-0 w-full h-full object-cover" id="asset-video-1755061237006"></video></div>
+              <video src="https://cdn.midjourney.com/video/0ead2892-b108-4ab3-86f3-0f2e9386dfa3/0.mp4" autoplay="" loop="" muted="" playsinline="" class="w-full h-[600px]" id="aura-emea2pusm" title="Oppenheimer movie poster"></video>
+              
+              <div class="absolute top-6 right-6 z-20">
+                <div class="apple-glass px-3 py-1 rounded-full text-sm font-medium text-orange-400 border border-orange-400/30 font-sans">
+                  IMAX 70mm
+                </div>
+              </div>
+              
+              <div class="absolute bottom-6 left-6 right-6 z-20">
+                <div class="flex items-center justify-between mb-4">
+                  <div class="flex items-center space-x-2">
+                    <div class="flex text-yellow-400 space-x-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" class="lucide lucide-star w-4 h-4 fill-current"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" class="lucide lucide-star w-4 h-4 fill-current"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" class="lucide lucide-star w-4 h-4 fill-current"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" class="lucide lucide-star w-4 h-4 fill-current"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" class="lucide lucide-star w-4 h-4 fill-current"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                    </div>
+                    <span class="text-white/80 font-medium text-sm font-sans">4.6 (12.4k)</span>
+                  </div>
+                  <div class="text-right">
+                    <div class="text-2xl text-white font-bricolage font-semibold">$34.99</div>
+                    <div class="text-xs text-white/60 font-sans">Premium IMAX</div>
+                  </div>
+                </div>
+                
+                <div class="flex gap-3">
+                  <button class="flex-1 apple-button py-3 rounded-xl font-medium text-sm font-sans">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="ticket" class="lucide lucide-ticket w-4 h-4 mr-2 inline"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"></path><path d="M13 5v2"></path><path d="M13 17v2"></path><path d="M13 11v2"></path></svg>
+                    Book Now
+                  </button>
+                  <button class="apple-glass p-3 rounded-xl hover:bg-white/10 transition-all duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="heart" class="lucide lucide-heart w-4 h-4"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"></path></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Premium Seat Selection -->
+    <section class="animate-blur-in delay-800 max-w-7xl lg:px-8 mr-auto ml-auto pt-24 pr-6 pb-24 pl-6 parallax-slow" style="animation-play-state: running;">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl md:text-6xl mb-6 apple-text-gradient tracking-tight font-bricolage font-semibold">Select Your Experience</h2>
+        <p class="text-xl text-white/70 max-w-3xl mx-auto font-light font-sans">
+          Choose from our premium seating options featuring heated massage chairs, personal service, and optimal viewing angles
+        </p>
+      </div>
+
+      <!-- Theater Selection -->
+      <div class="animate-scale-in delay-900 flex flex-wrap justify-center gap-4 mb-12" style="animation-play-state: running;">
+        <button class="apple-glass hover:bg-blue-500/20 px-6 py-3 rounded-2xl font-medium text-sm flex items-center transition-all duration-300 font-sans">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="monitor" class="lucide lucide-monitor w-4 h-4 mr-2"><rect width="20" height="14" x="2" y="3" rx="2"></rect><line x1="8" x2="16" y1="21" y2="21"></line><line x1="12" x2="12" y1="17" y2="21"></line></svg>
+          Theater 1 • IMAX Laser
+        </button>
+        <button class="apple-button px-6 py-3 rounded-2xl font-medium text-sm flex items-center font-sans">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="tv-2" class="lucide lucide-tv-2 w-4 h-4 mr-2"><path d="M7 21h10"></path><rect width="20" height="14" x="2" y="3" rx="2"></rect></svg>
+          Theater 2 • Dolby Cinema
+        </button>
+        <button class="apple-glass hover:bg-orange-500/20 px-6 py-3 rounded-2xl font-medium text-sm flex items-center transition-all duration-300 font-sans">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="gamepad-2" class="lucide lucide-gamepad-2 w-4 h-4 mr-2"><line x1="6" x2="10" y1="11" y2="11"></line><line x1="8" x2="8" y1="9" y2="13"></line><line x1="15" x2="15.01" y1="12" y2="12"></line><line x1="18" x2="18.01" y1="10" y2="10"></line><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"></path></svg>
+          Theater 3 • 4DX Motion
+        </button>
+      </div>
+
+      <!-- Cinema Screen -->
+      <div class="animate-slide-up delay-1000" style="animation-play-state: running;">
+        <div id="screen" class="screen-glow relative h-6 max-w-5xl bg-gradient-to-r from-gray-300 via-white to-gray-300 rounded-full mx-auto mb-4 cursor-pointer transition-all duration-500 hover:scale-105" style="box-shadow: 0 0 30px rgba(255,255,255,0.3), inset 0 2px 0 rgba(255,255,255,0.8), inset 0 -1px 0 rgba(0,0,0,0.2); background: linear-gradient(135deg, #f0f0f0 0%, #ffffff 30%, #f8f8f8 50%, #ffffff 70%, #f0f0f0 100%); border: 1px solid rgba(255,255,255,0.4);">
+  <div class="absolute inset-0 bg-gradient-to-r from-transparent via-blue-200/20 to-transparent rounded-full opacity-0 transition-opacity duration-300" id="screen-glow-effect"></div>
+  <div class="absolute -top-2 left-1/2 transform -translate-x-1/2 w-4 h-1 bg-gradient-to-r from-transparent via-white/60 to-transparent rounded-full"></div>
+  <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-gradient-to-r from-transparent via-gray-400/40 to-transparent rounded-full"></div>
+</div>
+        <div class="text-center text-white/60 text-sm mb-16 font-medium tracking-widest">
+          <span id="screen-text" class="font-sans">DOLBY VISION SCREEN • Click to preview</span>
+        </div>
+      </div>
+
+      <!-- Seat Layout -->
+      <div class="animate-scale-in delay-1200 premium-glass md:p-12 rounded-[2rem] mr-20 mb-12 ml-20 pt-8 pr-8 pb-8 pl-8" style="animation-play-state: running;">
+        <div class="md:space-y-6 space-y-4">
+          <!-- Row A (Premium Recliners) -->
+          <div class="flex justify-center items-center space-x-2 md:space-x-3">
+            <span class="text-white/60 w-6 md:w-8 text-center font-medium text-sm md:text-base font-sans">A</span>
+            <div class="flex space-x-1 md:space-x-2">
+              <button class="seat seat-premium w-6 h-6 md:w-8 md:h-8 rounded-lg" data-seat="A1" data-price="49.99" data-type="premium"></button>
+              <button class="seat seat-premium w-6 h-6 md:w-8 md:h-8 rounded-lg" data-seat="A2" data-price="49.99" data-type="premium"></button>
+              <button class="seat seat-occupied w-6 h-6 md:w-8 md:h-8 rounded-lg cursor-not-allowed"></button>
+              <button class="seat seat-occupied w-6 h-6 md:w-8 md:h-8 rounded-lg cursor-not-allowed"></button>
+              <div class="w-4 md:w-6"></div>
+              <button class="seat seat-premium w-6 h-6 md:w-8 md:h-8 rounded-lg" data-seat="A3" data-price="49.99" data-type="premium"></button>
+              <button class="seat seat-premium w-6 h-6 md:w-8 md:h-8 rounded-lg" data-seat="A4" data-price="49.99" data-type="premium"></button>
+              <button class="seat seat-occupied w-6 h-6 md:w-8 md:h-8 rounded-lg cursor-not-allowed"></button>
+              <button class="seat seat-premium w-6 h-6 md:w-8 md:h-8 rounded-lg" data-seat="A5" data-price="49.99" data-type="premium"></button>
+            </div>
+          </div>
+
+          <!-- Row B (Premium) -->
+          <div class="flex justify-center items-center space-x-2 md:space-x-3">
+            <span class="text-white/60 w-6 md:w-8 text-center font-medium text-sm md:text-base font-sans">B</span>
+            <div class="flex space-x-1 md:space-x-2">
+              <button class="seat seat-available w-6 h-6 md:w-8 md:h-8 rounded-lg" data-seat="B1" data-price="34.99" data-type="standard"></button>
+              <button class="seat seat-selected w-6 h-6 md:w-8 md:h-8 rounded-lg" data-seat="B2" data-price="34.99" data-type="standard"></button>
+              <button class="seat seat-selected w-6 h-6 md:w-8 md:h-8 rounded-lg" data-seat="B3" data-price="34.99" data-type="standard"></button>
+              <button class="seat seat-available w-6 h-6 md:w-8 md:h-8 rounded-lg" data-seat="B4" data-price="34.99" data-type="standard"></button>
+              <div class="w-4 md:w-6"></div>
+              <button class="seat seat-available w-6 h-6 md:w-8 md:h-8 rounded-lg" data-seat="B5" data-price="34.99" data-type="standard"></button>
+              <button class="seat seat-available w-6 h-6 md:w-8 md:h-8 rounded-lg" data-seat="B6" data-price="34.99" data-type="standard"></button>
+              <button class="seat seat-occupied w-6 h-6 md:w-8 md:h-8 rounded-lg cursor-not-allowed"></button>
+              <button class="seat seat-available w-6 h-6 md:w-8 md:h-8 rounded-lg" data-seat="B7" data-price="34.99" data-type="standard"></button>
+            </div>
+          </div>
+
+          <!-- Row C (Standard Premium) -->
+          <div class="flex justify-center items-center space-x-2 md:space-x-3">
+            <span class="text-white/60 w-6 md:w-8 text-center font-medium text-sm md:text-base font-sans">C</span>
+            <div class="flex space-x-1 md:space-x-2">
+              <button class="seat seat-available w-6 h-6 md:w-8 md:h-8 rounded-lg" data-seat="C1" data-price="29.99" data-type="standard"></button>
+              <button class="seat seat-available w-6 h-6 md:w-8 md:h-8 rounded-lg" data-seat="C2" data-price="29.99" data-type="standard"></button>
+              <button class="seat seat-available w-6 h-6 md:w-8 md:h-8 rounded-lg" data-seat="C3" data-price="29.99" data-type="standard"></button>
+              <button class="seat seat-available w-6 h-6 md:w-8 md:h-8 rounded-lg" data-seat="C4" data-price="29.99" data-type="standard"></button>
+              <div class="w-4 md:w-6"></div>
+              <button class="seat seat-available w-6 h-6 md:w-8 md:h-8 rounded-lg" data-seat="C5" data-price="29.99" data-type="standard"></button>
+              <button class="seat seat-available w-6 h-6 md:w-8 md:h-8 rounded-lg" data-seat="C6" data-price="29.99" data-type="standard"></button>
+              <button class="seat seat-available w-6 h-6 md:w-8 md:h-8 rounded-lg" data-seat="C7" data-price="29.99" data-type="standard"></button>
+              <button class="seat seat-available w-6 h-6 md:w-8 md:h-8 rounded-lg" data-seat="C8" data-price="29.99" data-type="standard"></button>
+            </div>
+          </div>
+
+          <!-- Row D (Standard) -->
+          <div class="flex justify-center items-center space-x-2 md:space-x-3">
+            <span class="text-white/60 w-6 md:w-8 text-center font-medium text-sm md:text-base font-sans">D</span>
+            <div class="flex space-x-1 md:space-x-2">
+              <button class="seat seat-occupied w-6 h-6 md:w-8 md:h-8 rounded-lg cursor-not-allowed"></button>
+              <button class="seat seat-available w-6 h-6 md:w-8 md:h-8 rounded-lg" data-seat="D2" data-price="24.99" data-type="standard"></button>
+              <button class="seat seat-available w-6 h-6 md:w-8 md:h-8 rounded-lg" data-seat="D3" data-price="24.99" data-type="standard"></button>
+              <button class="seat seat-available w-6 h-6 md:w-8 md:h-8 rounded-lg" data-seat="D4" data-price="24.99" data-type="standard"></button>
+              <div class="w-4 md:w-6"></div>
+              <button class="seat seat-available w-6 h-6 md:w-8 md:h-8 rounded-lg" data-seat="D5" data-price="24.99" data-type="standard"></button>
+              <button class="seat seat-available w-6 h-6 md:w-8 md:h-8 rounded-lg" data-seat="D6" data-price="24.99" data-type="standard"></button>
+              <button class="seat seat-available w-6 h-6 md:w-8 md:h-8 rounded-lg" data-seat="D7" data-price="24.99" data-type="standard"></button>
+              <button class="seat seat-occupied w-6 h-6 md:w-8 md:h-8 rounded-lg cursor-not-allowed"></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Seat Legend -->
+        <div class="flex flex-wrap justify-center gap-4 md:gap-8 mt-8 md:mt-12 pt-6 md:pt-8 border-t border-white/10">
+          <div class="flex items-center space-x-2 md:space-x-3">
+            <div class="seat-available w-5 h-5 md:w-6 md:h-6 rounded-lg"></div>
+            <span class="text-white/70 text-xs md:text-sm font-sans">Available</span>
+          </div>
+          <div class="flex items-center space-x-2 md:space-x-3">
+            <div class="seat-selected w-5 h-5 md:w-6 md:h-6 rounded-lg"></div>
+            <span class="text-white/70 text-xs md:text-sm font-sans">Selected</span>
+          </div>
+          <div class="flex items-center space-x-2 md:space-x-3">
+            <div class="seat-occupied w-5 h-5 md:w-6 md:h-6 rounded-lg"></div>
+            <span class="text-white/70 text-xs md:text-sm font-sans">Taken</span>
+          </div>
+          <div class="flex items-center space-x-2 md:space-x-3">
+            <div class="seat-premium w-5 h-5 md:w-6 md:h-6 rounded-lg"></div>
+            <span class="text-white/70 text-xs md:text-sm font-sans">Premium Recliner (+$15)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Booking Summary -->
+      <div class="animate-slide-up delay-1400 apple-glass rounded-[2rem] p-6 md:p-8 max-w-4xl mx-auto" style="animation-play-state: running;">
+        <div class="grid md:grid-cols-2 gap-8">
+          <!-- Left Column: Booking Details -->
+          <div class="">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="text-2xl apple-text-gradient font-bricolage font-semibold">Booking Summary</h3>
+              <div id="booking-status" class="apple-glass px-3 py-1 rounded-full text-sm text-green-400 border border-green-400/30"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-circle" class="lucide lucide-check-circle w-4 h-4 inline mr-1"><path d="M21.801 10A10 10 0 1 1 17 3.335"></path><path d="m9 11 3 3L22 4"></path></svg>2 seats selected</div>
+            </div>
+            
+            <div class="space-y-4 mb-8">
+              <div class="flex justify-between items-center pb-3 border-b border-white/10">
+                <span class="text-white/70 font-sans">Movie</span>
+                <span class="font-medium font-sans">Oppenheimer (IMAX 70mm)</span>
+              </div>
+              <div class="flex justify-between items-center pb-3 border-b border-white/10">
+                <span class="text-white/70 font-sans">Date &amp; Time</span>
+                <span class="font-medium font-sans">Fri, Dec 15 • 7:30 PM</span>
+              </div>
+              <div class="flex justify-between items-center pb-3 border-b border-white/10">
+                <span class="text-white/70 font-sans">Seats</span>
+                <span id="selected-seats" class="font-medium font-sans">B2, B3</span>
+              </div>
+              <div class="flex justify-between items-center pb-3 border-b border-white/10">
+                <span class="text-white/70 font-sans">Theater</span>
+                <span class="font-medium font-sans">Dolby Cinema • Theater 2</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Pricing & Actions -->
+          <div class="">
+            <div class="apple-glass p-6 rounded-2xl mb-6">
+              <h4 class="text-lg font-semibold mb-4 text-white font-sans">Price Breakdown</h4>
+              <div class="space-y-3">
+                <div id="seat-pricing" class="space-y-2">
+          <div class="flex justify-between">
+            <span class="text-white/70">Standard Seats (2x $34.99)</span>
+            <span>$69.98</span>
+          </div>
+        </div>
+                <div class="flex justify-between">
+                  <span class="text-white/70 font-sans">Service Fee</span>
+                  <span class="font-sans">$3.50</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-white/70 font-sans">Taxes</span>
+                  <span id="tax-amount" class="font-sans">$6.43</span>
+                </div>
+                <div class="pt-3 border-t border-white/20">
+                  <div class="flex justify-between">
+                    <span class="text-lg font-semibold font-sans">Total</span>
+                    <span id="total-price" class="text-2xl text-blue-400 font-bricolage font-semibold">$79.91</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Promo Code -->
+            <div class="apple-glass p-4 rounded-xl mb-6">
+              <div class="flex gap-3">
+                <input type="text" placeholder="Promo code" class="flex-1 bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-white/50 focus:outline-none focus:border-blue-500/50">
+                <button class="apple-glass hover:bg-white/10 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 font-sans">
+                  Apply
+                </button>
+              </div>
+            </div>
+            
+            <div class="flex flex-col gap-3">
+              <button class="apple-button py-4 rounded-2xl font-medium text-lg flex items-center justify-center font-sans">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="credit-card" class="lucide lucide-credit-card w-5 h-5 mr-3"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>
+                Proceed to Payment
+              </button>
+              <button class="apple-glass hover:bg-white/10 transition-all duration-300 py-3 rounded-xl font-medium font-sans">
+                Continue Browsing
+              </button>
+            </div>
+
+            <!-- Payment Methods -->
+            <div class="flex items-center justify-center space-x-4 mt-6 pt-4 border-t border-white/10">
+              <span class="text-white/60 text-sm font-sans">We accept:</span>
+              <div class="flex space-x-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="credit-card" class="lucide lucide-credit-card w-5 h-5 text-white/40"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="smartphone" class="lucide lucide-smartphone w-5 h-5 text-white/40"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"></rect><path d="M12 18h.01"></path></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="wallet" class="lucide lucide-wallet w-5 h-5 text-white/40"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"></path><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"></path></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/10 bg-black/20 mt-24">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 py-16">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div>
+          <h4 class="font-semibold mb-4 apple-text-gradient font-sans">Movies</h4>
+          <ul class="space-y-2 text-sm text-white/60">
+            <li><a href="#" class="hover:text-white transition-colors font-sans">Now Playing</a></li>
+            <li><a href="#" class="hover:text-white transition-colors font-sans">Coming Soon</a></li>
+            <li><a href="#" class="hover:text-white transition-colors font-sans">IMAX</a></li>
+            <li><a href="#" class="hover:text-white transition-colors font-sans">Dolby Cinema</a></li>
+          </ul>
+        </div>
+        <div class="">
+          <h4 class="font-semibold mb-4 apple-text-gradient font-sans">Experience</h4>
+          <ul class="space-y-2 text-sm text-white/60">
+            <li><a href="#" class="hover:text-white transition-colors font-sans">Premium Seating</a></li>
+            <li><a href="#" class="hover:text-white transition-colors font-sans">4DX Motion</a></li>
+            <li><a href="#" class="hover:text-white transition-colors font-sans">Dine-In</a></li>
+            <li><a href="#" class="hover:text-white transition-colors font-sans">Private Screening</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold mb-4 apple-text-gradient font-sans">Support</h4>
+          <ul class="space-y-2 text-sm text-white/60">
+            <li><a href="#" class="hover:text-white transition-colors font-sans">Help Center</a></li>
+            <li><a href="#" class="hover:text-white transition-colors font-sans">Contact Us</a></li>
+            <li><a href="#" class="hover:text-white transition-colors font-sans">Gift Cards</a></li>
+            <li><a href="#" class="hover:text-white transition-colors font-sans">Group Sales</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold mb-4 apple-text-gradient font-sans">Company</h4>
+          <ul class="space-y-2 text-sm text-white/60">
+            <li><a href="#" class="hover:text-white transition-colors font-sans">About Us</a></li>
+            <li><a href="#" class="hover:text-white transition-colors font-sans">Careers</a></li>
+            <li><a href="#" class="hover:text-white transition-colors font-sans">Press</a></li>
+            <li><a href="#" class="hover:text-white transition-colors font-sans">Privacy</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="flex flex-col md:flex-row justify-between items-center pt-12 mt-12 border-t border-white/10">
+        <div class="flex items-center mb-4 md:mb-0">
+          <div class="relative mr-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="tv" class="lucide lucide-tv w-6 h-6 text-blue-500"><path d="m17 2-5 5-5-5"></path><rect width="20" height="15" x="2" y="7" rx="2"></rect></svg>
+            <div class="absolute inset-0 bg-blue-500 blur-md opacity-20"></div>
+          </div>
+          <span class="font-semibold apple-text-gradient font-sans">CinemaVision Pro</span>
+        </div>
+        <div class="text-sm text-white/60 font-sans">
+          © 2024 CinemaVision Pro. The future of entertainment.
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Initialize Lucide Icons -->
+  <script>
+    lucide.createIcons();
+    
+    let selectedSeats = ['B2', 'B3']; // Initially selected seats
+    let screenActive = false;
+
+    // Parallax Effect
+    function initParallax() {
+      const parallaxBg = document.querySelectorAll('.parallax-bg');
+      const parallaxSlow = document.querySelectorAll('.parallax-slow');
+      const parallaxFast = document.querySelectorAll('.parallax-fast');
+
+      function updateParallax() {
+        const scrolled = window.pageYOffset;
+        const rate = scrolled * -0.5;
+        const rateSlow = scrolled * -0.2;
+        const rateFast = scrolled * -0.8;
+
+        parallaxBg.forEach(element => {
+          element.style.transform = `translate3d(0, ${rate}px, 0)`;
+        });
+
+        parallaxSlow.forEach(element => {
+          element.style.transform = `translate3d(0, ${rateSlow}px, 0)`;
+        });
+
+        parallaxFast.forEach(element => {
+          element.style.transform = `translate3d(0, ${rateFast}px, 0)`;
+        });
+      }
+
+      // Use requestAnimationFrame for smooth performance
+      let ticking = false;
+      
+      function requestTick() {
+        if (!ticking) {
+          requestAnimationFrame(updateParallax);
+          ticking = true;
+        }
+        ticking = false;
+      }
+
+      // Throttle scroll events
+      window.addEventListener('scroll', requestTick);
+    }
+
+    // Initialize parallax on page load
+    window.addEventListener('load', initParallax);
+
+    // Screen functionality
+    document.getElementById('screen').addEventListener('click', function() {
+      const screen = this;
+      const screenText = document.getElementById('screen-text');
+      
+      if (!screenActive) {
+        screen.classList.add('screen-active');
+        screenText.textContent = 'DOLBY VISION SCREEN • Now Playing: Oppenheimer';
+        screenActive = true;
+        
+        // Auto-deactivate after 3 seconds
+        setTimeout(() => {
+          screen.classList.remove('screen-active');
+          screenText.textContent = 'DOLBY VISION SCREEN • Click to preview';
+          screenActive = false;
+        }, 3000);
+      }
+    });
+
+    // Seat selection functionality
+    document.querySelectorAll('.seat-available, .seat-premium').forEach(seat => {
+      seat.addEventListener('click', function() {
+        if (this.classList.contains('seat-selected')) {
+          // Deselect seat
+          this.classList.remove('seat-selected');
+          if (this.dataset.type === 'premium') {
+            this.classList.add('seat-premium');
+          } else {
+            this.classList.add('seat-available');
+          }
+          selectedSeats = selectedSeats.filter(s => s !== this.dataset.seat);
+        } else {
+          // Select seat
+          this.classList.remove('seat-available', 'seat-premium');
+          this.classList.add('seat-selected');
+          selectedSeats.push(this.dataset.seat);
+        }
+        updateBookingSummary();
+      });
+    });
+
+    function updateBookingSummary() {
+      const selectedSeatsElement = document.getElementById('selected-seats');
+      const bookingStatus = document.getElementById('booking-status');
+      const seatPricing = document.getElementById('seat-pricing');
+      const totalPriceElement = document.getElementById('total-price');
+      const taxAmountElement = document.getElementById('tax-amount');
+
+      if (selectedSeats.length === 0) {
+        selectedSeatsElement.textContent = 'No seats selected';
+        bookingStatus.innerHTML = '<i data-lucide="alert-circle" class="w-4 h-4 inline mr-1"></i>Select seats';
+        bookingStatus.className = 'apple-glass px-3 py-1 rounded-full text-sm text-orange-400 border border-orange-400/30';
+        seatPricing.innerHTML = '<div class="text-white/50">No seats selected</div>';
+        totalPriceElement.textContent = '$0.00';
+        taxAmountElement.textContent = '$0.00';
+        return;
+      }
+
+      // Group seats by price
+      const seatsByPrice = {};
+      let subtotal = 0;
+
+      selectedSeats.forEach(seatId => {
+        const seatElement = document.querySelector(`[data-seat="${seatId}"]`);
+        if (seatElement) {
+          const price = parseFloat(seatElement.dataset.price);
+          const type = seatElement.dataset.type;
+          
+          if (!seatsByPrice[price]) {
+            seatsByPrice[price] = { count: 0, type: type };
+          }
+          seatsByPrice[price].count++;
+          subtotal += price;
+        }
+      });
+
+      // Update selected seats display
+      selectedSeatsElement.textContent = selectedSeats.sort().join(', ');
+      
+      // Update status
+      bookingStatus.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4 inline mr-1"></i>${selectedSeats.length} seat${selectedSeats.length > 1 ? 's' : ''} selected`;
+      bookingStatus.className = 'apple-glass px-3 py-1 rounded-full text-sm text-green-400 border border-green-400/30';
+
+      // Update pricing breakdown
+      let pricingHTML = '';
+      Object.entries(seatsByPrice).forEach(([price, data]) => {
+        const seatType = data.type === 'premium' ? 'Premium' : 'Standard';
+        pricingHTML += `
+          <div class="flex justify-between">
+            <span class="text-white/70">${seatType} Seats (${data.count}x $${price})</span>
+            <span>$${(parseFloat(price) * data.count).toFixed(2)}</span>
+          </div>
+        `;
+      });
+      seatPricing.innerHTML = pricingHTML;
+
+      // Calculate totals
+      const serviceFee = 3.50;
+      const taxRate = 0.0875; // 8.75%
+      const tax = (subtotal + serviceFee) * taxRate;
+      const total = subtotal + serviceFee + tax;
+
+      taxAmountElement.textContent = `$${tax.toFixed(2)}`;
+      totalPriceElement.textContent = `$${total.toFixed(2)}`;
+
+      // Re-initialize Lucide icons for the updated status
+      lucide.createIcons();
+    }
+
+    // Initialize the booking summary
+    updateBookingSummary();
+  </script>
+</body></html>

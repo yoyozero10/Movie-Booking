@@ -1,10 +1,12 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { config } from './config';
+import { UserRole } from './types';
 
 interface User {
   _id: string;
   name: string;
   email: string;
+  role: UserRole;
 }
 
 interface AuthContextType {
@@ -14,6 +16,7 @@ interface AuthContextType {
   getUserById: (userId: string) => Promise<User>;
   logout: () => void;
   isLoading: boolean;
+  isAdmin: () => boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -144,6 +147,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setUser(null);
   };
 
+  const isAdmin = () => {
+    return user?.role === UserRole.ADMIN;
+  };
+
   const value: AuthContextType = {
     user,
     login,
@@ -151,6 +158,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     getUserById,
     logout,
     isLoading,
+    isAdmin,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

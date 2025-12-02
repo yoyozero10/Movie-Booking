@@ -11,6 +11,7 @@ import movieRoutes from './routes/movies.js';
 import theaterRoutes from './routes/theaters.js';
 import showtimeRoutes from './routes/showtimes.js';
 import bookingRoutes from './routes/bookings.js';
+import adminRoutes from './routes/adminRoutes.js';
 
 // Load environment variables
 dotenv.config();
@@ -84,6 +85,7 @@ app.use('/api/movies', movieRoutes);
 app.use('/api/theaters', theaterRoutes);
 app.use('/api/showtimes', showtimeRoutes);
 app.use('/api/bookings', bookingRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

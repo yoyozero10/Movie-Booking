@@ -68,7 +68,7 @@ export function SignInForm({ onSignIn }: SignInFormProps) {
         <button className="auth-button" type="submit" disabled={submitting}>
           {submitting ? "Please wait..." : (flow === "signIn" ? "Sign in" : "Sign up")}
         </button>
-        <div className="text-center text-sm text-secondary">
+        <div className="text-center text-sm text-gray-600">
           <span>
             {flow === "signIn"
               ? "Don't have an account? "
@@ -76,7 +76,7 @@ export function SignInForm({ onSignIn }: SignInFormProps) {
           </span>
           <button
             type="button"
-            className="text-primary hover:text-primary-hover hover:underline font-medium cursor-pointer"
+            className="text-blue-600 hover:text-blue-700 hover:underline font-medium cursor-pointer"
             onClick={() => setFlow(flow === "signIn" ? "signUp" : "signIn")}
           >
             {flow === "signIn" ? "Sign up instead" : "Sign in instead"}

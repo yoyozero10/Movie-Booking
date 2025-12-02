@@ -1,6 +1,7 @@
-import { Search, X } from "lucide-react";
-import { User } from "../lib/types";
+import { Search, X, Tv } from "lucide-react";
+import { User, UserRole } from "../lib/types";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface NavigationProps {
   user: User | null;
@@ -14,6 +15,7 @@ interface NavigationProps {
 export function Navigation({ user, onLoginClick, onSignOut, activeSection, onNavigate, onSearch }: NavigationProps) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
 
   const navItems = [
     { id: "home", label: "Home" },
@@ -23,7 +25,12 @@ export function Navigation({ user, onLoginClick, onSignOut, activeSection, onNav
   ];
 
   // Add profile to nav items if user is logged in
-  const allNavItems = user ? [...navItems, { id: "profile", label: "Profile" }] : navItems;
+  let allNavItems = user ? [...navItems, { id: "profile", label: "Profile" }] : navItems;
+
+  // Add Admin Panel if user is admin
+  if (user?.role === UserRole.ADMIN) {
+    allNavItems = [...allNavItems, { id: "admin", label: "Admin Panel" }];
+  }
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,13 +51,25 @@ export function Navigation({ user, onLoginClick, onSignOut, activeSection, onNav
     }
   };
 
+  const handleNavItemClick = (id: string) => {
+    if (id === "admin") {
+      navigate("/admin");
+    } else {
+      onNavigate(id);
+    }
+  };
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black/80 to-transparent backdrop-blur-sm">
-      <div className="max-w-7xl mx-auto px-6 py-4">
+    <nav className="animate-fade-in fixed top-0 left-0 right-0 z-50 apple-glass">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center">
-            <h1 className="text-2xl font-bold text-white">Movie4You</h1>
+          <div className="text-xl font-semibold tracking-tight flex items-center cursor-pointer" onClick={() => onNavigate("home")}>
+            <div className="relative mr-3">
+              <Tv className="w-7 h-7 text-apple-blue" />
+              <div className="absolute inset-0 bg-apple-blue blur-md opacity-20"></div>
+            </div>
+            <span className="apple-text-gradient font-display">CinemaVision Pro</span>
           </div>
 
           {/* Navigation Menu */}
@@ -58,8 +77,8 @@ export function Navigation({ user, onLoginClick, onSignOut, activeSection, onNav
             {allNavItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => onNavigate(item.id)}
-                className={`text-white hover:text-pink-400 transition-colors font-medium ${activeSection === item.id ? "text-pink-400" : ""
+                onClick={() => handleNavItemClick(item.id)}
+                className={`text-white/80 hover:text-white transition-all duration-300 font-normal text-sm ${activeSection === item.id ? "text-white font-medium" : ""
                   }`}
               >
                 {item.label}
@@ -79,12 +98,12 @@ export function Navigation({ user, onLoginClick, onSignOut, activeSection, onNav
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search movies..."
                     autoFocus
-                    className="w-64 px-4 py-2 pr-10 bg-gray-800/90 border border-gray-700 rounded-full text-white placeholder-gray-400 focus:outline-none focus:border-pink-500 transition-all"
+                    className="w-64 px-4 py-2 pr-10 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/50 focus:outline-none focus:border-apple-blue/50 transition-all duration-300"
                   />
                   <button
                     type="button"
                     onClick={handleSearchToggle}
-                    className="absolute right-3 text-gray-400 hover:text-white transition-colors"
+                    className="absolute right-3 text-white/60 hover:text-white transition-colors duration-200"
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -92,7 +111,7 @@ export function Navigation({ user, onLoginClick, onSignOut, activeSection, onNav
               ) : (
                 <button
                   onClick={handleSearchToggle}
-                  className="text-white hover:text-pink-400 transition-colors"
+                  className="text-white/80 hover:text-white transition-colors duration-300"
                 >
                   <Search className="w-5 h-5" />
                 </button>
@@ -101,12 +120,12 @@ export function Navigation({ user, onLoginClick, onSignOut, activeSection, onNav
 
             {user ? (
               <div className="flex items-center space-x-4">
-                <span className="text-white text-sm hidden md:inline">
+                <span className="text-white/80 text-sm hidden md:inline">
                   {user.email}
                 </span>
                 <button
                   onClick={onSignOut}
-                  className="px-6 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-full font-medium transition-colors"
+                  className="apple-button px-6 py-2 rounded-full font-medium text-sm text-white"
                 >
                   Sign Out
                 </button>
@@ -114,12 +133,19 @@ export function Navigation({ user, onLoginClick, onSignOut, activeSection, onNav
             ) : (
               <button
                 onClick={onLoginClick}
-                className="px-6 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-full font-medium transition-colors"
+                className="apple-button px-6 py-2 rounded-full font-medium text-sm text-white"
               >
-                Login
+                Sign In
               </button>
             )}
           </div>
+
+          {/* Mobile Menu Button */}
+          <button className="md:hidden apple-glass p-2 rounded-lg">
+            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
         </div>
       </div>
     </nav>

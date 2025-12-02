@@ -21,9 +21,10 @@ const movieSchema = new mongoose.Schema({
     min: 1
   },
   rating: {
-    type: String,
+    type: Number, // Rating score (0-10)
     required: true,
-    enum: ['G', 'PG', 'PG-13', 'R', 'NC-17']
+    min: 0,
+    max: 10
   },
   posterUrl: {
     type: String,
@@ -32,6 +33,20 @@ const movieSchema = new mongoose.Schema({
   releaseDate: {
     type: String,
     required: true
+  },
+  trailerUrl: {
+    type: String,
+    required: false
+  },
+  director: {
+    type: String,
+    required: false,
+    trim: true
+  },
+  cast: {
+    type: [String],
+    required: false,
+    default: []
   },
   createdAt: {
     type: Date,
@@ -44,7 +59,7 @@ const movieSchema = new mongoose.Schema({
 });
 
 // Update the updatedAt field before saving
-movieSchema.pre('save', function(next) {
+movieSchema.pre('save', function (next) {
   this.updatedAt = new Date();
   next();
 });

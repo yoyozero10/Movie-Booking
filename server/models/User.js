@@ -19,6 +19,11 @@ const userSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  role: {
+    type: String,
+    enum: ['user', 'admin'],
+    default: 'user'
+  },
   createdAt: {
     type: Date,
     default: Date.now
@@ -30,7 +35,7 @@ const userSchema = new mongoose.Schema({
 });
 
 // Hash password before saving
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
 
   try {
@@ -43,12 +48,12 @@ userSchema.pre('save', async function(next) {
 });
 
 // Compare password method
-userSchema.methods.comparePassword = async function(candidatePassword) {
+userSchema.methods.comparePassword = async function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
 // Update the updatedAt field before saving
-userSchema.pre('save', function(next) {
+userSchema.pre('save', function (next) {
   this.updatedAt = new Date();
   next();
 });

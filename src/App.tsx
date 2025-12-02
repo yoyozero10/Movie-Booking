@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { SignInForm } from "./SignInForm";
 import { Toaster } from "sonner";
 import { TheaterFlow } from "./components/TheaterFlow";
@@ -7,19 +8,43 @@ import { Navigation } from "./components/Navigation";
 import { HeroSection } from "./components/HeroSection";
 import { FeaturedMovies } from "./components/FeaturedMovies";
 import { UserProfile } from "./components/UserProfile";
+import { FloatingOrbs } from "./components/FloatingOrbs";
 import { ContentProps } from "./lib/types";
 import { useAuth } from "./lib/auth";
+import { AdminPage } from "./components/admin/AdminPage";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 export default function App() {
+  return (
+    <>
+      <Routes>
+        <Route
+          path="/admin/*"
+          element={
+            <ProtectedRoute requireAdmin={true}>
+              <AdminPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/*" element={<MainApp />} />
+      </Routes>
+      <Toaster />
+    </>
+  );
+}
+
+function MainApp() {
   const [activeTab, setActiveTab] = useState<"movies" | "bookings">("movies");
   const [activeSection, setActiveSection] = useState<string>("home");
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const { user, logout, isLoading } = useAuth();
+  const navigate = useNavigate();
 
   const handleSignOut = () => {
     logout();
     setActiveSection("home");
+    navigate("/");
   };
 
   const handleNavigate = (section: string) => {
@@ -40,14 +65,17 @@ export default function App() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #000000 0%, #0a0a0a 50%, #1a1a1a 100%)' }}>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-apple-blue"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen" style={{ background: 'linear-gradient(180deg, #000000 0%, #0a0a0a 50%, #1a1a1a 100%)' }}>
+      {/* Floating Orbs Background */}
+      <FloatingOrbs />
+
       <Navigation
         user={user}
         onLoginClick={() => setShowLoginModal(true)}
@@ -69,8 +97,6 @@ export default function App() {
           searchQuery={searchQuery}
         />
       </main>
-
-      <Toaster />
     </div>
   );
 }
@@ -92,18 +118,18 @@ function Content({ activeTab, setActiveTab, activeSection, user, showLoginModal,
         {/* Login Modal */}
         {showLoginModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
-            <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 relative">
+            <div className="apple-glass rounded-2xl p-8 max-w-md w-full mx-4 relative">
               <button
                 onClick={() => setShowLoginModal(false)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl"
+                className="absolute top-4 right-4 text-white/60 hover:text-white text-2xl"
               >
                 ×
               </button>
               <div className="text-center mb-6">
-                <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                <h2 className="text-3xl font-bold text-white mb-2">
                   Welcome Back
                 </h2>
-                <p className="text-gray-600">
+                <p className="text-white/70">
                   Sign in to book your favorite movies
                 </p>
               </div>
@@ -121,13 +147,13 @@ function Content({ activeTab, setActiveTab, activeSection, user, showLoginModal,
   if (activeSection === "movies") {
     if (!user) {
       return (
-        <div className="min-h-screen flex items-center justify-center px-4 pt-20 bg-gray-900">
-          <div className="max-w-md w-full bg-gray-800 rounded-2xl p-8 border border-gray-700">
+        <div className="min-h-screen flex items-center justify-center px-4 pt-20">
+          <div className="max-w-md w-full apple-glass rounded-2xl p-8">
             <div className="text-center mb-6">
               <h2 className="text-3xl font-bold text-white mb-2">
                 Sign In Required
               </h2>
-              <p className="text-gray-300">
+              <p className="text-white/70">
                 Please sign in to browse and book movies
               </p>
             </div>
@@ -138,24 +164,24 @@ function Content({ activeTab, setActiveTab, activeSection, user, showLoginModal,
     }
 
     return (
-      <div className="min-h-screen bg-gray-900 pt-20">
+      <div className="min-h-screen pt-20">
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="mb-6">
-            <div className="flex gap-4 border-b border-gray-700">
+            <div className="flex gap-4 border-b border-white/10">
               <button
                 onClick={() => setActiveTab("movies")}
-                className={`px-4 py-2 font-semibold transition-colors ${activeTab === "movies"
-                  ? "text-pink-400 border-b-2 border-pink-400"
-                  : "text-gray-400 hover:text-gray-300"
+                className={`px-4 py-2 font-semibold transition-all duration-300 ${activeTab === "movies"
+                  ? "text-apple-blue border-b-2 border-apple-blue"
+                  : "text-white/60 hover:text-white"
                   }`}
               >
                 Browse Movies
               </button>
               <button
                 onClick={() => setActiveTab("bookings")}
-                className={`px-4 py-2 font-semibold transition-colors ${activeTab === "bookings"
-                  ? "text-pink-400 border-b-2 border-pink-400"
-                  : "text-gray-400 hover:text-gray-300"
+                className={`px-4 py-2 font-semibold transition-all duration-300 ${activeTab === "bookings"
+                  ? "text-apple-blue border-b-2 border-apple-blue"
+                  : "text-white/60 hover:text-white"
                   }`}
               >
                 My Bookings
@@ -173,13 +199,13 @@ function Content({ activeTab, setActiveTab, activeSection, user, showLoginModal,
   if (activeSection === "profile") {
     if (!user) {
       return (
-        <div className="min-h-screen flex items-center justify-center px-4 pt-20 bg-gray-900">
-          <div className="max-w-md w-full bg-gray-800 rounded-2xl p-8 border border-gray-700">
+        <div className="min-h-screen flex items-center justify-center px-4 pt-20">
+          <div className="max-w-md w-full apple-glass rounded-2xl p-8">
             <div className="text-center mb-6">
               <h2 className="text-3xl font-bold text-white mb-2">
                 Sign In Required
               </h2>
-              <p className="text-gray-300">
+              <p className="text-white/70">
                 Please sign in to view profiles
               </p>
             </div>
@@ -199,7 +225,7 @@ function Content({ activeTab, setActiveTab, activeSection, user, showLoginModal,
         <h2 className="text-4xl font-bold mb-4">
           {activeSection.charAt(0).toUpperCase() + activeSection.slice(1)}
         </h2>
-        <p className="text-xl text-gray-300">Coming soon...</p>
+        <p className="text-xl text-white/70">Coming soon...</p>
       </div>
     </div>
   );

@@ -8,6 +8,7 @@ import {
   searchAndFilterMovies
 } from '../controllers/movieController.js';
 import { authenticateToken } from '../middleware/auth.js';
+import { requireAdmin } from '../middleware/adminAuth.js';
 
 const router = express.Router();
 
@@ -17,8 +18,8 @@ router.get('/', getAllMovies);
 router.get('/:id', getMovieById);
 
 // Protected routes (admin only)
-router.post('/', authenticateToken, createMovie);
-router.put('/:id', authenticateToken, updateMovie);
-router.delete('/:id', authenticateToken, deleteMovie);
+router.post('/', authenticateToken, requireAdmin, createMovie);
+router.put('/:id', authenticateToken, requireAdmin, updateMovie);
+router.delete('/:id', authenticateToken, requireAdmin, deleteMovie);
 
 export default router;

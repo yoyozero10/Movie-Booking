@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+import { Play, CalendarPlus, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 import { api } from "../lib/api";
 
@@ -42,8 +42,8 @@ export function HeroSection({ onExploreClick }: HeroSectionProps) {
 
   if (loading) {
     return (
-      <div className="relative h-screen bg-gray-900 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+      <div className="relative h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-apple-blue"></div>
       </div>
     );
   }
@@ -53,64 +53,107 @@ export function HeroSection({ onExploreClick }: HeroSectionProps) {
   }
 
   return (
-    <div className="relative h-screen overflow-hidden">
+    <section className="relative overflow-hidden min-h-screen flex items-center hero-gradient">
       {/* Background Image with Overlay */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 -z-10 parallax-bg">
         <img
           src={featuredMovie.posterUrl}
           alt={featuredMovie.title}
-          className="w-full h-full object-cover scale-110 blur-sm"
+          className="w-full h-full object-cover scale-110 blur-sm opacity-20"
         />
-        {/* Stronger overlays to hide poster text */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/30"></div>
         <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/70 to-black/40"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
-        <div className="absolute inset-0 bg-black/30"></div>
       </div>
 
       {/* Content */}
-      <div className="relative h-full flex items-center">
-        <div className="max-w-7xl mx-auto px-6 py-20">
-          <div className="max-w-2xl">
-            {/* Featured Badge */}
-            <div className="mb-6">
-              <span className="inline-block bg-pink-600 text-white px-4 py-2 font-bold text-sm tracking-wider">
-                FEATURED
-              </span>
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-24 w-full">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-16 items-center">
+          <div className="animate-slide-right delay-200 parallax-fast">
+            {/* Now Playing Badge */}
+            <div className="inline-flex items-center apple-glass text-apple-blue px-4 py-2 rounded-full text-sm mb-8">
+              <div className="w-2 h-2 bg-apple-blue rounded-full mr-3 animate-pulse"></div>
+              <Sparkles className="w-4 h-4 mr-2" />
+              Now Playing • Premium Experience
             </div>
 
             {/* Movie Title */}
-            <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-6 leading-tight">
-              {featuredMovie.title}
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter mb-8 leading-none">
+              <span className="apple-text-gradient font-display">{featuredMovie.title}</span>
             </h1>
 
-            {/* Genre Tags */}
-            <div className="flex flex-wrap gap-2 mb-4">
-              {featuredMovie.genre.split(',').map((genre, index) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-sm rounded-full border border-white/30"
-                >
-                  {genre.trim()}
-                </span>
-              ))}
-              <span className="px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-sm rounded-full border border-white/30">
-                {featuredMovie.rating}
-              </span>
-            </div>
-
             {/* Description */}
-            <p className="text-white/90 text-lg mb-8 leading-relaxed max-w-xl">
+            <p className="text-xl md:text-2xl text-white/70 max-w-2xl mb-12 leading-relaxed">
               {featuredMovie.description}
             </p>
 
-            {/* CTA Button */}
-            <button
-              onClick={onExploreClick}
-              className="group px-8 py-4 bg-pink-500 hover:bg-pink-600 text-white rounded-full font-semibold text-lg transition-all flex items-center space-x-2 shadow-lg hover:shadow-xl"
-            >
-              <span>Explore Movies</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4">
+              <button
+                onClick={onExploreClick}
+                className="apple-button px-8 py-4 rounded-2xl font-medium text-lg flex items-center justify-center"
+              >
+                <Play className="w-5 h-5 mr-3" />
+                Book Tickets
+              </button>
+              <button className="apple-glass hover:bg-white/10 transition-all duration-300 px-8 py-4 rounded-2xl font-medium text-lg flex items-center justify-center text-white">
+                <CalendarPlus className="w-5 h-5 mr-3" />
+                View Showtimes
+              </button>
+            </div>
+
+            {/* Movie Stats */}
+            <div className="animate-slide-up delay-600 flex items-center space-x-8 mt-12 pt-8 border-t border-white/10">
+              <div className="text-center">
+                <div className="text-2xl font-display font-semibold text-white">{featuredMovie.rating}</div>
+                <div className="text-sm text-white/60">Rating</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-display font-semibold text-white">{featuredMovie.duration}m</div>
+                <div className="text-sm text-white/60">Runtime</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-display font-semibold text-white">{featuredMovie.genre.split(',')[0]}</div>
+                <div className="text-sm text-white/60">Genre</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Movie Poster Card */}
+          <div className="animate-slide-left delay-400 parallax-fast">
+            <div className="movie-card rounded-3xl overflow-hidden relative">
+              <img
+                src={featuredMovie.posterUrl}
+                alt={featuredMovie.title}
+                className="w-full h-[600px] object-cover"
+              />
+
+              {/* Premium Badge */}
+              <div className="absolute top-6 right-6 z-20">
+                <div className="apple-glass px-3 py-1 rounded-full text-sm font-medium text-apple-orange border border-apple-orange/30">
+                  Premium
+                </div>
+              </div>
+
+              {/* Bottom Overlay */}
+              <div className="absolute bottom-0 left-0 right-0 z-20 p-6 bg-gradient-to-t from-black/80 to-transparent">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-2">
+                    <div className="flex text-yellow-400 space-x-1">
+                      {[...Array(5)].map((_, i) => (
+                        <svg key={i} className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                        </svg>
+                      ))}
+                    </div>
+                    <span className="text-white/80 font-medium text-sm">4.8 (2.4k)</span>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-2xl text-white font-display font-semibold">$12.99</div>
+                    <div className="text-xs text-white/60">Standard</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -121,6 +164,6 @@ export function HeroSection({ onExploreClick }: HeroSectionProps) {
           <div className="w-1 h-3 bg-white/50 rounded-full"></div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

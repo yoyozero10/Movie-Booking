@@ -1,8 +1,14 @@
 // Type definitions for custom components
+export enum UserRole {
+  USER = 'user',
+  ADMIN = 'admin',
+}
+
 export interface User {
   _id: string;
   email: string;
   name: string;
+  role: UserRole;
 }
 
 export interface SignInFormProps {

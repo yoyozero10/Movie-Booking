@@ -1,10 +1,8 @@
-import { useState, useEffect } from "react";
-import { toast } from "sonner";
-import { api } from "../lib/api";
-import { useAuth } from "../lib/auth";
-import { Calendar, Clock, Armchair, Ticket, Trash2, XCircle } from "lucide-react";
+import { useState, useEffect } from 'react';
+import { toast } from 'sonner';
+import { api } from '../lib/api';
+import { Calendar, Clock, MapPin, Ticket, CheckCircle, XCircle, Trash2 } from 'lucide-react';
 
-// Define types for MongoDB documents
 interface Booking {
   _id: string;
   showtimeId: {
@@ -32,65 +30,53 @@ interface Booking {
 export function MyBookings() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
-  const [authError, setAuthError] = useState(false);
-  const { user } = useAuth();
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchBookings = async () => {
-      if (!user) {
-        setAuthError(true);
-        setLoading(false);
-        return;
-      }
+    fetchBookings();
+  }, []);
 
-      try {
-        const bookingsData = await api.getBookings();
-        setBookings(bookingsData);
-        setAuthError(false);
-      } catch (error: any) {
-        console.error('Error fetching bookings:', error);
-        if (error.message?.includes('Access token required') || error.message?.includes('401')) {
-          setAuthError(true);
-          toast.error('Please sign in to view your bookings');
-        } else {
-          toast.error('Failed to load bookings');
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchBookings = async () => {
+    try {
+      setLoading(true);
+      const data = await api.getBookings();
+      setBookings(data);
+      setError(null);
+    } catch (err) {
+      console.error('Error fetching bookings:', err);
+      setError('Failed to load bookings. Please try again.');
+      toast.error('Failed to load bookings');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    void fetchBookings();
-  }, [user]);
-
-  const handleCancel = async (bookingId: string) => {
-    if (!confirm("Are you sure you want to cancel this booking?")) return;
+  const handleCancelBooking = async (bookingId: string) => {
+    if (!confirm('Are you sure you want to cancel this booking?')) {
+      return;
+    }
 
     try {
       await api.cancelBooking(bookingId);
       toast.success('Booking cancelled successfully');
-
-      // Refresh bookings list
-      const updatedBookings = await api.getBookings();
-      setBookings(updatedBookings);
-    } catch (error) {
-      console.error('Error cancelling booking:', error);
+      await fetchBookings();
+    } catch (err) {
+      console.error('Error cancelling booking:', err);
       toast.error('Failed to cancel booking');
     }
   };
 
-  const handleDelete = async (bookingId: string) => {
-    if (!confirm("Are you sure you want to permanently delete this booking? This action cannot be undone.")) return;
+  const handleDeleteBooking = async (bookingId: string) => {
+    if (!confirm('Are you sure you want to delete this booking? This action cannot be undone.')) {
+      return;
+    }
 
     try {
       await api.deleteBooking(bookingId);
       toast.success('Booking deleted successfully');
-
-      // Refresh bookings list
-      const updatedBookings = await api.getBookings();
-      setBookings(updatedBookings);
-    } catch (error) {
-      console.error('Error deleting booking:', error);
+      await fetchBookings();
+    } catch (err) {
+      console.error('Error deleting booking:', err);
       toast.error('Failed to delete booking');
     }
   };
@@ -98,24 +84,20 @@ export function MyBookings() {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-500"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-apple-blue"></div>
       </div>
     );
   }
 
-  if (authError || !user) {
+  if (error) {
     return (
       <div className="text-center py-20">
-        <div className="text-6xl mb-4">🔒</div>
-        <p className="text-xl text-gray-300 mb-2">Sign in required</p>
-        <p className="text-gray-400 mb-6">
-          Please sign in to view your bookings
-        </p>
+        <p className="text-xl text-red-500 mb-4">{error}</p>
         <button
-          onClick={() => window.location.reload()}
-          className="px-6 py-2 bg-pink-500 text-white rounded-full hover:bg-pink-600 transition-colors"
+          onClick={fetchBookings}
+          className="apple-button px-6 py-3 rounded-lg"
         >
-          Sign In
+          Try Again
         </button>
       </div>
     );
@@ -123,157 +105,170 @@ export function MyBookings() {
 
   if (bookings.length === 0) {
     return (
-      <div className="text-center py-20">
-        <div className="text-6xl mb-4">🎫</div>
-        <p className="text-xl text-gray-300 mb-2">No bookings yet</p>
-        <p className="text-gray-400">
-          Book your first movie to see your bookings here!
-        </p>
+      <div className="text-center py-20 animate-fade-in">
+        <div className="apple-glass rounded-3xl p-12 max-w-md mx-auto">
+          <Ticket className="w-16 h-16 text-white/40 mx-auto mb-4" />
+          <h3 className="text-2xl font-bold text-white mb-2 font-display">No Bookings Yet</h3>
+          <p className="text-white/70">
+            Start booking your favorite movies to see them here!
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      <h3 className="text-2xl font-bold text-white mb-6">My Bookings</h3>
+    <div className="max-w-6xl mx-auto">
+      <h2 className="text-3xl font-bold text-white mb-8 font-display animate-fade-in">My Bookings</h2>
 
-      <div className="grid gap-6">
-        {bookings.map((booking) => (
-          <div
-            key={booking._id}
-            className="bg-gray-800 rounded-xl overflow-hidden border border-gray-700 shadow-lg hover:border-pink-500/50 transition-all duration-300"
-          >
-            <div className="flex flex-col md:flex-row">
-              {/* Movie Poster */}
-              <div className="w-full md:w-48 h-64 md:h-auto bg-gray-900 flex-shrink-0 relative">
-                <img
-                  src={booking.showtimeId?.movieId?.posterUrl}
-                  alt={booking.showtimeId?.movieId?.title}
-                  className="w-full h-full object-cover"
-                  onError={(e) => { (e.target as HTMLImageElement).src = 'https://picsum.photos/seed/placeholder/500/750'; }}
-                />
-                <div className="absolute top-2 right-2 md:hidden">
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm ${booking.status === 'confirmed'
-                      ? 'bg-green-500 text-white'
-                      : booking.status === 'cancelled'
-                        ? 'bg-red-500 text-white'
-                        : 'bg-gray-500 text-white'
-                      }`}
-                  >
-                    {booking.status}
-                  </span>
+      <div className="space-y-6">
+        {bookings.map((booking, index) => {
+          // Safely access nested properties with fallbacks
+          const showtime = booking.showtimeId;
+          const movie = showtime?.movieId;
+          const theater = showtime?.theaterId;
+
+          // Skip rendering if critical data is missing
+          if (!showtime || !movie || !theater) {
+            return null;
+          }
+
+          return (
+            <div
+              key={booking._id}
+              className="movie-card rounded-2xl p-6 hover:border-apple-blue/50 transition-all duration-300 animate-slide-up"
+              style={{ animationDelay: `${index * 100}ms` }}
+            >
+              <div className="flex flex-col lg:flex-row gap-6">
+                {/* Movie Poster */}
+                <div className="flex-shrink-0">
+                  <img
+                    src={movie.posterUrl || 'https://via.placeholder.com/300x450?text=No+Poster'}
+                    alt={movie.title || 'Movie'}
+                    className="w-full lg:w-32 h-48 lg:h-48 object-cover rounded-xl"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'https://via.placeholder.com/300x450?text=No+Poster';
+                    }}
+                  />
                 </div>
-              </div>
 
-              {/* Booking Details */}
-              <div className="flex-1 p-6 flex flex-col justify-between">
-                <div>
-                  <div className="flex justify-between items-start mb-4">
+                {/* Booking Details */}
+                <div className="flex-1 space-y-4">
+                  {/* Header */}
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                     <div>
-                      <h4 className="text-2xl font-bold text-white mb-1">
-                        {booking.showtimeId?.movieId?.title || 'Movie Title'}
-                      </h4>
-                      <p className="text-pink-400 font-medium text-sm">
-                        Booking Ref: {booking.bookingReference}
-                      </p>
+                      <h3 className="text-2xl font-bold text-white mb-2 font-display">
+                        {movie.title || 'Unknown Movie'}
+                      </h3>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`px-3 py-1 rounded-lg text-sm font-medium border ${booking.status === 'confirmed'
+                              ? 'bg-green-500/20 text-green-400 border-green-500/30'
+                              : 'bg-red-500/20 text-red-400 border-red-500/30'
+                            }`}
+                        >
+                          {booking.status === 'confirmed' ? (
+                            <span className="flex items-center gap-1">
+                              <CheckCircle className="w-4 h-4" />
+                              Confirmed
+                            </span>
+                          ) : (
+                            <span className="flex items-center gap-1">
+                              <XCircle className="w-4 h-4" />
+                              Cancelled
+                            </span>
+                          )}
+                        </span>
+                        {booking.bookingReference && (
+                          <span className="px-3 py-1 bg-apple-blue/20 text-apple-blue rounded-lg text-sm font-medium border border-apple-blue/30">
+                            {booking.bookingReference}
+                          </span>
+                        )}
+                      </div>
                     </div>
-                    <div className="hidden md:block">
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${booking.status === 'confirmed'
-                          ? 'bg-green-500/20 text-green-400 border border-green-500/30'
-                          : booking.status === 'cancelled'
-                            ? 'bg-red-500/20 text-red-400 border border-red-500/30'
-                            : 'bg-gray-500/20 text-gray-400 border border-gray-500/30'
-                          }`}
+
+                    <div className="text-right">
+                      <div className="text-3xl font-bold text-apple-blue font-display">
+                        ${booking.totalPrice?.toFixed(2) || '0.00'}
+                      </div>
+                      <div className="text-sm text-white/60">
+                        {booking.seats?.length || 0} seat{(booking.seats?.length || 0) > 1 ? 's' : ''}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Info Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="flex items-start gap-3">
+                      <Calendar className="w-5 h-5 text-apple-blue flex-shrink-0 mt-0.5" />
+                      <div>
+                        <div className="text-sm text-white/60">Date & Time</div>
+                        <div className="text-white font-medium">
+                          {showtime.date || 'N/A'} at {showtime.startTime || 'N/A'}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <MapPin className="w-5 h-5 text-apple-blue flex-shrink-0 mt-0.5" />
+                      <div>
+                        <div className="text-sm text-white/60">Theater</div>
+                        <div className="text-white font-medium">
+                          {theater.name || 'Unknown Theater'}
+                        </div>
+                        <div className="text-sm text-white/50">
+                          {theater.location || 'Unknown Location'}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <Ticket className="w-5 h-5 text-apple-blue flex-shrink-0 mt-0.5" />
+                      <div>
+                        <div className="text-sm text-white/60">Seats</div>
+                        <div className="text-white font-medium">
+                          {booking.seats?.join(', ') || 'N/A'}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <Clock className="w-5 h-5 text-apple-blue flex-shrink-0 mt-0.5" />
+                      <div>
+                        <div className="text-sm text-white/60">Duration</div>
+                        <div className="text-white font-medium">
+                          {movie.duration || 0} minutes
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex gap-3 pt-4 border-t border-white/10">
+                    {booking.status === 'confirmed' && (
+                      <button
+                        onClick={() => handleCancelBooking(booking._id)}
+                        className="apple-glass hover:bg-red-500/20 hover:border-red-500/30 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 text-white flex items-center gap-2"
                       >
-                        {booking.status}
-                      </span>
-                    </div>
+                        <XCircle className="w-4 h-4" />
+                        Cancel Booking
+                      </button>
+                    )}
+                    {booking.status === 'cancelled' && (
+                      <button
+                        onClick={() => handleDeleteBooking(booking._id)}
+                        className="apple-glass hover:bg-red-500/20 hover:border-red-500/30 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 text-white flex items-center gap-2"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        Delete Booking
+                      </button>
+                    )}
                   </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                    {/* Theater Info - NEW */}
-                    <div className="flex items-center space-x-3 text-gray-300 col-span-1 sm:col-span-2 bg-gray-700/30 p-3 rounded-lg border border-gray-700">
-                      <div className="p-2 bg-gray-700/50 rounded-lg">
-                        <svg className="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-400">Theater Location</p>
-                        <p className="font-bold text-white">{booking.showtimeId?.theaterId?.name || 'Unknown Theater'}</p>
-                        <p className="text-sm text-gray-400">{booking.showtimeId?.theaterId?.location || 'Address not available'}</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center space-x-3 text-gray-300">
-                      <div className="p-2 bg-gray-700/50 rounded-lg">
-                        <Calendar className="w-5 h-5 text-pink-400" />
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-400">Date</p>
-                        <p className="font-medium">{booking.showtimeId?.date || 'N/A'}</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center space-x-3 text-gray-300">
-                      <div className="p-2 bg-gray-700/50 rounded-lg">
-                        <Clock className="w-5 h-5 text-pink-400" />
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-400">Time</p>
-                        <p className="font-medium">{booking.showtimeId?.startTime || 'N/A'}</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center space-x-3 text-gray-300">
-                      <div className="p-2 bg-gray-700/50 rounded-lg">
-                        <Armchair className="w-5 h-5 text-pink-400" />
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-400">Seats</p>
-                        <p className="font-medium">{booking.seats.join(', ')}</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center space-x-3 text-gray-300">
-                      <div className="p-2 bg-gray-700/50 rounded-lg">
-                        <Ticket className="w-5 h-5 text-pink-400" />
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-400">Total Price</p>
-                        <p className="font-bold text-white text-lg">${booking.totalPrice.toFixed(2)}</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex justify-end pt-4 border-t border-gray-700">
-                  {booking.status === 'confirmed' && (
-                    <button
-                      onClick={() => void handleCancel(booking._id)}
-                      className="flex items-center space-x-2 px-4 py-2 bg-red-500/10 text-red-400 hover:bg-red-500/20 rounded-lg transition-colors border border-red-500/30"
-                    >
-                      <XCircle className="w-4 h-4" />
-                      <span>Cancel Booking</span>
-                    </button>
-                  )}
-                  {booking.status === 'cancelled' && (
-                    <button
-                      onClick={() => void handleDelete(booking._id)}
-                      className="flex items-center space-x-2 px-4 py-2 bg-gray-700 text-gray-300 hover:bg-gray-600 rounded-lg transition-colors"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                      <span>Delete Booking</span>
-                    </button>
-                  )}
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
