@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { User, Edit, Calendar, Mail } from "lucide-react";
+import { User, Edit, Calendar, Mail, Shield, CheckCircle, Film, Ticket } from "lucide-react";
 import { useAuth } from "../lib/auth";
 import { api } from "../lib/api";
 
@@ -9,6 +9,7 @@ interface UserProfileProps {
 
 export function UserProfile({ userId }: UserProfileProps) {
   const [profileUser, setProfileUser] = useState<any>(null);
+  const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { user: currentUser } = useAuth();
@@ -24,6 +25,16 @@ export function UserProfile({ userId }: UserProfileProps) {
         if (isOwnProfile) {
           // Get current user's profile
           userData = await api.getProfile();
+
+          // Fetch user's bookings
+          try {
+            const userBookings = await api.getBookings();
+            setBookings(userBookings);
+          } catch (bookingError) {
+            console.error('Error fetching bookings:', bookingError);
+            // Don't fail the whole profile if bookings fail
+            setBookings([]);
+          }
         } else {
           // Validate userId (simple ObjectId hex string check) before requesting
           const isValidObjectId = typeof userId === 'string' && /^[a-fA-F0-9]{24}$/.test(userId);
@@ -33,6 +44,7 @@ export function UserProfile({ userId }: UserProfileProps) {
 
           // Get specific user's profile
           userData = await api.getUserById(userId as string);
+          setBookings([]); // Don't show other users' bookings
         }
 
         setProfileUser(userData);
@@ -48,18 +60,18 @@ export function UserProfile({ userId }: UserProfileProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 pt-20 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-400"></div>
+      <div className="min-h-screen pt-24 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-apple-blue"></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-900 pt-20 flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-red-400 text-lg mb-2">Error</div>
-          <div className="text-gray-300">{error}</div>
+      <div className="min-h-screen pt-24 flex items-center justify-center">
+        <div className="apple-glass rounded-3xl p-12 max-w-md mx-auto text-center">
+          <div className="text-red-400 text-2xl font-bold mb-4">Error</div>
+          <div className="text-white/70">{error}</div>
         </div>
       </div>
     );
@@ -67,104 +79,164 @@ export function UserProfile({ userId }: UserProfileProps) {
 
   if (!profileUser) {
     return (
-      <div className="min-h-screen bg-gray-900 pt-20 flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-gray-400 text-lg mb-2">User not found</div>
+      <div className="min-h-screen pt-24 flex items-center justify-center">
+        <div className="apple-glass rounded-3xl p-12 max-w-md mx-auto text-center">
+          <User className="w-16 h-16 text-white/30 mx-auto mb-4" />
+          <div className="text-white/70 text-lg">User not found</div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 pt-20">
-      <div className="max-w-4xl mx-auto px-6 py-8">
-        <div className="bg-gray-800 rounded-2xl p-8 border border-gray-700">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center space-x-4">
-              <div className="w-20 h-20 bg-pink-500 rounded-full flex items-center justify-center">
-                <User className="w-10 h-10 text-white" />
+    <div className="min-h-screen pt-24 pb-16">
+      <div className="max-w-5xl mx-auto px-6 lg:px-8">
+        {/* Header Card */}
+        <div className="premium-glass rounded-3xl p-8 md:p-12 mb-8 animate-scale-in">
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
+            {/* Avatar */}
+            <div className="relative">
+              <div className="w-32 h-32 rounded-3xl bg-gradient-to-br from-apple-blue to-purple-500 flex items-center justify-center border-4 border-white/10">
+                <User className="w-16 h-16 text-white" strokeWidth={2} />
               </div>
-              <div>
-                <h1 className="text-3xl font-bold text-white">{profileUser.name}</h1>
-                <p className="text-gray-400 flex items-center mt-1">
-                  <Mail className="w-4 h-4 mr-2" />
-                  {profileUser.email}
-                </p>
-              </div>
-            </div>
-
-            {isOwnProfile && (
-              <button className="px-6 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-full font-medium transition-colors flex items-center">
-                <Edit className="w-4 h-4 mr-2" />
-                Edit Profile
-              </button>
-            )}
-          </div>
-
-          {/* Profile Details */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-4">
-              <div className="flex items-center text-gray-300">
-                <User className="w-5 h-5 mr-3 text-pink-400" />
-                <span className="font-medium">Name:</span>
-                <span className="ml-2 text-white">{profileUser.name}</span>
-              </div>
-
-              <div className="flex items-center text-gray-300">
-                <Mail className="w-5 h-5 mr-3 text-pink-400" />
-                <span className="font-medium">Email:</span>
-                <span className="ml-2 text-white">{profileUser.email}</span>
-              </div>
-
-              <div className="flex items-center text-gray-300">
-                <Calendar className="w-5 h-5 mr-3 text-pink-400" />
-                <span className="font-medium">Member since:</span>
-                <span className="ml-2 text-white">
-                  {new Date(profileUser.createdAt).toLocaleDateString()}
-                </span>
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <div className="bg-gray-700 rounded-lg p-4">
-                <h3 className="text-white font-semibold mb-2">Account Status</h3>
-                <div className="flex items-center">
-                  <div className="w-3 h-3 bg-green-400 rounded-full mr-2"></div>
-                  <span className="text-green-400">Active</span>
+              {profileUser.role === 'admin' && (
+                <div className="absolute -bottom-2 -right-2 apple-glass px-3 py-1 rounded-full border border-apple-orange/30">
+                  <Shield className="w-4 h-4 text-apple-orange" />
                 </div>
-              </div>
-
-              <div className="bg-gray-700 rounded-lg p-4">
-                <h3 className="text-white font-semibold mb-2">Role</h3>
-                <span className="text-gray-300">Standard User</span>
-              </div>
+              )}
             </div>
-          </div>
 
-          {/* Demo: View Other Users Section (only for own profile) */}
-          {isOwnProfile && (
-            <div className="mt-8 border-t border-gray-700 pt-6">
-              <h2 className="text-xl font-semibold text-white mb-4">Browse Other Users</h2>
-              <div className="bg-gray-700 rounded-lg p-4">
-                <p className="text-gray-300 mb-4">
-                  You can view other users' profiles using their user ID:
-                </p>
-                <div className="space-y-2">
-                  <button
-                    onClick={() => window.open('/profile', '_blank')}
-                    className="block w-full text-left px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded transition-colors"
-                  >
-                    View Your Profile
+            {/* User Info */}
+            <div className="flex-1 text-center md:text-left">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
+                <div>
+                  <h1 className="text-4xl md:text-5xl font-bold mb-2">
+                    <span className="apple-text-gradient font-display">{profileUser.name}</span>
+                  </h1>
+                  <div className="flex items-center justify-center md:justify-start gap-2 text-white/60">
+                    <Mail className="w-4 h-4" />
+                    <span>{profileUser.email}</span>
+                  </div>
+                </div>
+
+                {isOwnProfile && (
+                  <button className="apple-button px-6 py-3 rounded-2xl font-medium flex items-center gap-2 mx-auto md:mx-0">
+                    <Edit className="w-4 h-4" />
+                    Edit Profile
                   </button>
-                  <p className="text-sm text-gray-400 mt-2">
-                    💡 Tip: Replace "demo-user-1" with any actual user ID from your database
-                  </p>
+                )}
+              </div>
+
+              {/* Stats */}
+              <div className="flex flex-wrap gap-4 justify-center md:justify-start mt-6">
+                <div className="apple-glass px-4 py-2 rounded-xl">
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-apple-blue" />
+                    <span className="text-white/60 text-sm">Joined</span>
+                    <span className="text-white font-semibold text-sm">
+                      {new Date(profileUser.createdAt).toLocaleDateString('en-US', {
+                        month: 'short',
+                        year: 'numeric'
+                      })}
+                    </span>
+                  </div>
                 </div>
+
+                <div className="apple-glass px-4 py-2 rounded-xl">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4 text-green-400" />
+                    <span className="text-green-400 font-semibold text-sm">Active</span>
+                  </div>
+                </div>
+
+                {profileUser.role === 'admin' && (
+                  <div className="apple-glass px-4 py-2 rounded-xl border border-apple-orange/30">
+                    <div className="flex items-center gap-2">
+                      <Shield className="w-4 h-4 text-apple-orange" />
+                      <span className="text-apple-orange font-semibold text-sm">Administrator</span>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
-          )}
+          </div>
         </div>
+
+        {/* Profile Details Grid */}
+        <div className="grid md:grid-cols-2 gap-6 animate-slide-up delay-200">
+          {/* Account Information */}
+          <div className="apple-glass rounded-2xl p-6">
+            <h2 className="text-xl font-bold text-white mb-6 font-display flex items-center gap-2">
+              <User className="w-5 h-5 text-apple-blue" />
+              Account Information
+            </h2>
+
+            <div className="space-y-4">
+              <div className="flex justify-between items-center pb-3 border-b border-white/10">
+                <span className="text-white/60">Full Name</span>
+                <span className="text-white font-medium">{profileUser.name}</span>
+              </div>
+
+              <div className="flex justify-between items-center pb-3 border-b border-white/10">
+                <span className="text-white/60">Email</span>
+                <span className="text-white font-medium">{profileUser.email}</span>
+              </div>
+
+              <div className="flex justify-between items-center pb-3 border-b border-white/10">
+                <span className="text-white/60">User ID</span>
+                <span className="text-white/40 font-mono text-xs">{profileUser._id}</span>
+              </div>
+
+              <div className="flex justify-between items-center">
+                <span className="text-white/60">Account Type</span>
+                <span className="text-white font-medium capitalize">{profileUser.role || 'user'}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Activity Stats */}
+          <div className="apple-glass rounded-2xl p-6">
+            <h2 className="text-xl font-bold text-white mb-6 font-display flex items-center gap-2">
+              <Film className="w-5 h-5 text-apple-blue" />
+              Activity
+            </h2>
+
+            <div className="space-y-4">
+              <div className="bg-white/5 rounded-xl p-4 hover:bg-white/10 transition-colors">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-white/60 text-sm">Total Bookings</span>
+                  <Ticket className="w-4 h-4 text-apple-blue" />
+                </div>
+                <div className="text-3xl font-bold text-white font-display">{bookings.length}</div>
+                <div className="text-xs text-white/40 mt-1">All time</div>
+              </div>
+
+              <div className="bg-white/5 rounded-xl p-4 hover:bg-white/10 transition-colors">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-white/60 text-sm">Movies Watched</span>
+                  <Film className="w-4 h-4 text-purple-400" />
+                </div>
+                <div className="text-3xl font-bold text-white font-display">
+                  {new Set(bookings.map((b: any) => typeof b.showtimeId?.movieId === 'object' ? b.showtimeId.movieId._id : b.showtimeId?.movieId)).size}
+                </div>
+                <div className="text-xs text-white/40 mt-1">Unique titles</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Recent Activity (Placeholder) */}
+        {isOwnProfile && (
+          <div className="mt-8 apple-glass rounded-2xl p-6 animate-slide-up delay-400">
+            <h2 className="text-xl font-bold text-white mb-6 font-display">Recent Activity</h2>
+
+            <div className="text-center py-12">
+              <Ticket className="w-16 h-16 text-white/20 mx-auto mb-4" />
+              <p className="text-white/60">No recent activity</p>
+              <p className="text-white/40 text-sm mt-2">Your booking history will appear here</p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

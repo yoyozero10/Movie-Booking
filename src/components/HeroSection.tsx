@@ -1,6 +1,8 @@
-import { Play, CalendarPlus, Sparkles } from "lucide-react";
+import { Play, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 import { api } from "../lib/api";
+import { useLocale } from "../lib/LocaleContext";
+import { t } from "../lib/i18n";
 
 interface Movie {
   _id: string;
@@ -20,6 +22,7 @@ interface HeroSectionProps {
 export function HeroSection({ onExploreClick }: HeroSectionProps) {
   const [featuredMovie, setFeaturedMovie] = useState<Movie | null>(null);
   const [loading, setLoading] = useState(true);
+  const { language } = useLocale();
 
   useEffect(() => {
     const fetchFeaturedMovie = async () => {
@@ -73,7 +76,7 @@ export function HeroSection({ onExploreClick }: HeroSectionProps) {
             <div className="inline-flex items-center apple-glass text-apple-blue px-4 py-2 rounded-full text-sm mb-8">
               <div className="w-2 h-2 bg-apple-blue rounded-full mr-3 animate-pulse"></div>
               <Sparkles className="w-4 h-4 mr-2" />
-              Now Playing • Premium Experience
+              {t('hero.nowPlaying', language)}
             </div>
 
             {/* Movie Title */}
@@ -93,11 +96,7 @@ export function HeroSection({ onExploreClick }: HeroSectionProps) {
                 className="apple-button px-8 py-4 rounded-2xl font-medium text-lg flex items-center justify-center"
               >
                 <Play className="w-5 h-5 mr-3" />
-                Book Tickets
-              </button>
-              <button className="apple-glass hover:bg-white/10 transition-all duration-300 px-8 py-4 rounded-2xl font-medium text-lg flex items-center justify-center text-white">
-                <CalendarPlus className="w-5 h-5 mr-3" />
-                View Showtimes
+                {t('hero.bookTickets', language)}
               </button>
             </div>
 
@@ -105,15 +104,15 @@ export function HeroSection({ onExploreClick }: HeroSectionProps) {
             <div className="animate-slide-up delay-600 flex items-center space-x-8 mt-12 pt-8 border-t border-white/10">
               <div className="text-center">
                 <div className="text-2xl font-display font-semibold text-white">{featuredMovie.rating}</div>
-                <div className="text-sm text-white/60">Rating</div>
+                <div className="text-sm text-white/60">{t('hero.rating', language)}</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-display font-semibold text-white">{featuredMovie.duration}m</div>
-                <div className="text-sm text-white/60">Runtime</div>
+                <div className="text-sm text-white/60">{t('hero.runtime', language)}</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-display font-semibold text-white">{featuredMovie.genre.split(',')[0]}</div>
-                <div className="text-sm text-white/60">Genre</div>
+                <div className="text-sm text-white/60">{t('hero.genre', language)}</div>
               </div>
             </div>
           </div>
@@ -127,12 +126,7 @@ export function HeroSection({ onExploreClick }: HeroSectionProps) {
                 className="w-full h-[600px] object-cover"
               />
 
-              {/* Premium Badge */}
-              <div className="absolute top-6 right-6 z-20">
-                <div className="apple-glass px-3 py-1 rounded-full text-sm font-medium text-apple-orange border border-apple-orange/30">
-                  Premium
-                </div>
-              </div>
+
 
               {/* Bottom Overlay */}
               <div className="absolute bottom-0 left-0 right-0 z-20 p-6 bg-gradient-to-t from-black/80 to-transparent">

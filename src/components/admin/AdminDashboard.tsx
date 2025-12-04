@@ -48,9 +48,6 @@ export function AdminDashboard() {
     const fetchStats = async () => {
         try {
             const response = await api.getAdminStats();
-            console.log('Admin Stats Response:', response);
-            console.log('Recent Bookings:', response.data?.recentBookings);
-            console.log('First Booking userId:', response.data?.recentBookings?.[0]?.userId);
 
             if (response.success) {
                 setStats(response.data.stats);

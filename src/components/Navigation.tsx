@@ -2,6 +2,9 @@ import { Search, X, Tv } from "lucide-react";
 import { User, UserRole } from "../lib/types";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { LanguageSwitcher } from "./LanguageSwitcher";
+import { useLocale } from "../lib/LocaleContext";
+import { t } from "../lib/i18n";
 
 interface NavigationProps {
   user: User | null;
@@ -16,20 +19,21 @@ export function Navigation({ user, onLoginClick, onSignOut, activeSection, onNav
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
+  const { language } = useLocale();
 
   const navItems = [
-    { id: "home", label: "Home" },
-    { id: "movies", label: "Movies" },
+    { id: "home", label: t('nav.home', language) },
+    { id: "movies", label: t('nav.movies', language) },
     { id: "releases", label: "Releases" },
-    { id: "contact", label: "Contact" },
+    { id: "contact", label: t('nav.contact', language) },
   ];
 
   // Add profile to nav items if user is logged in
-  let allNavItems = user ? [...navItems, { id: "profile", label: "Profile" }] : navItems;
+  let allNavItems = user ? [...navItems, { id: "profile", label: t('nav.profile', language) }] : navItems;
 
   // Add Admin Panel if user is admin
   if (user?.role === UserRole.ADMIN) {
-    allNavItems = [...allNavItems, { id: "admin", label: "Admin Panel" }];
+    allNavItems = [...allNavItems, { id: "admin", label: t('nav.admin', language) }];
   }
 
   const handleSearch = (e: React.FormEvent) => {
@@ -86,7 +90,7 @@ export function Navigation({ user, onLoginClick, onSignOut, activeSection, onNav
             ))}
           </div>
 
-          {/* Right Section - Search & Login */}
+          {/* Right Section - Search, Language & Login */}
           <div className="flex items-center space-x-4">
             {/* Search Bar */}
             <div className="relative">
@@ -96,7 +100,7 @@ export function Navigation({ user, onLoginClick, onSignOut, activeSection, onNav
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search movies..."
+                    placeholder={t('movies.searchPlaceholder', language)}
                     autoFocus
                     className="w-64 px-4 py-2 pr-10 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/50 focus:outline-none focus:border-apple-blue/50 transition-all duration-300"
                   />
@@ -118,6 +122,9 @@ export function Navigation({ user, onLoginClick, onSignOut, activeSection, onNav
               )}
             </div>
 
+            {/* Language Switcher */}
+            <LanguageSwitcher />
+
             {user ? (
               <div className="flex items-center space-x-4">
                 <span className="text-white/80 text-sm hidden md:inline">
@@ -127,7 +134,7 @@ export function Navigation({ user, onLoginClick, onSignOut, activeSection, onNav
                   onClick={onSignOut}
                   className="apple-button px-6 py-2 rounded-full font-medium text-sm text-white"
                 >
-                  Sign Out
+                  {t('nav.logout', language)}
                 </button>
               </div>
             ) : (
@@ -135,7 +142,7 @@ export function Navigation({ user, onLoginClick, onSignOut, activeSection, onNav
                 onClick={onLoginClick}
                 className="apple-button px-6 py-2 rounded-full font-medium text-sm text-white"
               >
-                Sign In
+                {t('nav.login', language)}
               </button>
             )}
           </div>

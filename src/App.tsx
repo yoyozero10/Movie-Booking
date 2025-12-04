@@ -13,10 +13,13 @@ import { ContentProps } from "./lib/types";
 import { useAuth } from "./lib/auth";
 import { AdminPage } from "./components/admin/AdminPage";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { ReleasesPage } from "./components/ReleasesPage";
+import { ContactPage } from "./components/ContactPage";
+import { LocaleProvider } from "./lib/LocaleContext";
 
 export default function App() {
   return (
-    <>
+    <LocaleProvider>
       <Routes>
         <Route
           path="/admin/*"
@@ -29,7 +32,7 @@ export default function App() {
         <Route path="/*" element={<MainApp />} />
       </Routes>
       <Toaster />
-    </>
+    </LocaleProvider>
   );
 }
 
@@ -216,6 +219,15 @@ function Content({ activeTab, setActiveTab, activeSection, user, showLoginModal,
     }
 
     return <UserProfile />;
+  }
+
+  // Show releases section
+  if (activeSection === "releases") {
+    return <ReleasesPage />;
+  }
+  // Show contact section
+  if (activeSection === "contact") {
+    return <ContactPage />;
   }
 
   // Placeholder for other sections

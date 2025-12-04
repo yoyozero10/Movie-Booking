@@ -40,6 +40,7 @@ export function ShowtimeManagement() {
     const [movies, setMovies] = useState<Movie[]>([]);
     const [theaters, setTheaters] = useState<Theater[]>([]);
     const [loading, setLoading] = useState(true);
+    const [submitting, setSubmitting] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [editingShowtime, setEditingShowtime] = useState<Showtime | null>(null);
     const [filterDate, setFilterDate] = useState('');
@@ -55,19 +56,22 @@ export function ShowtimeManagement() {
         availableSeats: undefined,
     });
 
+    // Initial load - fetch everything once
     useEffect(() => {
-        fetchData();
+        fetchInitialData();
+    }, []);
+
+    // Filter changes - only fetch showtimes
+    useEffect(() => {
+        if (!loading) {
+            fetchShowtimes();
+        }
     }, [filterDate, filterMovie, filterTheater]);
 
-    const fetchData = async () => {
+    const fetchInitialData = async () => {
         try {
-            const filters: any = {};
-            if (filterDate) filters.date = filterDate;
-            if (filterMovie) filters.movieId = filterMovie;
-            if (filterTheater) filters.theaterId = filterTheater;
-
             const [showtimesData, moviesData, theatersData] = await Promise.all([
-                api.getAllShowtimes(filters),
+                api.getAllShowtimes({}),
                 api.getMovies(),
                 api.getTheaters(),
             ]);
@@ -80,6 +84,21 @@ export function ShowtimeManagement() {
             toast.error('Failed to load data');
         } finally {
             setLoading(false);
+        }
+    };
+
+    const fetchShowtimes = async () => {
+        try {
+            const filters: any = {};
+            if (filterDate) filters.date = filterDate;
+            if (filterMovie) filters.movieId = filterMovie;
+            if (filterTheater) filters.theaterId = filterTheater;
+
+            const showtimesData = await api.getAllShowtimes(filters);
+            setShowtimes(showtimesData);
+        } catch (error) {
+            console.error('Error fetching showtimes:', error);
+            toast.error('Failed to load showtimes');
         }
     };
 
@@ -137,20 +156,30 @@ export function ShowtimeManagement() {
             return;
         }
 
+        setSubmitting(true);
         try {
             if (editingShowtime) {
-                await api.updateShowtime(editingShowtime._id, formData);
+                const updated = await api.updateShowtime(editingShowtime._id, formData);
                 toast.success('Showtime updated successfully');
+
+                // Optimistic update
+                setShowtimes(prev => prev.map(st =>
+                    st._id === editingShowtime._id ? updated : st
+                ));
             } else {
-                await api.createShowtime(formData);
+                const created = await api.createShowtime(formData);
                 toast.success('Showtime created successfully');
+
+                // Optimistic update - add to list
+                setShowtimes(prev => [created, ...prev]);
             }
 
             handleCloseModal();
-            fetchData();
         } catch (error: any) {
             console.error('Error saving showtime:', error);
             toast.error(error.message || 'Failed to save showtime');
+        } finally {
+            setSubmitting(false);
         }
     };
 
@@ -162,7 +191,9 @@ export function ShowtimeManagement() {
         try {
             await api.deleteShowtime(id);
             toast.success('Showtime deleted successfully');
-            fetchData();
+
+            // Optimistic update - remove from list
+            setShowtimes(prev => prev.filter(st => st._id !== id));
         } catch (error: any) {
             console.error('Error deleting showtime:', error);
             toast.error(error.message || 'Failed to delete showtime');
@@ -463,16 +494,27 @@ export function ShowtimeManagement() {
                                 <button
                                     type="button"
                                     onClick={handleCloseModal}
-                                    className="flex-1 px-6 py-3 rounded-xl font-medium text-white bg-white/10 hover:bg-white/20 transition-colors"
+                                    disabled={submitting}
+                                    className="flex-1 px-6 py-3 rounded-xl font-medium text-white bg-white/10 hover:bg-white/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
-                                    className="flex-1 apple-button px-6 py-3 rounded-xl font-medium flex items-center justify-center gap-2"
+                                    disabled={submitting}
+                                    className="flex-1 apple-button px-6 py-3 rounded-xl font-medium flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                    <Save className="w-5 h-5" />
-                                    {editingShowtime ? 'Update Showtime' : 'Create Showtime'}
+                                    {submitting ? (
+                                        <>
+                                            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                                            Saving...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Save className="w-5 h-5" />
+                                            {editingShowtime ? 'Update Showtime' : 'Create Showtime'}
+                                        </>
+                                    )}
                                 </button>
                             </div>
                         </form>

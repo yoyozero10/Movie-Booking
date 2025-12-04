@@ -4,8 +4,8 @@ import { AdminDashboard } from './AdminDashboard';
 import { MovieManagement } from './MovieManagement';
 import { TheaterManagement } from './TheaterManagement';
 import { ShowtimeManagement } from './ShowtimeManagement';
+import { UserManagement } from './UserManagement';
 // Import other components as they are created
-// import { UserManagement } from './UserManagement';
 // import { BookingManagement } from './BookingManagement';
 
 export function AdminPage() {
@@ -22,9 +22,10 @@ export function AdminPage() {
             case 'showtimes':
                 return <ShowtimeManagement />;
             case 'users':
-                return <div className="text-white">User Management (Coming Soon)</div>;
+                return <UserManagement />;
             case 'bookings':
-                return <div className="text-white">Booking Management (Coming Soon)</div>;
+                // Show Dashboard with Recent Bookings (no separate Booking Management needed)
+                return <AdminDashboard />;
             default:
                 return <AdminDashboard />;
         }

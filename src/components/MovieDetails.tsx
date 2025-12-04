@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { SeatSelection } from "./SeatSelection";
 import { api } from "../lib/api";
 import { Clock, Calendar, MapPin, Armchair, Star } from "lucide-react";
+import { useLocale } from "../lib/LocaleContext";
+import { formatCurrency } from "../lib/currency";
 
 // Define types for MongoDB documents
 interface Movie {
@@ -47,6 +49,7 @@ export function MovieDetails({
   const [showtimes, setShowtimes] = useState<Showtime[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedShowtimeId, setSelectedShowtimeId] = useState<string | null>(null);
+  const { currency } = useLocale();
 
   useEffect(() => {
     const fetchMovieAndShowtimes = async () => {
@@ -184,7 +187,7 @@ export function MovieDetails({
                           </p>
                         </div>
                         <span className="text-2xl font-bold text-apple-blue font-display">
-                          ${showtime.price}
+                          {formatCurrency(showtime.price, currency)}
                         </span>
                       </div>
 
