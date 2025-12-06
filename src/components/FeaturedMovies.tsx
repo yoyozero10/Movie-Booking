@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../lib/api";
 import { Star, Clock } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface Movie {
   _id: string;
@@ -13,7 +14,7 @@ interface Movie {
   releaseDate: string;
 }
 
-export function FeaturedMovies() {
+export function FeaturedMovies({ searchQuery }: { searchQuery?: string }) {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -21,8 +22,12 @@ export function FeaturedMovies() {
     const fetch = async () => {
       try {
         const all: Movie[] = await api.getMovies();
-        // Simple heuristic: take up to 6 movies sorted by releaseDate desc if available
-        const sorted = all.sort((a: Movie, b: Movie) => (new Date(b.releaseDate).getTime() || 0) - (new Date(a.releaseDate).getTime() || 0));
+        let filtered = all;
+        if (searchQuery) {
+          const lowerQuery = searchQuery.toLowerCase();
+          filtered = all.filter(m => m.title.toLowerCase().includes(lowerQuery));
+        }
+        const sorted = filtered.sort((a: Movie, b: Movie) => (new Date(b.releaseDate).getTime() || 0) - (new Date(a.releaseDate).getTime() || 0));
         setMovies(sorted.slice(0, 6));
       } catch (err) {
         console.error('Error fetching featured movies', err);
@@ -32,7 +37,7 @@ export function FeaturedMovies() {
     };
 
     void fetch();
-  }, []);
+  }, [searchQuery]);
 
   if (loading) {
     return (
@@ -55,9 +60,10 @@ export function FeaturedMovies() {
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
         {movies.map((m, index) => (
-          <div
+          <Link
             key={m._id}
-            className="movie-card rounded-2xl overflow-hidden cursor-pointer group animate-scale-in"
+            to={`/movie/${m._id}`}
+            className="block movie-card rounded-2xl overflow-hidden cursor-pointer group animate-scale-in"
             style={{ animationDelay: `${index * 100}ms` }}
           >
             {/* Poster */}
@@ -104,7 +110,7 @@ export function FeaturedMovies() {
               </h4>
               <p className="text-xs text-white/60 truncate">{m.genre}</p>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </section>

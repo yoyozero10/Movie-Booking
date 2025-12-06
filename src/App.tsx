@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, useParams } from "react-router-dom";
 import { SignInForm } from "./SignInForm";
 import { Toaster } from "sonner";
 import { TheaterFlow } from "./components/TheaterFlow";
@@ -16,6 +16,22 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import { ReleasesPage } from "./components/ReleasesPage";
 import { ContactPage } from "./components/ContactPage";
 import { LocaleProvider } from "./lib/LocaleContext";
+import { MovieDetails } from "./components/MovieDetails";
+import { NotFound } from "./components/NotFound";
+
+function MoviePageWrapper() {
+  const { id } = useParams();
+  console.log('MoviePageWrapper render, id:', id);
+  const navigate = useNavigate();
+  return (
+    <div className="min-h-screen pt-20" style={{ background: 'linear-gradient(180deg, #000000 0%, #0a0a0a 50%, #1a1a1a 100%)' }}>
+      <FloatingOrbs />
+      <div className="px-6">
+        <MovieDetails movieId={id!} onBack={() => navigate('/')} />
+      </div>
+    </div>
+  );
+}
 
 export default function App() {
   return (
@@ -29,7 +45,9 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/*" element={<MainApp />} />
+        <Route path="/movie/:id" element={<MoviePageWrapper />} />
+        <Route path="/" element={<MainApp />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Toaster />
     </LocaleProvider>
@@ -116,12 +134,12 @@ function Content({ activeTab, setActiveTab, activeSection, user, showLoginModal,
     return (
       <>
         <HeroSection onExploreClick={onExploreClick} />
-        <FeaturedMovies />
+        <FeaturedMovies searchQuery={searchQuery} />
 
         {/* Login Modal */}
         {showLoginModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
-            <div className="apple-glass rounded-2xl p-8 max-w-md w-full mx-4 relative">
+            <div data-testid="login-modal" className="apple-glass rounded-2xl p-8 max-w-md w-full mx-4 relative">
               <button
                 onClick={() => setShowLoginModal(false)}
                 className="absolute top-4 right-4 text-white/60 hover:text-white text-2xl"

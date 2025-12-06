@@ -3,6 +3,8 @@ import { toast } from "sonner";
 import { api } from "../lib/api";
 import { PaymentModal } from "./PaymentModal";
 import { Check, CreditCard, Monitor, Tv } from "lucide-react";
+import { formatCurrency, formatCurrencyFull } from "../lib/currency";
+import { calculateTotalPrice } from "../lib/booking";
 
 // Define types for MongoDB documents
 interface Movie {
@@ -130,10 +132,33 @@ export function SeatSelection({
   // Generate dynamic seat layout based on theater capacity
   const totalSeats = typeof showtime.theaterId === 'object' ? showtime.theaterId.totalSeats : 100;
 
-  // Calculate optimal rows and seats per row
-  // Common cinema layout: ~10-15 seats per row for good viewing
-  const seatsPerRow = Math.min(15, Math.ceil(Math.sqrt(totalSeats * 1.5)));
-  const numRows = Math.ceil(totalSeats / seatsPerRow);
+  // Calculate optimal rows and seats per row for realistic cinema layout
+  // Most cinemas have 10-16 seats per row for optimal viewing
+  const calculateLayout = (total: number): { rows: number; seatsPerRow: number } => {
+    // Preferred seats per row range
+    const minSeatsPerRow = 10;
+    const maxSeatsPerRow = 16;
+
+    // Try to find the best layout
+    let bestLayout = { rows: 0, seatsPerRow: 0, waste: total };
+
+    for (let seatsPerRow = minSeatsPerRow; seatsPerRow <= maxSeatsPerRow; seatsPerRow++) {
+      const rows = Math.ceil(total / seatsPerRow);
+      const totalCapacity = rows * seatsPerRow;
+      const waste = totalCapacity - total;
+
+      // Prefer layouts with less waste and reasonable row count
+      if (waste < bestLayout.waste || (waste === bestLayout.waste && rows < bestLayout.rows)) {
+        bestLayout = { rows, seatsPerRow, waste };
+      }
+    }
+
+    return bestLayout;
+  };
+
+  const layout = calculateLayout(totalSeats);
+  const seatsPerRow = layout.seatsPerRow;
+  const numRows = layout.rows;
 
   // Generate row letters (A-Z, then AA-AZ, BA-BZ, etc.)
   const generateRowLetters = (count: number): string[] => {
@@ -218,7 +243,7 @@ export function SeatSelection({
     date: showtime.date,
     time: showtime.startTime,
     seats: selectedSeats,
-    totalPrice: selectedSeats.length * showtime.price,
+    totalPrice: calculateTotalPrice(selectedSeats, showtime.price),
   });
 
   return (
@@ -265,11 +290,23 @@ export function SeatSelection({
 
           {/* Seat Grid */}
           <div className="animate-scale-in delay-400 space-y-4 md:space-y-6 mb-8">
-            {rows.map((row) => (
+            {rows.map((row, rowIndex) => (
               <div key={row} className="flex justify-center items-center space-x-2 md:space-x-3">
                 <span className="text-white/60 w-6 md:w-8 text-center font-medium text-sm md:text-base">{row}</span>
                 <div className="flex space-x-1 md:space-x-2">
                   {Array.from({ length: seatsPerRow }, (_, i) => {
+                    const seatNumber = rowIndex * seatsPerRow + i + 1;
+
+                    // Skip rendering seats that exceed totalSeats
+                    if (seatNumber > totalSeats) {
+                      return (
+                        <div
+                          key={`empty-${row}-${i}`}
+                          className="w-6 h-6 md:w-8 md:h-8"
+                        />
+                      );
+                    }
+
                     const seatId = `${row}${i + 1}`;
                     const isBooked = bookedSeats.includes(seatId);
                     const isSelected = selectedSeats.includes(seatId);
@@ -278,6 +315,9 @@ export function SeatSelection({
                     return (
                       <button
                         key={seatId}
+                        data-testid={`seat-${seatId}`}
+                        data-selected={isSelected}
+                        data-booked={isBooked}
                         onClick={() => isAvailable && handleSeatClick(seatId)}
                         disabled={!isAvailable}
                         className={`
@@ -360,22 +400,14 @@ export function SeatSelection({
                   <h4 className="text-lg font-semibold mb-4 text-white">Price Breakdown</h4>
                   <div className="space-y-3">
                     <div className="flex justify-between">
-                      <span className="text-white/70">Seats ({selectedSeats.length}x ${showtime.price})</span>
-                      <span className="text-white">${(selectedSeats.length * showtime.price).toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-white/70">Service Fee</span>
-                      <span className="text-white">$3.50</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-white/70">Taxes</span>
-                      <span className="text-white">${((selectedSeats.length * showtime.price + 3.50) * 0.0875).toFixed(2)}</span>
+                      <span className="text-white/70">Seats ({selectedSeats.length}x {formatCurrency(showtime.price)})</span>
+                      <span className="text-white">{formatCurrencyFull(calculateTotalPrice(selectedSeats, showtime.price))}</span>
                     </div>
                     <div className="pt-3 border-t border-white/20">
                       <div className="flex justify-between">
                         <span className="text-lg font-semibold text-white">Total</span>
                         <span className="text-2xl text-apple-blue font-display font-semibold">
-                          ${((selectedSeats.length * showtime.price + 3.50) * 1.0875).toFixed(2)}
+                          {formatCurrencyFull(calculateTotalPrice(selectedSeats, showtime.price))}
                         </span>
                       </div>
                     </div>

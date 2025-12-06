@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Film, Building2, Ticket, DollarSign, Users } from 'lucide-react';
 import { api } from '../../lib/api';
 import { toast } from 'sonner';
+import { formatCurrencyFull } from '../../lib/currency';
 
 interface AdminStats {
     totalMovies: number;
@@ -77,7 +78,7 @@ export function AdminDashboard() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <StatCard
                     title="Total Revenue"
-                    value={`$${stats.totalRevenue}`}
+                    value={formatCurrencyFull(parseFloat(stats.totalRevenue) || 0)}
                     icon={DollarSign}
                     color="text-green-400"
                     bg="bg-green-400/10"
@@ -144,7 +145,7 @@ export function AdminDashboard() {
                                         <div className="text-xs text-white/50">{booking.showtimeId?.theaterId?.location}</div>
                                     </td>
                                     <td className="py-4 font-medium text-white">
-                                        ${booking.totalPrice?.toFixed(2)}
+                                        {formatCurrencyFull(booking.totalPrice || 0)}
                                     </td>
                                     <td className="py-4">
                                         <span className={`px-2 py-1 rounded-lg text-xs font-medium border ${booking.status === 'confirmed'

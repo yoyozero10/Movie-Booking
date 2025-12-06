@@ -5,7 +5,7 @@ export type Currency = 'VND' | 'USD';
 export const formatCurrency = (amount: number, currency: Currency = 'VND'): string => {
     if (currency === 'VND') {
         // Format VND: 100,000₫ or 100k₫
-        if (amount >= 1000) {
+        if (Math.abs(amount) >= 1000) {
             return `${(amount / 1000).toFixed(0)}k₫`;
         }
         return `${amount.toLocaleString('vi-VN')}₫`;

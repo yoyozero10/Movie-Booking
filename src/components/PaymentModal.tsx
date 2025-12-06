@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { QRCodeSVG } from "qrcode.react";
+import { formatCurrencyFull } from "../lib/currency";
 
 interface PaymentModalProps {
     isOpen: boolean;
@@ -102,7 +103,7 @@ export function PaymentModal({
     const qrData = JSON.stringify({
         method: paymentMethod,
         amount: bookingDetails.totalPrice,
-        currency: "USD",
+        currency: "VND",
         description: `Vé xem phim ${bookingDetails.movieTitle}`,
         seats: bookingDetails.seats.join(", "),
         theater: bookingDetails.theaterName,
@@ -146,8 +147,8 @@ export function PaymentModal({
                                 <button
                                     onClick={() => setPaymentMethod("momo")}
                                     className={`p-4 rounded-lg border-2 transition-all ${paymentMethod === "momo"
-                                            ? "border-pink-500 bg-pink-500/10"
-                                            : "border-gray-700 bg-gray-800/50 hover:border-gray-600"
+                                        ? "border-pink-500 bg-pink-500/10"
+                                        : "border-gray-700 bg-gray-800/50 hover:border-gray-600"
                                         }`}
                                 >
                                     <div className="flex flex-col items-center gap-2">
@@ -164,8 +165,8 @@ export function PaymentModal({
                                 <button
                                     onClick={() => setPaymentMethod("zalopay")}
                                     className={`p-4 rounded-lg border-2 transition-all ${paymentMethod === "zalopay"
-                                            ? "border-blue-500 bg-blue-500/10"
-                                            : "border-gray-700 bg-gray-800/50 hover:border-gray-600"
+                                        ? "border-blue-500 bg-blue-500/10"
+                                        : "border-gray-700 bg-gray-800/50 hover:border-gray-600"
                                         }`}
                                 >
                                     <div className="flex flex-col items-center gap-2">
@@ -182,8 +183,8 @@ export function PaymentModal({
                                 <button
                                     onClick={() => setPaymentMethod("vnpay")}
                                     className={`p-4 rounded-lg border-2 transition-all ${paymentMethod === "vnpay"
-                                            ? "border-red-500 bg-red-500/10"
-                                            : "border-gray-700 bg-gray-800/50 hover:border-gray-600"
+                                        ? "border-red-500 bg-red-500/10"
+                                        : "border-gray-700 bg-gray-800/50 hover:border-gray-600"
                                         }`}
                                 >
                                     <div className="flex flex-col items-center gap-2">
@@ -200,8 +201,8 @@ export function PaymentModal({
                                 <button
                                     onClick={() => setPaymentMethod("atm")}
                                     className={`p-4 rounded-lg border-2 transition-all ${paymentMethod === "atm"
-                                            ? "border-primary bg-primary/10"
-                                            : "border-gray-700 bg-gray-800/50 hover:border-gray-600"
+                                        ? "border-primary bg-primary/10"
+                                        : "border-gray-700 bg-gray-800/50 hover:border-gray-600"
                                         }`}
                                 >
                                     <div className="flex flex-col items-center gap-2">
@@ -306,7 +307,7 @@ export function PaymentModal({
                                     <div className="bg-gray-900/50 rounded-lg p-4">
                                         <div className="flex justify-between items-center mb-2">
                                             <span className="text-gray-400 text-sm">Số tiền thanh toán</span>
-                                            <span className="text-white font-bold text-lg">${bookingDetails.totalPrice.toFixed(2)}</span>
+                                            <span className="text-white font-bold text-lg">{formatCurrencyFull(bookingDetails.totalPrice)}</span>
                                         </div>
                                         <div className="flex justify-between items-center">
                                             <span className="text-gray-400 text-sm">Nội dung</span>
@@ -386,17 +387,13 @@ export function PaymentModal({
                                 <div className="space-y-2">
                                     <div className="flex justify-between text-sm">
                                         <span className="text-gray-400">Vé ({bookingDetails.seats.length}x)</span>
-                                        <span className="text-white">${bookingDetails.totalPrice.toFixed(2)}</span>
-                                    </div>
-                                    <div className="flex justify-between text-sm">
-                                        <span className="text-gray-400">Phí tiện lợi</span>
-                                        <span className="text-white">$0.00</span>
+                                        <span className="text-white">{formatCurrencyFull(bookingDetails.totalPrice)}</span>
                                     </div>
                                     <div className="border-t border-gray-700 pt-2 mt-2">
                                         <div className="flex justify-between items-center">
                                             <span className="text-lg font-bold text-white">Tổng Cộng</span>
                                             <span className="text-2xl font-bold text-primary">
-                                                ${bookingDetails.totalPrice.toFixed(2)}
+                                                {formatCurrencyFull(bookingDetails.totalPrice)}
                                             </span>
                                         </div>
                                     </div>
@@ -420,7 +417,7 @@ export function PaymentModal({
                                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                                     </svg>
-                                    Thanh Toán ${bookingDetails.totalPrice.toFixed(2)}
+                                    Thanh Toán {formatCurrencyFull(bookingDetails.totalPrice)}
                                 </>
                             )}
                         </button>

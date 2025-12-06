@@ -99,6 +99,7 @@ export function Navigation({ user, onLoginClick, onSignOut, activeSection, onNav
                   <input
                     type="text"
                     value={searchQuery}
+                    data-testid="search-input"
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder={t('movies.searchPlaceholder', language)}
                     autoFocus
@@ -115,6 +116,7 @@ export function Navigation({ user, onLoginClick, onSignOut, activeSection, onNav
               ) : (
                 <button
                   onClick={handleSearchToggle}
+                  data-testid="search-toggle"
                   className="text-white/80 hover:text-white transition-colors duration-300"
                 >
                   <Search className="w-5 h-5" />
@@ -132,6 +134,7 @@ export function Navigation({ user, onLoginClick, onSignOut, activeSection, onNav
                 </span>
                 <button
                   onClick={onSignOut}
+                  data-testid="logout-btn"
                   className="apple-button px-6 py-2 rounded-full font-medium text-sm text-white"
                 >
                   {t('nav.logout', language)}
@@ -140,6 +143,7 @@ export function Navigation({ user, onLoginClick, onSignOut, activeSection, onNav
             ) : (
               <button
                 onClick={onLoginClick}
+                data-testid="login-btn"
                 className="apple-button px-6 py-2 rounded-full font-medium text-sm text-white"
               >
                 {t('nav.login', language)}

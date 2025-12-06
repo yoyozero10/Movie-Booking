@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { User, Edit, Calendar, Mail, Shield, CheckCircle, Film, Ticket } from "lucide-react";
 import { useAuth } from "../lib/auth";
 import { api } from "../lib/api";
+import { EditProfileModal } from "./EditProfileModal";
+import { BookingHistory } from "./BookingHistory";
 
 interface UserProfileProps {
   userId?: string; // Optional - if not provided, shows current user
@@ -12,6 +14,7 @@ export function UserProfile({ userId }: UserProfileProps) {
   const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { user: currentUser } = useAuth();
   const isOwnProfile = !userId || userId === currentUser?._id;
 
@@ -120,7 +123,10 @@ export function UserProfile({ userId }: UserProfileProps) {
                 </div>
 
                 {isOwnProfile && (
-                  <button className="apple-button px-6 py-3 rounded-2xl font-medium flex items-center gap-2 mx-auto md:mx-0">
+                  <button
+                    onClick={() => setIsEditModalOpen(true)}
+                    className="apple-button px-6 py-3 rounded-2xl font-medium flex items-center gap-2 mx-auto md:mx-0"
+                  >
                     <Edit className="w-4 h-4" />
                     Edit Profile
                   </button>
@@ -225,19 +231,33 @@ export function UserProfile({ userId }: UserProfileProps) {
           </div>
         </div>
 
-        {/* Recent Activity (Placeholder) */}
+        {/* Booking History */}
         {isOwnProfile && (
           <div className="mt-8 apple-glass rounded-2xl p-6 animate-slide-up delay-400">
-            <h2 className="text-xl font-bold text-white mb-6 font-display">Recent Activity</h2>
+            <h2 className="text-xl font-bold text-white mb-6 font-display flex items-center gap-2">
+              <Ticket className="w-5 h-5 text-apple-blue" />
+              Booking History
+            </h2>
 
-            <div className="text-center py-12">
-              <Ticket className="w-16 h-16 text-white/20 mx-auto mb-4" />
-              <p className="text-white/60">No recent activity</p>
-              <p className="text-white/40 text-sm mt-2">Your booking history will appear here</p>
-            </div>
+            <BookingHistory
+              bookings={bookings}
+              onBookingDeleted={(bookingId) => {
+                setBookings(prev => prev.filter(b => b._id !== bookingId));
+              }}
+            />
           </div>
         )}
       </div>
+
+      {/* Edit Profile Modal */}
+      <EditProfileModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        user={profileUser}
+        onUpdate={(updatedUser) => {
+          setProfileUser(updatedUser);
+        }}
+      />
     </div>
   );
 }

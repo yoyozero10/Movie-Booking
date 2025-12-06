@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { api } from '../lib/api';
 import { Calendar, Clock, MapPin, Ticket, CheckCircle, XCircle, Trash2 } from 'lucide-react';
+import { formatCurrencyFull } from '../lib/currency';
 
 interface Booking {
   _id: string;
@@ -163,8 +164,8 @@ export function MyBookings() {
                       <div className="flex items-center gap-2">
                         <span
                           className={`px-3 py-1 rounded-lg text-sm font-medium border ${booking.status === 'confirmed'
-                              ? 'bg-green-500/20 text-green-400 border-green-500/30'
-                              : 'bg-red-500/20 text-red-400 border-red-500/30'
+                            ? 'bg-green-500/20 text-green-400 border-green-500/30'
+                            : 'bg-red-500/20 text-red-400 border-red-500/30'
                             }`}
                         >
                           {booking.status === 'confirmed' ? (
@@ -189,7 +190,7 @@ export function MyBookings() {
 
                     <div className="text-right">
                       <div className="text-3xl font-bold text-apple-blue font-display">
-                        ${booking.totalPrice?.toFixed(2) || '0.00'}
+                        {formatCurrencyFull(booking.totalPrice || 0)}
                       </div>
                       <div className="text-sm text-white/60">
                         {booking.seats?.length || 0} seat{(booking.seats?.length || 0) > 1 ? 's' : ''}

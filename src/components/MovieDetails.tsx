@@ -145,7 +145,23 @@ export function MovieDetails({
                 {movie.rating}
               </span>
             </div>
-            <p className="text-white/70 leading-relaxed">{movie.description}</p>
+            <div>
+              <h2 className="text-lg font-semibold text-white mb-2">Storyline</h2>
+              <p className="text-white/70 leading-relaxed">{movie.description}</p>
+            </div>
+            {showtimes.length > 0 && (
+              <button
+                onClick={() => {
+                  const firstShowtime = showtimes[0];
+                  if (firstShowtime) {
+                    setSelectedShowtimeId(firstShowtime._id);
+                  }
+                }}
+                className="w-full apple-button px-6 py-3 rounded-lg font-semibold"
+              >
+                Book Tickets
+              </button>
+            )}
           </div>
         </div>
 
