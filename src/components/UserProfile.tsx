@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { User, Edit, Calendar, Mail, Shield, CheckCircle, Film, Ticket } from "lucide-react";
+import { User, Edit, Calendar, Mail, Shield, CheckCircle, Film, Ticket, Lock } from "lucide-react";
 import { useAuth } from "../lib/auth";
 import { api } from "../lib/api";
 import { EditProfileModal } from "./EditProfileModal";
+import { ChangePasswordModal } from "./ChangePasswordModal";
 import { BookingHistory } from "./BookingHistory";
 
 interface UserProfileProps {
@@ -15,6 +16,7 @@ export function UserProfile({ userId }: UserProfileProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false);
   const { user: currentUser } = useAuth();
   const isOwnProfile = !userId || userId === currentUser?._id;
 
@@ -123,13 +125,22 @@ export function UserProfile({ userId }: UserProfileProps) {
                 </div>
 
                 {isOwnProfile && (
-                  <button
-                    onClick={() => setIsEditModalOpen(true)}
-                    className="apple-button px-6 py-3 rounded-2xl font-medium flex items-center gap-2 mx-auto md:mx-0"
-                  >
-                    <Edit className="w-4 h-4" />
-                    Edit Profile
-                  </button>
+                  <div className="flex flex-col sm:flex-row gap-3 mx-auto md:mx-0">
+                    <button
+                      onClick={() => setIsEditModalOpen(true)}
+                      className="apple-button px-6 py-3 rounded-2xl font-medium flex items-center gap-2"
+                    >
+                      <Edit className="w-4 h-4" />
+                      Edit Profile
+                    </button>
+                    <button
+                      onClick={() => setIsChangePasswordModalOpen(true)}
+                      className="px-6 py-3 rounded-2xl font-medium flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-apple-orange/50 transition-all duration-300"
+                    >
+                      <Lock className="w-4 h-4 text-apple-orange" />
+                      Change Password
+                    </button>
+                  </div>
                 )}
               </div>
 
@@ -257,6 +268,12 @@ export function UserProfile({ userId }: UserProfileProps) {
         onUpdate={(updatedUser) => {
           setProfileUser(updatedUser);
         }}
+      />
+
+      {/* Change Password Modal */}
+      <ChangePasswordModal
+        isOpen={isChangePasswordModalOpen}
+        onClose={() => setIsChangePasswordModalOpen(false)}
       />
     </div>
   );

@@ -2,10 +2,11 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { useAuth } from "./lib/auth";
 import { SignInFormProps } from "./lib/types";
+import { ForgotPassword } from "./components/ForgotPassword";
 
 export function SignInForm({ onSignIn }: SignInFormProps) {
   const { login, register } = useAuth();
-  const [flow, setFlow] = useState<"signIn" | "signUp">("signIn");
+  const [flow, setFlow] = useState<"signIn" | "signUp" | "forgotPassword">("signIn");
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -47,6 +48,14 @@ export function SignInForm({ onSignIn }: SignInFormProps) {
     })();
   };
 
+  if (flow === "forgotPassword") {
+    return (
+      <div className="w-full">
+        <ForgotPassword onBack={() => setFlow("signIn")} />
+      </div>
+    );
+  }
+
   return (
     <div className="w-full">
       <form className="flex flex-col gap-form-field" onSubmit={handleSubmit}>
@@ -57,14 +66,27 @@ export function SignInForm({ onSignIn }: SignInFormProps) {
           placeholder="Email"
           required
         />
-        <input
-          className="auth-input-field"
-          type="password"
-          name="password"
-          placeholder="Password"
-          required
-          minLength={6}
-        />
+        <div className="flex flex-col gap-1">
+          <input
+            className="auth-input-field"
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+            minLength={6}
+          />
+          {flow === "signIn" && (
+            <div className="text-right">
+              <button
+                type="button"
+                className="text-white/60 hover:text-white text-xs hover:underline cursor-pointer transition-colors"
+                onClick={() => setFlow("forgotPassword")}
+              >
+                Forgot your password?
+              </button>
+            </div>
+          )}
+        </div>
         <button className="auth-button" type="submit" disabled={submitting}>
           {submitting ? "Please wait..." : (flow === "signIn" ? "Sign in" : "Sign up")}
         </button>

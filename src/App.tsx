@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Routes, Route, useNavigate, useParams } from "react-router-dom";
 import { SignInForm } from "./SignInForm";
 import { Toaster } from "sonner";
+import { ResetPassword } from "./components/ResetPassword";
 import { TheaterFlow } from "./components/TheaterFlow";
 import { MyBookings } from "./components/MyBookings";
 import { Navigation } from "./components/Navigation";
@@ -45,6 +46,7 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/movie/:id" element={<MoviePageWrapper />} />
         <Route path="/" element={<MainApp />} />
         <Route path="*" element={<NotFound />} />
