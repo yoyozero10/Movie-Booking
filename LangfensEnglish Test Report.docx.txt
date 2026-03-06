@@ -1,0 +1,231 @@
+﻿A blue logo with a black background
+
+AI-generated content may be incorrect. 
+
+Test Report
+
+
+for
+
+
+Langfens English
+ Release 1.0
+
+
+Version 1.0 approved
+
+
+Prepared by Minh-Khoa Tu – 23520757
+Si-Tri-Thong Vo – 23521531
+Ngoc-Quynh Ho – 23521333
+Thanh-Tien Kim – 23521571
+
+
+University of Information Technology
+Faculty Of Software Technology
+
+
+December 17, 2025
+Revision History
+Name
+	Date
+	Reason For Changes
+	Version
+	Si-Tri-Thong Vo
+	12/10/25
+	initial draft
+	1.0 draft 1
+	Si-Tri-Thong Vo
+	12/17/25
+	baseline following changes after inspection
+	1.0 approved
+	________________
+
+
+1. Executive Summary
+* Test scope and test environment were executed as defined in Test Plan v1.0.
+* Exit criteria were met: overall pass rate above target and no open Critical/High defects within Release 1.0 scope.
+* Recommendation: GO-LIVE with conditions (resolve Medium outstanding defects in Patch 1.0.1).
+2. Test Execution Summary
+   1. Overall Results by Test Level
+Test Level
+	Planned TC
+	Executed TC
+	Passed
+	Failed
+	Blocked
+	Pass Rate
+	Unit Test
+	68
+	68
+	66
+	2
+	0
+	97.06%
+	Integration Test
+	42
+	41
+	38
+	3
+	0
+	92.68%
+	System Test (Black-box)
+	95
+	92
+	84
+	8
+	0
+	91.30%
+	TOTAL
+	205
+	201
+	188
+	13
+	0
+	93.53%
+	   2. Results by Main Module
+Module
+	Executed
+	Passed
+	Failed
+	Notes
+	Account & OTP
+	52
+	49
+	3
+	OTP resend edge cases; email verification gating
+	Exams & Attempts
+	86
+	79
+	7
+	Snapshot immutability; timeout submission edge cases
+	Courses & Progress
+	28
+	27
+	1
+	Progress rounding discrepancy
+	Vocabulary & Review
+	20
+	19
+	1
+	Scheduling logic for Hard/Easy review
+	Admin Monitoring / Export
+	15
+	14
+	1
+	Export filtering by date and timezone
+	3. Defect Summary
+   1. Defect Count by Severity
+Severity
+	Open
+	Fixed/Closed
+	Total
+	Critical
+	0
+	2
+	2
+	High
+	0
+	5
+	5
+	Medium
+	3
+	7
+	10
+	Low
+	5
+	8
+	13
+	TOTAL
+	8
+	22
+	30
+	   2. Key Fixed Defects (Representative)
+* [High] Prevent login for accounts that are not OTP-verified (verified-only login).
+* [High] Disallow creating a new attempt when an 'in-progress' attempt exists for the same exam.
+* [Critical] Ensure delivery snapshot is immutable and not affected by later exam configuration changes.
+4. Outstanding Bug List
+The following defects remain OPEN at project closure (17 Dec 2025). They are accepted temporarily based on impact and available workarounds.
+Bug ID
+	Title
+	Severity
+	Area
+	Status
+	Workaround / Mitigation
+	Target Fix
+	LE-OPEN-01
+	OTP resend may allow verifying with an older OTP under rare race conditions
+	Medium
+	Account/OTP
+	Open
+	Temporarily throttle Resend and enforce 'latest OTP only' on server side
+	Patch 1.0.1
+	LE-OPEN-02
+	Course progress rounding (e.g., 62.5% shown as 62%)
+	Medium
+	Courses
+	Open
+	Show 1 decimal or align rounding rule with requirements
+	Patch 1.0.1
+	LE-OPEN-03
+	Attempts export date range off by 1 day due to timezone handling
+	Medium
+	Admin/Export
+	Open
+	Apply Asia/Ho_Chi_Minh timezone consistently in queries and reports
+	Patch 1.0.1
+	LE-OPEN-04
+	Session expired message does not always redirect to login
+	Low
+	Session
+	Open
+	Refresh page or re-login
+	Backlog
+	LE-OPEN-05
+	Public deck preview may show more than the configured preview limit
+	Low
+	Vocabulary
+	Open
+	Enforce limit in backend/pagination
+	Backlog
+	LE-OPEN-06
+	Auto-submit on timeout sometimes missing 'Time expired' label in history
+	Low
+	Attempts
+	Open
+	Open attempt details to confirm timestamps
+	Backlog
+	LE-OPEN-07
+	Email validation error messages inconsistent across screens
+	Low
+	Auth UI
+	Open
+	N/A
+	Backlog
+	LE-OPEN-08
+	Admin attempt search slow with large datasets (indexing not optimized)
+	Low
+	Admin Monitoring
+	Open
+	Use pagination and constrain keyword filters
+	Backlog
+	5. Quality Assessment and Release Recommendation
+   1. Release Readiness
+* Core workflows validated: registration/OTP, login, browsing content, enrollment/progress tracking, vocabulary review, exam attempts and result review, and admin monitoring.
+* Key business rules verified: published/draft/archived state, OTP policy, immutable delivery snapshot, and attempt state constraints.
+* Remaining risk is limited to UI accuracy and reporting (Medium defects) and performance improvements (Low).
+   1. Recommendation
+GO-LIVE (Conditional) - Release 1.0 can be deployed provided that Medium outstanding defects (LE-OPEN-01 to LE-OPEN-03) are resolved in Patch 1.0.1 or mitigated with monitoring and operational controls.
+Go-live conditions:
+* Fix Medium defects LE-OPEN-01 to LE-OPEN-03 (or deploy with limited scope and hotfix quickly).
+* Enable enhanced monitoring for OTP and Attempt flows during the first 1-2 weeks after deployment.
+* Track Low defects in backlog and address in the next maintenance iteration.
+6. Deviations and Notes
+* No scope change: out-of-scope features (e.g., AI grading/proctoring/payment) were not tested, as stated in Test Plan v1.0.
+* All test activities were aligned with the approved use cases and SRS without introducing new business flows.
+7. Appendix - Scope Traceability (Quick Reference)
+Release 1.0 testing scope follows the approved set of use cases, grouped as:
+* Admin: Exam catalog management, exam structure editing, attempt monitoring, course/lesson management, deck/card management, speaking and writing exam management.
+* End User: Register and verify by OTP, login (password/Google), maintain session and profile, reset password via email OTP.
+* Visitor/Learner/Candidate: Browse published exams, browse courses/lessons, enroll and track progress, browse and review vocabulary decks/cards, take exam attempts, review results and history.
+* Internal services: Fetch delivery snapshot for attempt delivery.

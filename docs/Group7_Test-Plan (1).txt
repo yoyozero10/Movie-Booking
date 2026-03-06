@@ -1,0 +1,274 @@
+﻿MINISTRY OF EDUCATION AND TRAINING
+UNIVERSITY OF INFORMATION TECHNOLOGY
+FACULTY OF SOFTWARE TECHNOLOGY
+
+SOFTWARE TESTING
+TEST PLAN FOR
+MOVIE BOOKING WEBSITE
+Group 7 - Class: SE113.Q11
+Test leader: Tran Dai Thang 23521432
+Tester 1: Doan Duc Trung 23521674
+Tester 2: Le Nguyen Hung 22520507
+Tester 3: Le Nguyen Khang 23520689
+
+
+
+
+
+
+HO CHI MINH CITY, December 3, 2025
+
+INDEX
+1.	OVERVIEW	4
+1.1.	PRODUCT NAME	4
+1.2.	PRODUCT REVISION	4
+1.3.	PROJECT LEAD	4
+1.4.	TEST PROJECT STAFF	4
+1.5.	PRODUCT OVERVIEW	4
+2.	TEST PLAN OBJECTIVE	5
+3.	TESTING STRATEGY	5
+3.1.	System Test	5
+3.2.	Performance Test	6
+3.3.	Recovery Test	6
+3.4.	Installation / Compatibility Test	6
+General Testing Process Approach	7
+Items to be Tested	7
+Items not to be Tested	7
+4.	HARDWARE / SOFTWARE RESOURCES	8
+4.1.	Hardware Requirements	8
+4.2.	Software Requirements	8
+4.3.	Standards/Reference material	9
+5.	TYPES OF TESTING	9
+5.1.	FEATURE TEST	9
+5.1.1.	Features to be tested	9
+5.1.2.	Features not to be tested	11
+5.2.	INSTALLATION TEST	11
+6.	RISKS & CONTINGENCIES	12
+7.	SUSPENSION CRITERIA AND RESUMPTION REQUIREMENTS	13
+7.1.	Suspension criteria	13
+7.2.	Resumption requirements	14
+8.	TEST SCHEDULE AND RESOURCES	14
+8.1.	Test schedule	14
+8.2.	Resources	15
+9.	ROLES AND RESPONSIBILITIES	15
+10.DELIVERABLES	16
+
+
+
+1. OVERVIEW
+1.1. PRODUCT NAME
+  "Movie Booking Website"
+1.2. PRODUCT REVISION
+  Last vision.
+1.3. PRODUCT OVERVIEW
+Movie Booking Website is a centralized web platform allowing users to browse movies, check showtimes, select seats through a visual seat-map, and book tickets with online payment options (PayOS). Users can view booking history and manage accounts. Admins can manage movie listings, theaters, showtimes, bookings, and user accounts.
+Front-end is built with React (Vite + Tailwind), backend with Node.js + Express, and database with MongoDB. Authentication uses JWT. Role-based authorization supports User and Admin portals. The platform aims to provide smooth booking experience with real-time seating availability and secure payment flows..
+2. TEST PLAN OBJECTIVE
+The primary objective of this test plan is to ensure the Movie Booking Website meets all functional and non-functional requirements. The testing process aims to identify defects within the booking flow, user authentication, and data management modules. Specifically, the goals are to verify that users can successfully book tickets without errors, ensure the integrity of the seat selection process (preventing double bookings), and confirm that administrative changes are reflected accurately in the user interface.
+3. TESTING STRATEGY
+The testing scope encompasses the entire application lifecycle, from user registration to the final booking confirmation. Functional testing will focus on the core business logic, including account management, movie search, seat locking mechanisms, and payment simulation. Non-functional testing will address the application's performance under load, security of user data, and compatibility across different web browsers (Chrome, Firefox, Safari).
+3.1. System Test
+System testing will verify the complete, end-to-end behavior of the system. Scenarios will be executed on the fully integrated platform to confirm that all components cooperate correctly.
+Typical scenarios include:
+* User registration and sign-in
+* Browsing movies and selecting theaters
+* Viewing and selecting showtimes
+* Interactive seat selection and real-time validation
+* Booking confirmation and record creation
+* Viewing booking history
+* Administrative actions (CRUD on movies, theaters, showtimes, users)
+
+3.2. Performance Test
+Performance tests will determine whether the system meets response time expectations under expected load. Simulated booking traffic will be used to measure performance for critical paths.
+Performance focus areas:
+* Seat-map rendering latency
+* Simultaneous booking attempts on popular showtimes
+* Payment confirmation responsiveness
+* Dashboard query performance
+Targets:
+* Page navigation and seat map updates should remain responsive
+* Booking confirmation and post-booking actions should complete without timeout
+* System should handle typical peak load without degradation
+3.3. Recovery Test
+Recovery tests will force failures to ensure that the system maintains data integrity and returns to normal after failures.
+Recovery testing includes:
+* Browser refresh/disconnect during seat selection or payment
+* Server restart during booking
+* Payment cancellation or partial submission
+* Database restart or temporary loss of connectivity
+  Expected outcomes:
+* No duplicate charges or double bookings
+* Seat locking logic releases abandoned reservations
+* Users can continue a booking where possible
+* Database records remain consistent
+
+3.4. Installation / Compatibility Test
+The website will be tested to ensure it installs and runs correctly in supported environments. Testing will also check compatibility with multiple platforms and browsers.
+Compatibility and installation checks include:
+* Successful installation and deployment
+* Correct configuration of environment variables
+* Normal operation across supported browsers (Chrome/Edge/Firefox)
+* Consistent display of seat map and tickets on different screen resolutions
+* Support for deployment in development and production environments
+General Testing Process Approach
+1. Review functional requirements and repository documentation
+2. Develop the test plan and define testing scope
+3. Design test cases for core modules and edge cases
+4. Prepare necessary test data and environments
+5. Execute tests and collect evidence/logs
+6. Record and prioritize defects
+7. Perform regression testing after fixes
+8. Compile the final test report
+Items to be Tested
+* Authentication and authorization (JWT based)
+* Movie information listing and filtering
+* Theater and showtime management
+* Seat selection and seat-locking logic
+* Booking creation and payment processing
+* Booking history and ticket information
+* Administrative management of movies, showtimes, users
+
+Items not to be Tested
+3.2. 
+3.3. 
+3.1. 
+3.2. 
+3.3. 
+3.4. 
+3.5. 
+3.6. 
+3.7. 
+3.8. 
+* Mobile applications (not included in this release)
+* Loyalty programs, vouchers, coupons (future scope)
+* External movie rating APIs
+* Hardware-based ticket scanners
+4. HARDWARE / SOFTWARE RESOURCES
+4.1. Hardware Requirements
+* CPU ≥ 2 Cores
+* RAM ≥ 8 GB
+* Internet ≥ 10 Mbps
+4.2. Software Requirements
+* OS: Windows / Linux / macOS
+* Browsers: Chrome, Edge, Firefox
+* Node.js v20+
+* MongoDB v6+
+* NPM/Yarn
+* Postman for API validation
+4.3. Standards/Reference material
+* ISO/IEC/IEEE 29119 Software Testing
+* Payment API Documentation (PayOS)
+* REST API conventions
+5. TYPES OF TESTING
+5.1. FEATURE TEST
+5.1.1. Features to be tested
+Authentication
+* Register new user
+* Login/logout
+* JWT session validity
+* Prevent deleting admin account by normal user
+Movie Management
+* Browse movies
+* Search/filter by title/genre
+* View movie details
+Theater & Showtime
+* View available theaters
+* List showtimes by date/movie
+* Validate real-time seat availability
+Seat Selection
+* Visual seat map rendering
+* Select seats
+* Prevent selecting already booked seats
+* Lock state stored in database
+Booking & Payment
+* Create booking
+* PayOS integration
+* Handle rejected payment
+* Unique booking ID
+* Email/receipt confirmation
+Booking History
+* View previous bookings
+* Ticket download/QR (if supported)
+* Cancelation (if supported)
+Admin Dashboard
+* Create/edit/delete movie entries
+* Create showtimes
+* Block conflicting showtimes
+* Generate booking reports
+* User role management
+5.1.2. Features not to be tested
+* Bulk theater migration scripts
+* External payment dispute process
+* Performance of third-party services (PayOS servers)
+
+5.2. INSTALLATION TEST
+Installation tests will validate that the Movie Booking System can be successfully set up, configured, and operated in the supported environments without malfunction. These tests ensure that installation procedures are followed correctly, required dependencies are available, and the system continues to function normally after installation or environment changes.
+The installation test will include the following activities:
+* Deploy the backend (Node.js + Express + MongoDB) and frontend (React/Vite) to the designated test environment.
+* Verify that necessary configuration files (environment variables, database connection strings, API keys) are detected and applied correctly.
+* Launch the web application in supported browsers to confirm that the system initializes properly and default routes render without errors.
+* Validate that the application continues to operate normally while browser updates or Node package updates are occurring, ensuring that ongoing operations are not disrupted.
+* Reinstall or update required runtime modules (Node packages, MongoDB services) and verify that the system resumes normal behavior after reinstall or update.
+* Confirm that logging and error-handling modules are functioning as expected following installation activities.
+* Confirm that uninstall and cleanup procedures (removing environment configuration files, clearing cached dependencies) do not leave residual data that would interfere with future deployments.
+The overall objective of the installation test is to confirm that the system can be installed, upgraded, and recovered without corrupting data or impacting the functional behavior of the booking platform.
+
+6. RISKS & CONTINGENCIES
+RiskContingencyHigh concurrency seat conflictImplement atomic DB operations; queue transactionsPayment failuresRetry logic; confirm non-duplicate chargeSeat lock remains after interruptionAuto-expiry system (time-based release)MongoDB outageBackup + reconnect logicUnauthorized admin accessRBAC test suite + DB seed sanitizationUser abandons payment mid-processPartial reservation cleanup logic
+7. SUSPENSION CRITERIA AND RESUMPTION REQUIREMENTS
+7.1. Suspension criteria
+* Booking flow blocked due to fatal bug
+* MongoDB unavailable
+* Payment sandbox inaccessible
+* Admin dashboard unresponsive
+
+7.2. Resumption requirements
+* Fix deployed and retested
+* Core flows pass smoke testing
+* No open critical defects
+8. TEST SCHEDULE AND RESOURCES
+8.1. Test schedule
+
+8.2. Resources
+The test team will consist of:
+* A Test Leader
+* 4 Testers
+9. ROLES AND RESPONSIBILITIES
+WorkerMinimum Resources RecommendedSpecific Responsibilities / CommentsTest LeaderProvides management oversight. 
+Responsibilities:
+* Provide technical direction and test strategy
+* Acquire and manage appropriate resources
+* Status reporting and risk escalation
+* Ensure environments, data, and test assets are provisioned and maintained
+* Approve entry/exit criteria and sign-off
+Từ Minh Khoa30%Test DesignerIdentifies, prioritizes, and implements test cases.
+Responsibilities:
+* Generate and review test cases (E2E/functional/performance)
+* Define acceptance criteria and traceability to requirements
+* Prepare/seed test data and fixtures
+* Evaluate effectiveness/coverage and optimize the suite
+Từ Minh Khoa30%Võ Sĩ Trí Thông50%Hồ Ngọc Quỳnh50%Kim Thành Tiến50%TesterExecutes the tests.
+Responsibilities:
+* Execute and record test results
+* Capture evidence (screens, logs), file and track defects
+* Perform error recovery and reruns
+* Verify fixes and run targeted regression
+* Maintain execution reportsTừ Minh Khoa40%Võ Sĩ Trí Thông50%Hồ Ngọc Quỳnh50%Kim Thành Tiến50%
+10. DELIVERABLES
+DeliverableResponsibilityCompletion DateDevelop Test Cases (Functional Suite v1)Kim Thành Tiến
+Võ Sĩ Trí Thông28/10/2025Test Case Review & ApprovalTừ Minh Khoa
+Hồ Ngọc Quỳnh29/10/2025Execute Manual Tests - Cycle 1Từ Minh Khoa
+Kim Thành Tiến07/11/2025Complete Defect Reports - Cycle 1Từ Minh Khoa
+Kim Thành Tiến08/11/2025Execute Regression - Cycle 2Từ Minh Khoa
+Võ Sĩ Trí Thông21/11/2025Complete Defect Reports - Cycle 2Từ Minh Khoa
+Võ Sĩ Trí Thông22/11/2025Performance & Recovery Test ReportTừ Minh Khoa
+Hồ Ngọc Quỳnh28/11/2025UAT Checklist & Sign-off (Internal)Từ Minh Khoa
+Hồ Ngọc Quỳnh12/12/2025Final Test Report & HandoverTừ Minh Khoa24/12/2025
+
+
+17
+
+
+17
+
+
