@@ -4,6 +4,8 @@ import path from "path";
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => ({
+  // Keep backward compatibility with root-level .env files after splitting apps.
+  envDir: "..",
   plugins: [
     react(),
   ],

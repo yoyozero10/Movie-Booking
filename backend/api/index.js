@@ -5,15 +5,16 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import path from 'path';
 
 // Import routes
 import authRoutes from '../server/routes/auth.js';
 import movieRoutes from '../server/routes/movies.js';
 import bookingRoutes from '../server/routes/bookings.js';
 import showtimeRoutes from '../server/routes/showtimes.js';
-import userRoutes from '../server/routes/users.js';
 
 dotenv.config();
+dotenv.config({ path: path.resolve(process.cwd(), '../.env') });
 
 const app = express();
 
@@ -69,7 +70,6 @@ app.use('/api/auth', authRoutes);
 app.use('/api/movies', movieRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/showtimes', showtimeRoutes);
-app.use('/api/users', userRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

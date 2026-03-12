@@ -1,3 +1,28 @@
+# CinemaVision Pro
+
+A modern, full-stack movie booking platform built with React, Node.js, and MongoDB.
+
+## Workspace Structure (Updated)
+
+This repository is now split into two independent apps:
+
+- `frontend/`: React + Vite client app
+- `backend/`: Express + MongoDB API
+
+Root `package.json` is used only to orchestrate workspace scripts.
+
+### Common Commands
+
+```bash
+npm run dev            # run frontend + backend in parallel
+npm run dev:frontend   # run only frontend
+npm run dev:backend    # run only backend
+npm run build          # build frontend
+npm run start          # start backend
+npm run seed           # seed backend data
+```
+
+The rest of the project documentation below may still reference the legacy single-folder layout.
 # 🎬 CinemaVision Pro
 
 A modern, full-stack movie booking platform built with React, Node.js, and MongoDB.
@@ -246,3 +271,4 @@ For questions or support, please contact:
 **Built with ❤️ using React, Node.js, and MongoDB**
 
 🎬 **CinemaVision Pro** - Your Premium Movie Booking Experience
+

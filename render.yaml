@@ -1,11 +1,10 @@
 services:
-  # Backend API Service
   - type: web
     name: movie-booking-api
     runtime: node
     env: node
     buildCommand: npm install
-    startCommand: npm start
+    startCommand: npm run start
     envVars:
       - key: NODE_ENV
         value: production

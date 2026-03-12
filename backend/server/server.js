@@ -15,6 +15,7 @@ import adminRoutes from './routes/adminRoutes.js';
 
 // Load environment variables
 dotenv.config();
+dotenv.config({ path: path.resolve(process.cwd(), '../.env') });
 
 // Create logs directory if it doesn't exist
 const logsDir = path.join(process.cwd(), 'logs');
