@@ -3,6 +3,9 @@ import { toast } from 'sonner';
 import { api } from '../lib/api';
 import { Calendar, Clock, MapPin, Ticket, CheckCircle, XCircle, Trash2 } from 'lucide-react';
 import { formatCurrencyFull } from '../lib/currency';
+import { config } from '../lib/config';
+
+const CANCEL_CUTOFF_MINUTES = config.CANCEL_CUTOFF_MINUTES;
 
 interface Booking {
   _id: string;
@@ -28,6 +31,36 @@ interface Booking {
   bookingReference: string;
 }
 
+const parseShowtimeDateTime = (date: string, startTime: string): Date | null => {
+  if (!date || !startTime) return null;
+  const showtimeDateTime = new Date(`${date}T${startTime}:00`);
+  return Number.isNaN(showtimeDateTime.getTime()) ? null : showtimeDateTime;
+};
+
+const getCancellationEligibility = (booking: Booking) => {
+  if (booking.status !== 'confirmed') {
+    return { canCancel: false, reason: 'Only confirmed bookings can be cancelled' };
+  }
+
+  const showtimeDateTime = parseShowtimeDateTime(booking.showtimeId?.date, booking.showtimeId?.startTime);
+  if (!showtimeDateTime) {
+    return { canCancel: false, reason: 'Showtime date/time is invalid' };
+  }
+
+  const cancelDeadline = new Date(showtimeDateTime.getTime() - CANCEL_CUTOFF_MINUTES * 60 * 1000);
+  if (new Date() > cancelDeadline) {
+    return {
+      canCancel: false,
+      reason: `Cancellation closed (${CANCEL_CUTOFF_MINUTES} minutes before showtime)`
+    };
+  }
+
+  return {
+    canCancel: true,
+    reason: `You can cancel until ${cancelDeadline.toLocaleString()}`
+  };
+};
+
 export function MyBookings() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
@@ -52,13 +85,19 @@ export function MyBookings() {
     }
   };
 
-  const handleCancelBooking = async (bookingId: string) => {
+  const handleCancelBooking = async (booking: Booking) => {
+    const eligibility = getCancellationEligibility(booking);
+    if (!eligibility.canCancel) {
+      toast.error(eligibility.reason);
+      return;
+    }
+
     if (!confirm('Are you sure you want to cancel this booking?')) {
       return;
     }
 
     try {
-      await api.cancelBooking(bookingId);
+      await api.cancelBooking(booking._id);
       toast.success('Booking cancelled successfully');
       await fetchBookings();
     } catch (err) {
@@ -133,6 +172,8 @@ export function MyBookings() {
           if (!showtime || !movie || !theater) {
             return null;
           }
+
+          const cancelEligibility = getCancellationEligibility(booking);
 
           return (
             <div
@@ -247,13 +288,22 @@ export function MyBookings() {
                   {/* Actions */}
                   <div className="flex gap-3 pt-4 border-t border-white/10">
                     {booking.status === 'confirmed' && (
-                      <button
-                        onClick={() => handleCancelBooking(booking._id)}
-                        className="apple-glass hover:bg-red-500/20 hover:border-red-500/30 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 text-white flex items-center gap-2"
-                      >
-                        <XCircle className="w-4 h-4" />
-                        Cancel Booking
-                      </button>
+                      <>
+                        <button
+                          onClick={() => handleCancelBooking(booking)}
+                          disabled={!cancelEligibility.canCancel}
+                          className={`apple-glass px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 text-white flex items-center gap-2 ${
+                            cancelEligibility.canCancel
+                              ? 'hover:bg-red-500/20 hover:border-red-500/30'
+                              : 'opacity-50 cursor-not-allowed'
+                          }`}
+                          title={cancelEligibility.reason}
+                        >
+                          <XCircle className="w-4 h-4" />
+                          Cancel Booking
+                        </button>
+                        <div className="text-xs text-white/60 self-center">{cancelEligibility.reason}</div>
+                      </>
                     )}
                     {booking.status === 'cancelled' && (
                       <button

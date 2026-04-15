@@ -1,4 +1,7 @@
 // Environment configuration
+const DEFAULT_CANCEL_CUTOFF_MINUTES = 120;
+const parsedCancelCutoff = Number.parseInt(import.meta.env.VITE_CANCEL_CUTOFF_MINUTES || '', 10);
+
 export const config = {
   // API Base URL - defaults to localhost for development
   API_BASE_URL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api',
@@ -11,4 +14,9 @@ export const config = {
 
   // Production flag
   isProduction: import.meta.env.PROD,
+
+  // Cancellation policy (minutes before showtime)
+  CANCEL_CUTOFF_MINUTES: Number.isFinite(parsedCancelCutoff) && parsedCancelCutoff > 0
+    ? parsedCancelCutoff
+    : DEFAULT_CANCEL_CUTOFF_MINUTES,
 };

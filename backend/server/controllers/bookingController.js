@@ -3,6 +3,19 @@ import Showtime from '../models/Showtime.js';
 import mongoose from 'mongoose';
 import { logger } from '../server.js';
 
+const DEFAULT_CANCEL_CUTOFF_MINUTES = 120;
+
+const parseShowtimeDateTime = (date, startTime) => {
+  if (!date || !startTime) return null;
+  const showtimeDate = new Date(`${date}T${startTime}:00`);
+  return Number.isNaN(showtimeDate.getTime()) ? null : showtimeDate;
+};
+
+const getCancelCutoffMinutes = () => {
+  const parsed = Number.parseInt(process.env.CANCEL_CUTOFF_MINUTES || '', 10);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : DEFAULT_CANCEL_CUTOFF_MINUTES;
+};
+
 // Get user's bookings
 export const getUserBookings = async (req, res) => {
   try {
@@ -11,7 +24,7 @@ export const getUserBookings = async (req, res) => {
         path: 'showtimeId',
         populate: {
           path: 'movieId theaterId',
-          select: 'title posterUrl name location'
+          select: 'title posterUrl duration name location'
         }
       })
       .sort({ createdAt: -1 });
@@ -164,16 +177,41 @@ export const cancelBooking = async (req, res) => {
       return res.status(403).json({ error: 'Not authorized to cancel this booking' });
     }
 
+    // Only confirmed bookings can be cancelled
+    if (booking.status !== 'confirmed') {
+      await session.abortTransaction();
+      return res.status(400).json({ error: 'Only confirmed bookings can be cancelled' });
+    }
+
+    const showtime = await Showtime.findById(booking.showtimeId);
+    if (!showtime) {
+      await session.abortTransaction();
+      return res.status(400).json({ error: 'Cannot cancel booking: showtime not found' });
+    }
+
+    // Simple cancellation policy: allow cancellation only before X minutes to showtime
+    const cutoffMinutes = getCancelCutoffMinutes();
+    const showtimeDateTime = parseShowtimeDateTime(showtime.date, showtime.startTime);
+    if (!showtimeDateTime) {
+      await session.abortTransaction();
+      return res.status(400).json({ error: 'Cannot cancel booking: invalid showtime date/time' });
+    }
+
+    const cancelDeadline = new Date(showtimeDateTime.getTime() - cutoffMinutes * 60 * 1000);
+    if (new Date() > cancelDeadline) {
+      await session.abortTransaction();
+      return res.status(400).json({
+        error: `Booking can only be cancelled at least ${cutoffMinutes} minutes before showtime`
+      });
+    }
+
     // Update booking status
     booking.status = 'cancelled';
     await booking.save({ session });
 
     // Return seats to showtime
-    const showtime = await Showtime.findById(booking.showtimeId);
-    if (showtime) {
-      showtime.availableSeats += booking.seats.length;
-      await showtime.save({ session });
-    }
+    showtime.availableSeats += booking.seats.length;
+    await showtime.save({ session });
 
     await session.commitTransaction();
 
