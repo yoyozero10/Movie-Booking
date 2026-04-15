@@ -1,0 +1,300 @@
+﻿
+Software Requirements Specification
+for
+Movie-Booking Website, Release 1.0
+Version 1.0 approved
+Prepared by Group 7
+  Le Van Bao - 23520112
+  Tran Dai Thang - 23521432
+  Nguyen Xuan Nhat Minh - 23520946
+  Doan Duc Trung - 23521674
+SE113.Q11 - UIT
+October 18, 2025
+
+Table of Contents
+Table of Contents	ii
+Revision History	ii
+1.	Introduction	1
+1.1	Purpose	1
+1.2	Document Conventions	1
+1.3	Project Scope and Product Features	1
+1.4	References	1
+2.	Overall Description	1
+2.1	User Classes and Their Use Cases	1
+2.1.1	Visitor (Unauthenticated) A user who has not logged into the system.	1
+2.1.2	Registered User (Authenticated) A user who has successfully registered and logged in.	1
+2.1.3	Administrator A privileged user (role implied by backend CRUD features) responsible for managing system content.	2
+2.2	Operating Environment	2
+2.3	Design and Implementation Constraints	2
+3.	Functional Requirements	3
+3.1	Use Cases for Visitors	3
+3.2	Use Cases for Registered Users	4
+3.3	Use Cases for Administrators	5
+3.4	System Features (New Section)	7
+3.5	Reporting Requirements	7
+4.	Data Requirements	8
+4.1	Logical Data Model	8
+4.2	Data Dictionary (Partial)	10
+4.3	Data Integrity, Retention and Disposal	10
+5.	External Interface Requirements	11
+5.1	User Interfaces	11
+5.2	Software Interfaces	11
+5.3	Hardware Interfaces	11
+5.4	Communications Interfaces	11
+6.	Quality Attributes	12
+6.1	Performance Requirements	12
+6.2	Security Requirements	12
+6.3	Usability Requirements	12
+6.4	Maintainability Requirements	12
+6.5	Testing Requirements	13
+6.6	Safety Requirements	13
+6.7	Availability Requirements	13
+6.8	Robustness Requirements	13
+Appendix A: Analysis Models	14
+Appendix B: Project Structure	15
+Appendix C: Deployment Diagram	16
+
+Revision History
+Name	Date	Reason For Changes	Version
+Tran Dai Thang	18/10/25	Initial draft	1.0 draft 1
+Le Van Bao	08/12/25	Update	1.0 draft 2
+Le Van Bao	12/04/26	Updated member list	1.1
+1. Introduction
+1.1 Purpose 
+This Software Requirements Specification (SRS) describes the functional and nonfunctional requirements for Release 1.0 of the Movie-Booking Website. This system is a full-stack web application that allows users to browse movies, check showtimes, and book tickets online. This document is intended to be used by the project's developers, testers, and stakeholders to guide design, implementation, and verification.
+1.2 Document Conventions
+The functional requirements in Section 3 are organized by User Class, with specific Use Cases (UC) detailed for each class. This approach aligns the system's features with the perspectives of its end-users.
+1.3 Project Scope and Product Features
+Vision: To provide a seamless, secure, and modern online platform for moviegoers to discover films and book their tickets, replacing the inconvenience of in-person or phone-based booking.
+
+Scope: The product is a decoupled, full-stack application.
+* Frontend: A client-side application built with React + Vite, responsible for all user-facing interactions.
+* Backend: A secure RESTful API built with Express.js + MongoDB, responsible for business logic, data management, and user authentication.
+* Features: The system will manage movie listings, theater showtimes, user accounts, and the complete booking process from seat selection to confirmation.
+1.4 References
+1. IEEE Std 830-1998, IEEE Recommended Practice for Software Requirements Specifications.
+2. React Documentation. Available at: https://react.dev/
+3. Vite Documentation. Available at: https://vitejs.dev/
+4. Express.js 5.0 API Documentation. Available at: https://expressjs.com/
+5. MongoDB Manual & Mongoose ODM Docs. Available at: https://mongoosejs.com/docs/
+6. PayOS API Reference. Available at: https://payos.vn/docs/
+7. Tailwind CSS Documentation. Available at: https://tailwindcss.com/docs/
+8. Playwright Documentation (E2E Testing). Available at: https://playwright.dev/
+2. Overall Description
+2.1 User Classes and Their Use Cases
+The system has three (3) primary user classes:
+2.1.1 Visitor (Unauthenticated) A user who has not logged into the system.
+Use Cases:
+* UC-V-1: Explore and Search Movies
+* UC-V-2: View Showings
+* UC-V-3: Register for an Account
+* UC-V-4: Log In
+2.1.2 Registered User (Authenticated) A user who has successfully registered and logged in.
+Use Cases:
+* (All Visitor use cases)
+* UC-U-1: Manage User Profile
+* UC-U-2: Book Ticket
+* UC-U-3: View Booking History
+2.1.3 Administrator A privileged user (role implied by backend CRUD features) responsible for managing system content.
+Use Cases:
+* UC-A-1: Manage Movies (CRUD)
+* UC-A-2: Manage Showings (CRUD)
+* UC-A-3: Manage Bookings (CRUD)
+* UC-A-4: Manage Users (Implied)
+2.2 Operating Environment
+*  OE-1: The frontend application shall be deployed and hosted on Netlify.
+*  OE-2: The backend API shall be deployed and hosted on Render.
+*  OE-3: The database shall be a cloud-hosted MongoDB Atlas cluster.
+*  OE-4: The system shall be accessible via modern web browsers (e.g., Google Chrome, Mozilla Firefox, Apple Safari, Microsoft Edge) on both desktop and mobile platforms.
+2.3 Design and Implementation Constraints
+The system design and implementation shall adhere to the following constraints:
+* CO-1 (Frontend Stack): The client-side application shall be built using React 19 combined with TypeScript to ensure type safety. The build process and development server shall utilize Vite for performance optimization.
+* CO-2 (UI/UX Design): The user interface shall be styled using Tailwind CSS following a "Glassmorphism" design system. Icons shall be implemented using Lucide React, and toast notifications shall be handled by Sonner.
+* CO-3 (Language Support): The system must support internationalization (i18n), allowing users to switch between English (en) and Vietnamese (vi).
+* CO-4 (Backend Stack): The server-side API shall be built on the Node.js runtime using the Express 5.0 framework.
+* CO-5 (Database): Data persistence shall be managed by MongoDB (NoSQL) via the Mongoose ODM library.
+* CO-6 (Authentication): User authentication shall use JSON Web Tokens (JWT). Passwords must be hashed using bcryptjs before storage.
+* CO-7 (Security Standards): The backend must implement Helmet for secure HTTP headers and Express Rate Limit to prevent brute-force attacks.
+* CO-8 (Payment Integration): The system shall integrate with the PayOS gateway to process secure online transactions.
+* CO-9 (Quality Assurance): The project must include Jest for Unit Testing and Playwright for End-to-End (E2E) Testing.
+3. Functional Requirements
+3.1 Use Cases for Visitors
+UC-V-1: Explore and Search Movies
+* Description: A Visitor can browse and search for movies available on the platform.
+* Requirements:
+IDDescriptionPriorityFR-V-1.1The system shall display a gallery of movies (e.g., "Now Playing," "Coming Soon").HighFR-V-1.2The system shall provide a search bar to find movies by title.HighFR-V-1.3The system shall provide filtering options (e.g., by genre, rating).HighFR-V-1.4A Visitor shall be able to click a movie to view its detailed information (synopsis, cast, trailer, etc.).High
+UC-V-2: View Showings
+* Description: A Visitor can view available showtimes for a specific movie.
+* Requirements:
+IDDescriptionPriorityFR-V-2.1When viewing a movie's details, the system shall display a list of its available showtimes.HighFR-V-2.2The system shall allow Visitors to filter showtimes by date.HighFR-V-2.3The system shall allow Visitors to filter or group showtimes by theater.High
+UC-V-3: Register for an Account
+* Description: A Visitor can create a new account to become a Registered User.
+* Requirements:
+IDDescriptionPriorityFR-V-3.1The system shall provide a registration form (e.g., name, email, password).HighFR-V-3.2The system shall validate inputs (e.g., valid email format, password strength).HighFR-V-3.3The system shall check if the email is already in use and provide a clear error message if it is.HighFR-V-3.4The system shall submit the registration data to the POST /api/auth/register endpoint.HighFR-V-3.5The backend shall hash the user's password using bcryptjs before saving it to the database.High
+UC-V-4: Log In
+* Description: A Visitor or Registered User can log into the system.
+* Requirements:
+IDDescriptionPriorityFR-V-4.1The system shall provide a login form (email, password).HighFR-V-4.2The system shall submit credentials to the POST /api/auth/login endpoint.HighFR-V-4.3The backend shall validate the credentials. Upon success, it shall return a JWT to the client.HighFR-V-4.4The client application shall securely store the JWT and use it for authenticating subsequent requests.High
+3.2 Use Cases for Registered Users
+UC-U-1: Manage User Profile
+* Description: A Registered User can view and manage their personal information.
+* Requirements:
+IDDescriptionPriorityFR-U-1.1The user shall be able to access a profile page.HighFR-U-1.2The system shall call the GET /api/auth/profile endpoint to fetch and display the user's details.HighFR-U-1.3The user shall be able to update their profile information (e.g., name, password).Medium
+UC-U-2: Book Ticket
+* Description: A Registered User can select seats and complete the booking process for a showing.
+* Requirements:
+IDDescriptionPriorityFR-U-2.1The user must be logged in to book a ticket. The system shall prompt Visitors to log in if they attempt to book.HighFR-U-2.2After selecting a showing, the system shall display an interactive seating map for the corresponding theater.HighFR-U-2.3The seating map shall visually differentiate between available, occupied, and selected seats.HighFR-U-2.4The user shall be able to select one or more available seats.HighFR-U-2.5The system shall provide an API endpoint (POST /api/bookings) to create a booking.HighFR-U-2.6The booking logic must handle concurrency to prevent two users from booking the same seat simultaneously (see SEC-5).HighFR-U-2.7(Future) The system shall integrate with a payment gateway to process payment before confirming the booking.Medium
+UC-U-3: View Booking History
+* Description: A Registered User can view their past and upcoming bookings.
+* Requirements:
+IDDescriptionPriorityFR-U-3.1The user's profile page shall contain a section for "My Bookings" or "Booking History".MediumFR-U-3.2The system shall fetch and display a list of all bookings associated with the user's account.MediumUC-U-4: Payment & Ticket Generation
+* Description: A Registered User completes the payment via PayOS and receives a digital ticket (QR Code).
+* Requirements:
+IDDescriptionPriorityFR-U-4.1The system shall display a Payment Modal integrating the PayOS interface.HighFR-U-4.2Upon successful transaction, the system shall update the Booking status from pending to confirmed.High      FR-U-4.3The system shall generate a unique QR Code (using qrcode.react) containing the booking reference for check-in purposes.High      FR-U-4.4If the payment fails or times out (15 minutes), the system shall release the held seats and mark the booking as cancelled.
+3.3 Use Cases for Administrators
+UC-A-1: Manage Movies (CRUD)
+* Description: An Administrator can Create, Read, Update, and Delete movie entries.
+* Requirements:
+IDDescriptionPriorityFR-A-1.1The system shall provide a secure interface (e.g., an Admin Dashboard) and API endpoints for movie management.HighFR-A-1.2Admin shall be able to create a new movie entry (title, description, poster URL, duration, genre, etc.).HighFR-A-1.3Admin shall be able to update the details of an existing movie.HighFR-A-1.4Admin shall be able to delete a movie from the system.High
+UC-A-2: Manage Showings (CRUD)
+* Description: An Administrator can Create, Read, Update, and Delete showtimes.
+* Requirements:
+IDDescriptionPriorityFR-A-2.1Admin shall be able to create a new showing by associating a Movie, a Theater/Screen, and a specific date/time.HighFR-A-2.2Admin shall be able to view all scheduled showings.HighFR-A-2.3Admin shall be able to update or delete an existing showing.High
+UC-A-3: Manage Bookings (CRUD)
+* Description: An Administrator can view and manage user bookings.
+* Requirements:
+IDDescriptionPriorityFR-A-3.1Admin shall be able to view a list of all bookings in the system, filterable by user or movie.MediumFR-A-3.2Admin shall be able to cancel or modify a user's booking (e.g., to issue a refund).Medium
+UC-A-4: Manage Users
+* Description: An Administrator can view list of users and manage their roles or status.
+* Requirements:
+IDDescriptionPriorityFR-A-4.1The system shall display a list of all registered users with pagination.MediumFR-A-4.2Admin shall be able to lock/unlock user accounts (prevent login).LowFR-A-4.3Admin shall be able to assign or revoke "Admin" role to a user.Low
+3.4 System Features (New Section)
+SYS-1: Internationalization (i18n)
+* Description: The system supports dynamic language switching and currency formatting.
+* Requirements:
+IDDescriptionPriorityFR-SYS-1.1The system shall provide a global toggle to switch the interface language between English and Vietnamese.MediumFR-SYS-1.2The system shall automatically format currency values based on the selected locale (e.g., USD for English, VND for Vietnamese).Medium3.5 Reporting Requirements
+Report-1: Revenue Report
+* Purpose: View revenue generated by movies and theaters over a specific period.
+* User: Administrator.
+* Output: Bar chart or table showing Total Revenue, Tickets Sold per Movie.
+* Priority: Medium.
+Report-2: Transaction History
+* Purpose: Allows users to view details of their past payments and booking status.
+* User: Registered User.
+* Output: List of transactions with Date, Amount, Status (Success/Failed/Refunded), and Payment Method.
+* Priority: High.
+4. Data Requirements
+4.1 Logical Data Model
+
+Figure 1. Partial data model for release 1.0 of the Movie-Booking Website.
+The system's data persistence is managed by MongoDB and defined by Mongoose schemas (as implied by server/models/). The core entities are:
+* User: Stores user account information, including hashed credentials and profile details.
+* Movie: Stores all information related to a single film.
+* Theater: (Implied) Stores information about a cinema location, including its screens and seating layouts.
+* Showing: A relational entity that links one Movie to one Theater (screen) at a specific showTime.
+* Booking: Stores a record of a completed transaction, linking a User, a Showing, and the specific seats they reserved.
+
+
+
+
+
+Figure 1.1. Detailed Entity-Relationship Diagram (ERD)
+
+4.2 Data Dictionary (Partial)
+Data ElementDescriptionType / FormatConstraints / ValuesUser.roleUser permission levelString (Enum)user, admin. Default: userMovie.ratingContent rating or scoreNumberMin: 0, Max: 10Movie.castList of main actorsArray[String]OptionalTheater.cityCity location of the theaterStringRequiredShowtime.priceBase ticket priceNumberCurrency value ($\ge 0$)Showtime.availableSeatsList of currently free seatsArray[String]Managed by Backend (e.g., ['A1', 'A2'])Booking.bookingRefUnique reference for ticket lookupStringUnique, Auto-generated (UUID/ShortID)Booking.totalPriceFinal transaction amountNumberCalculated: Showtime.price * seats.lengthBooking.statusLifecycle state of the bookingString (Enum)pending, confirmed, cancelled, refunded
+4.3 Data Integrity, Retention and Disposal
+
+* DI-1 (Transaction Logs): Booking and Payment logs must be retained for at least 24 months for auditing and dispute resolution purposes.
+* DI-2 (Pending Bookings): Seats held in a "Pending" booking state must be automatically released if payment is not completed within 15 minutes.
+* DI-3 (Account Deletion): Upon user request for account deletion, Personal Identifiable Information (PII) must be anonymized, but transaction history must be preserved for revenue accuracy.
+5. External Interface Requirements
+5.1  User Interfaces
+*  UI-1: The UI shall be responsive and render correctly on all major device types (desktop, tablet, mobile).
+*  UI-2: The UI shall adhere to the Tailwind CSS utility-first design framework.
+*  UI-3: The UI shall use icons from the Lucide React library for consistent visual language.
+*  UI-4: The application shall function as a Single Page Application (SPA), with navigation handled by React Router.
+5.2  Software Interfaces
+*  SI-1 (API): The frontend (Netlify) shall communicate with the backend (Render) via a RESTful API over HTTP, using Axios.
+*  SI-2 (Database): The backend (Express.js) shall interface with the MongoDB Atlas cluster via the Mongoose ODM.
+*  SI-3 (Environment Config): The frontend shall fetch the backend API location from a VITE_API_BASE_URL environment variable.
+*  SI-4 (Data Seeding): The project shall provide an npm run seed script to populate the database with sample data.
+5.3 Hardware Interfaces
+No hardware interfaces have been identified.
+5.4 Communications Interfaces
+*  CI-1 (Encryption): All communication between the client and servers shall be encrypted using HTTPS. (Handled by Netlify and Render).
+*  CI-2 (CORS): The backend shall implement a CORS policy to only accept requests from the deployed frontend domain.
+6. Quality Attributes
+6.1 Performance Requirements
+*  PER-1 (Build/Dev): The frontend development server and production build process shall be optimized by Vite for fast startup and optimized bundles.
+*  PER-2 (Rate Limiting): The backend API shall be protected by express-rate-limit to prevent brute-force attacks and simple DoS attacks, ensuring service availability.
+6.2 Security Requirements
+*  SEC-1 (Token Management): Authentication shall use JWT with a defined expiration (e.g., 7 days). Tokens shall be stored securely in localStorage on the client side.
+*  SEC-2 (Secure Headers): The backend shall utilize the Helmet middleware to enforce secure HTTP headers (XSS Filter, No-Sniff, HSTS).
+*  SEC-3 (Rate Limiting): The API shall implement Express Rate Limit to restrict traffic to 1000 requests per 15 minutes per IP address to mitigate DDoS attacks.
+*  SEC-4 (Input Sanitization): All incoming API requests must be validated and sanitized to prevent NoSQL Injection attacks.
+6.3 Usability Requirements
+*  USE-1 (Responsiveness): The application shall be fully functional and easy to navigate on mobile devices (see UI-1).
+*  USE-2 (Clarity): The booking flow-from movie selection to seat selection to confirmation-shall be intuitive and clearly guide the user.
+6.4 Maintainability Requirements
+*  MAIN-1 (Modularity): The project shall be organized with a clear separation of concerns:
+* src/: All frontend React code.
+* server/: All backend Express.js code.
+*  MAIN-2 (Backend Structure): The server/ directory shall be further modularized into controllers, middleware, models, and routes to isolate logic.
+*  MAIN-3 (Config): All environment-specific variables (database strings, API keys, JWT secrets) shall be stored in .env files and not hard-coded. An .env.example file shall be provided.
+*  MAIN-4 (Code Quality): The project shall include an npm run lint script to enforce code style and identify potential errors.
+6.5 Testing Requirements
+*  TEST-1 (Unit Testing): Critical utility functions (currency formatting, validation logic) shall be tested using Jest.
+*  TEST-2 (E2E Testing): Core user flows (Login, Booking, Admin CRUD) shall be verified using automated Playwright tests.
+6.6 Safety Requirements
+* SAF-1 (Age Restriction): The system shall display age rating labels (e.g., C13, C18) clearly on movie details and booking screens.
+* SAF-2 (Payment Safety): The system shall strictly not store sensitive credit card information (PAN, CVV) in the database. All processing is delegated to PayOS.
+6.7 Availability Requirements
+* AVL-1 (Uptime): The system shall aim for 99% uptime during peak operational hours (18:00 - 23:00 on weekends).
+* AVL-2 (Maintenance): Scheduled maintenance should be performed during off-peak hours (02:00 - 05:00) with prior user notification.
+6.8 Robustness Requirements
+* ROB-1 (Payment Recovery): If a user's network disconnects during payment, the system shall provide a mechanism to "Check Transaction Status" from PayOS to re-sync the booking status (Confirmed/Failed) without double-charging.
+* ROB-2 (Concurrency Handling): The system must handle race conditions where two users select the same seat simultaneously; only the first request to reach the server shall lock the seat.
+
+
+
+
+Appendix A: Analysis Models
+Figure 2. This diagram illustrates the primary actors and their interactions with the system's main functionalities
+
+
+Figure 3. This diagram shows the lifecycle of a Booking object, which is crucial for testing the booking logic. 
+
+
+Figure 4. This diagram illustrates the booking process flow, showing how a user selects seats, confirms payment, and how the system validates and records the booking transaction.
+
+Appendix B: Project Structure 
+Figure 5. Project Directory and Component Structure
+
+SE113-Project/
+├── src/                  (Frontend: React + TypeScript)
+│   ├── components/       (UI Components: Admin, Seats, MovieDetails)
+│   ├── lib/              (Utilities: API Client, AuthContext, i18n)
+│   └── App.tsx           (Root Component & Routing)
+├── server/               (Backend: Node.js + Express)
+│   ├── controllers/      (Business Logic)
+│   ├── models/           (Mongoose Schemas)
+│   └── routes/           (API Endpoints)
+└── tests/                (Quality Assurance)
+    ├── lab1/             (E2E Tests - Playwright)
+    └── lab2/             (Unit Tests - Jest)
+
+Appendix C: Deployment Diagram
+Figure 6. System Deployment Diagram
+
+Copyright (c) 2013 by Karl Wiegers and Seilevel
+
+Software Requirements Specification for Cafeteria Ordering System	Page ii
+
+Copyright (c) 2013 by Karl Wiegers and Seilevel
+
+Software Requirements Specification for Cafeteria Ordering System	Page 10
+
+
+
+
+
