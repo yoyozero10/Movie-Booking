@@ -1,7 +1,7 @@
 import User from '../models/User.js';
 import { generateToken } from '../middleware/auth.js';
 import crypto from 'crypto';
-import { sendPasswordResetEmail } from '../utils/emailService.js';
+import { sendPasswordResetEmail, sendWelcomeEmail } from '../utils/emailService.js';
 
 // Register new user
 export const register = async (req, res) => {
@@ -20,6 +20,16 @@ export const register = async (req, res) => {
 
     // Generate token
     const token = generateToken(user._id);
+
+    // Best-effort welcome email (registration should not fail on email errors)
+    try {
+      await sendWelcomeEmail({
+        email: user.email,
+        customerName: user.name
+      });
+    } catch (emailError) {
+      console.error('Failed to send welcome email:', emailError);
+    }
 
     res.status(201).json({
       message: 'User registered successfully',

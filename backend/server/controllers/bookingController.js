@@ -2,6 +2,7 @@ import Booking from '../models/Booking.js';
 import Showtime from '../models/Showtime.js';
 import mongoose from 'mongoose';
 import { logger } from '../server.js';
+import { sendBookingConfirmationEmail } from '../utils/emailService.js';
 
 const DEFAULT_CANCEL_CUTOFF_MINUTES = 120;
 
@@ -146,6 +147,26 @@ export const createBooking = async (req, res) => {
           { path: 'theaterId', select: 'name location' }
         ]
       });
+
+    // Best-effort email notification: do not fail booking if email sending fails
+    try {
+      if (req.user?.email) {
+        await sendBookingConfirmationEmail({
+          email: req.user.email,
+          customerName: req.user.name,
+          bookingReference: populatedBooking?.bookingReference,
+          movieTitle: populatedBooking?.showtimeId?.movieId?.title,
+          theaterName: populatedBooking?.showtimeId?.theaterId?.name,
+          theaterLocation: populatedBooking?.showtimeId?.theaterId?.location,
+          showDate: populatedBooking?.showtimeId?.date,
+          showTime: populatedBooking?.showtimeId?.startTime,
+          seats: populatedBooking?.seats,
+          totalPrice: populatedBooking?.totalPrice
+        });
+      }
+    } catch (emailError) {
+      logger.error(`Failed to send booking confirmation email: ${emailError.message}`);
+    }
 
     logger.info('Booking populated successfully');
     res.status(201).json(populatedBooking);

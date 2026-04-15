@@ -75,3 +75,106 @@ export const sendPasswordResetEmail = async (email, resetUrl) => {
     throw error;
   }
 };
+
+export const sendBookingConfirmationEmail = async ({
+  email,
+  customerName,
+  bookingReference,
+  movieTitle,
+  theaterName,
+  theaterLocation,
+  showDate,
+  showTime,
+  seats,
+  totalPrice
+}) => {
+  const transporter = await createTransporter();
+
+  const safeSeats = Array.isArray(seats) ? seats.join(', ') : '';
+  const formattedPrice = Number.isFinite(totalPrice)
+    ? new Intl.NumberFormat('vi-VN').format(totalPrice)
+    : `${totalPrice || ''}`;
+
+  const mailOptions = {
+    from: process.env.SMTP_FROM || '"CinemaVision Pro" <noreply@cinemavision.com>',
+    to: email,
+    subject: `Booking Confirmed - ${bookingReference || 'CinemaVision Pro'}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 640px; margin: 0 auto; color: #1f2937;">
+        <div style="background:#0f172a; color:#ffffff; padding:20px; border-radius:10px 10px 0 0;">
+          <h1 style="margin:0; font-size:22px;">CinemaVision Pro</h1>
+          <p style="margin:8px 0 0 0; opacity:0.85;">Your booking is confirmed</p>
+        </div>
+        <div style="border:1px solid #e5e7eb; border-top:none; border-radius:0 0 10px 10px; padding:24px;">
+          <p style="margin-top:0;">Hi ${customerName || 'there'},</p>
+          <p>Your booking has been confirmed. Here are your ticket details:</p>
+          <table style="width:100%; border-collapse:collapse; margin:16px 0;">
+            <tr><td style="padding:8px 0; color:#6b7280;">Booking Ref</td><td style="padding:8px 0; font-weight:600;">${bookingReference || '-'}</td></tr>
+            <tr><td style="padding:8px 0; color:#6b7280;">Movie</td><td style="padding:8px 0; font-weight:600;">${movieTitle || '-'}</td></tr>
+            <tr><td style="padding:8px 0; color:#6b7280;">Theater</td><td style="padding:8px 0; font-weight:600;">${theaterName || '-'}</td></tr>
+            <tr><td style="padding:8px 0; color:#6b7280;">Location</td><td style="padding:8px 0; font-weight:600;">${theaterLocation || '-'}</td></tr>
+            <tr><td style="padding:8px 0; color:#6b7280;">Showtime</td><td style="padding:8px 0; font-weight:600;">${showDate || '-'} ${showTime || ''}</td></tr>
+            <tr><td style="padding:8px 0; color:#6b7280;">Seats</td><td style="padding:8px 0; font-weight:600;">${safeSeats || '-'}</td></tr>
+            <tr><td style="padding:8px 0; color:#6b7280;">Total</td><td style="padding:8px 0; font-weight:700;">${formattedPrice} VND</td></tr>
+          </table>
+          <p style="margin-bottom:0; color:#6b7280;">Enjoy your movie!</p>
+        </div>
+      </div>
+    `,
+    text: [
+      `Booking confirmed: ${bookingReference || '-'}`,
+      `Movie: ${movieTitle || '-'}`,
+      `Theater: ${theaterName || '-'} (${theaterLocation || '-'})`,
+      `Showtime: ${showDate || '-'} ${showTime || ''}`,
+      `Seats: ${safeSeats || '-'}`,
+      `Total: ${formattedPrice} VND`
+    ].join('\n')
+  };
+
+  const info = await transporter.sendMail(mailOptions);
+  console.log('Booking confirmation email sent: %s', info.messageId);
+
+  if (process.env.SMTP_HOST === 'smtp.ethereal.email' || !process.env.SMTP_HOST) {
+    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+  }
+
+  return info;
+};
+
+export const sendWelcomeEmail = async ({ email, customerName }) => {
+  const transporter = await createTransporter();
+
+  const mailOptions = {
+    from: process.env.SMTP_FROM || '"CinemaVision Pro" <noreply@cinemavision.com>',
+    to: email,
+    subject: 'Welcome to CinemaVision Pro',
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 640px; margin: 0 auto; color: #1f2937;">
+        <div style="background:#0f172a; color:#ffffff; padding:20px; border-radius:10px 10px 0 0;">
+          <h1 style="margin:0; font-size:22px;">Welcome to CinemaVision Pro</h1>
+        </div>
+        <div style="border:1px solid #e5e7eb; border-top:none; border-radius:0 0 10px 10px; padding:24px;">
+          <p style="margin-top:0;">Hi ${customerName || 'there'},</p>
+          <p>Your account has been created successfully.</p>
+          <p>You can now explore movies, pick seats, and book tickets directly on CinemaVision Pro.</p>
+          <p style="margin-bottom:0; color:#6b7280;">Enjoy your movie time!</p>
+        </div>
+      </div>
+    `,
+    text: [
+      `Hi ${customerName || 'there'},`,
+      'Your CinemaVision Pro account has been created successfully.',
+      'You can now explore movies and book tickets.',
+      'Enjoy your movie time!'
+    ].join('\n')
+  };
+
+  const info = await transporter.sendMail(mailOptions);
+  console.log('Welcome email sent: %s', info.messageId);
+
+  if (process.env.SMTP_HOST === 'smtp.ethereal.email' || !process.env.SMTP_HOST) {
+    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+  }
+
+  return info;
+};
